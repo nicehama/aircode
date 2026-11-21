@@ -4,8 +4,9 @@
 - **https://nicehama.github.io/aircode/** (GitHub Pages — 배지·광고 없음, 로그인·비밀번호 없음)
 - 저장소: **https://github.com/nicehama/aircode** (Public, `main` = 소스 / `gh-pages` = 배포본)
 - 배포 파일: `index.html` (저장소 루트 = `dist/index.html` = `downloads/에어컨_에러코드_앱_프로토타입.html`)
-- 최신 배포: **v12 (GitHub Pages)** — 앱 표시 이름을 **에러코드.zip**으로 변경. 주소·저장소·`qr_site.svg`·`localStorage` 키(`aircode_fav_v1`·`aircode_recent_v1`)는 그대로.
+- 최신 배포: **v12 (GitHub Pages)** — 2026-11-21 22:19 KST, **543,036 bytes** (sha256 `8e7a4988…f6154`). 앱 표시 이름을 **에러코드.zip**으로 변경. 주소·저장소·`qr_site.svg` QR 값·`localStorage` 키(`aircode_fav_v1`·`aircode_recent_v1`)는 그대로.
   - v11 22:06 (543,116 bytes, sha256 `a2047138…c9c91`) → **v12: `<title>`·apple/application-name·PWA 매니페스트(name/short_name)·상단 헤더·공유 제목·QR aria-label을 `에러코드.zip`으로** (헤더의 `AirCode` 영문 표기 제거)
+  - v12 라이브 검증(390×844): `https://nicehama.github.io/aircode/` HTTP 200 + 내려받은 본문 **바이트 동일**, 타이틀 `에러코드.zip — 에어컨 LED·에러코드`, 헤더 `에러코드.zip`, 매니페스트 name/short_name `에러코드.zip`, QR OpenCV 디코드 `https://nicehama.github.io/aircode/`, LED `test_led_ch21.mp4` → `CH21`, 하단 탭바 4개 완전 노출, **콘솔·페이지 오류 0건**. 캡처 `downloads/gh_pages_errorcodezip.png`·`gh_pages_errorcodezip_header.png`.
   - v10 22:00 → **v11 22:05: 아카데미 탭에 쾌적하마 홍보(서비스 대상·기종·절차·강점)·홈페이지/네이버 블로그/대표번호 링크·문의 모달 링크 보강**
   - v1 11-17 20:35 (체크리스트 탭) → v2 20:58 (현장 진단 개편) → v3 21:00 (코드바·진행바) → v4 21:10 (반응 띠)
   - **v5~v10 11-21: 에어코드 이름·QR 배포 모달·즐겨찾기·tel 링크·실제 LED 영상 판독 엔진** (v6 tel 정규식, v7 PWA 매니페스트, v8 모드 칩 폭, v9 미매칭 코드 전화 링크, v10 전화 링크 스타일)
