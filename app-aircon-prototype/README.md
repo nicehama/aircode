@@ -1,12 +1,14 @@
 # 에어코드 (AirCode) — 에어컨 LED·에러코드 현장 앱
 
 ## 배포 URL
-- **https://aircon-code-demo-1120.deed.page/** (deed.page 무료 플랜, 만료 없음, 비밀번호 없음)
-- 배포 파일: `dist/index.html` (원본 `downloads/에어컨_에러코드_앱_프로토타입.html`과 같은 파일)
-- 최신 배포: **v10** — 2026-11-21 / slug `aircon-code-demo-1120`, 536,289 bytes, `permanent: true`
+- **https://nicehama.github.io/aircode/** (GitHub Pages — 배지·광고 없음, 로그인·비밀번호 없음)
+- 저장소: **https://github.com/nicehama/aircode** (Public, `main` = 소스 / `gh-pages` = 배포본)
+- 배포 파일: `index.html` (저장소 루트 = `dist/index.html` = `downloads/에어컨_에러코드_앱_프로토타입.html`)
+- 최신 배포: **v10 (GitHub Pages)** — 2026-11-21 21:58 KST, 536,331 bytes, QR·PWA 매니페스트 주소 `https://nicehama.github.io/aircode/`
   - v1 11-17 20:35 (체크리스트 탭) → v2 20:58 (현장 진단 개편) → v3 21:00 (코드바·진행바) → v4 21:10 (반응 띠)
   - **v5~v10 11-21: 에어코드 이름·QR 배포 모달·즐겨찾기·tel 링크·실제 LED 영상 판독 엔진** (v6 tel 정규식, v7 PWA 매니페스트, v8 모드 칩 폭, v9 미매칭 코드 전화 링크, v10 전화 링크 스타일)
-- 무료 플랜이라 페이지 오른쪽 아래에 작은 "Published with deed.page" 링크가 붙는다(검색 노출은 `listed:false`로 미등록).
+- 이전 deed.page 주소(`https://aircon-code-demo-1120.deed.page/`)는 옛 빌드로 남아 있다(QR이 deed.page를 가리키고 "Published with deed.page" 배지가 붙음). **새로 배포·공유할 주소는 GitHub Pages만 쓴다.**
+- GitHub Pages 소스는 `gh-pages` 브랜치다(빈 저장소에 `gh-pages`를 처음 푸시했을 때 자동 활성화됨, `build_type: legacy`, 경로 `/`). Pages 설정 API는 GitHub App 권한(`Pages`)이 없어 403이므로, 배포는 `gh-pages` 푸시로 한다.
 
 ## v5에서 바뀐 것 — 앱 이름과 배포
 - 이름을 **에어코드 (AirCode)** 로 확정: `<title>`, 헤더 타이틀, `apple-mobile-web-app-title`, `application-name`, PWA 매니페스트(name/short_name), 아이콘.
@@ -32,7 +34,14 @@
   - `삼성 4WAY`·정지 사진: 켜진 램프의 위치·색을 클러스터로 찾아 보여 주고, **[4WAY 조합기에서 확정 →]** 으로 램프 개수(4/5)에 맞는 조합기를 바로 연다.
 - **결과 카드**: 실측 파형(캔버스, 적/녹/밝기 + 점멸 구간 음영), `적색 2회 · 녹색 1회` 같은 실측값, **±1 보정 버튼**(적/녹·자릿수·횟수 — 빛번짐 1회 오차를 재촬영 없이 수정), 매칭 코드·원인·점검·리셋, [상세 점검 보기]·[현장 진단 시작 →], 그리고 "영상은 기기 내에서만 실시간 분석되며 외부로 전송되지 않습니다." 문구.
 
-## 검증 기록 (배포 URL, Playwright 390×844, `LD_LIBRARY_PATH=/workspace/tmp/libs/root/usr/lib/x86_64-linux-gnu`)
+## GitHub Pages 라이브 검증 (2026-11-21 21:58, `verify_pages.py`)
+- `https://nicehama.github.io/aircode/` → **HTTP 200**, 내려받은 HTML이 로컬 `dist/index.html`과 **바이트 동일**(sha256 `29f4738…0334`, 536,331 bytes).
+- 메인: `deed.page`·`Published with`·`Report abuse` 문자열 **0건**, 외부 링크는 `cjyacademy.com` 2개(브랜드 링크)뿐. 하단 탭바 4개(검색·LED 찾기·현장 진단·아카데미) 모두 뷰포트 안(`783~838px`, 844px 화면), 다른 요소에 가려짐 없음(`elementFromPoint` 일치).
+- QR 모달: 표기 `https://nicehama.github.io/aircode/`, QR 이미지를 OpenCV `QRCodeDetector`로 디코드한 값 **동일**.
+- LED 찾기: `test_led_ch21.mp4` 업로드 → **`CH21` / 적색 2회 · 녹색 1회 / 122프레임 / 자동 ROI**, 점멸 6개.
+- **콘솔·페이지 오류 0건.** 스크린샷: `downloads/gh_pages_main.png` · `gh_pages_qr.png` · `gh_pages_led_ch21.png`
+
+## 검증 기록 (이전 deed.page 배포, Playwright 390×844, `LD_LIBRARY_PATH=/workspace/tmp/libs/root/usr/lib/x86_64-linux-gnu`)
 - **실제 영상 E2E**(WebM·H.264 mp4 둘 다 확인): `make_test_video.py`로 적색 2회 → 녹색 1회 패턴이 두 번 반복되는 9.5초 640×480 30fps 영상(`downloads/test_led_ch21.mp4`, H.264 30KB)을 만들고, 배포 URL에서 `#fileIn`에 실제 업로드 → **`CH21` / 적색 2회 · 녹색 1회 / 123프레임 / 자동 ROI** 판독. 파형에 점멸 6개(2묶음)가 그려지고 ± 보정으로 CH22↔CH21 전환 확인.
 - 샘플 3종: LG 실내기 `CH21`(1번째 2회·2번째 1회), 캐리어 `운전램프 5회 연속 점멸`(냉매 점검 필요), 삼성 4WAY `램프 2개 감지`.
 - ROI를 LED가 없는 구석으로 옮기면 `LED 점멸을 찾지 못했습니다`로 바뀌고, LED 자리로 되돌리면 `CH21` 복귀.
@@ -61,6 +70,9 @@
 | `app_v5_14_unmatched.png` | 표에 없는 조합 → 고객센터 전화 링크 |
 | `app_v5_15_live_mp4.png` | 라이브에서 H.264 mp4 업로드 판독 |
 | `test_led_ch21.mp4` / `test_led_frame_*.png` | E2E용 실제 점멸 영상(H.264 30KB)·프레임 |
+| `gh_pages_main.png` | GitHub Pages 라이브 메인 — 배지 없음·하단 탭바 4개 완전 노출 |
+| `gh_pages_qr.png` | GitHub Pages QR 모달 — `https://nicehama.github.io/aircode/` 표기 |
+| `gh_pages_led_ch21.png` | GitHub Pages 라이브에서 실제 영상 업로드 → `CH21` 판독 |
 
 ## 파일 구성
 ```
@@ -69,6 +81,7 @@ build_app.py           템플릿 + JSON + 아이콘 + QR + 매니페스트 → �
 make_assets.py         아이콘 SVG/PNG, 배포 QR SVG 생성 (assets/)
 make_test_video.py     E2E용 CH21 점멸 영상 생성
 verify_v5_live.py      배포 URL 전 기능 + 실제 영상 업로드 E2E
+verify_pages.py        GitHub Pages 라이브 검증(배지·탭바·QR·CH21·오류)
 test_v5_local.py       로컬 파일 기준 기능 전수 점검
 test_v5_small.py       375×667 + 매니페스트 확인
 test_upload.py         파일 하나만 지정해 판독 결과 확인 (python3 test_upload.py 경로)
@@ -83,10 +96,14 @@ cd /workspace/app-aircon-prototype
 python3 make_assets.py      # 아이콘·QR 다시 만들 때만
 python3 build_app.py        # app_template.html → downloads/…html (자원 인라인)
 cp ../downloads/에어컨_에러코드_앱_프로토타입.html dist/index.html
-cd dist && curl -s -T index.html "https://deed.page/v1/sites?slug=aircon-code-demo-1120" \
-  -H "Authorization: Bearer $(cat ../.deed-token)" -H "X-Client: pickle-agent"
+# 저장소 사본(/workspace/aircode-repo)에 반영
+cp dist/index.html /workspace/aircode-repo/index.html
+cd /workspace/aircode-repo && git add -A && git commit -m "deploy: v11" \
+  && git push origin main && git push origin main:gh-pages
 ```
-토큰: `app-aircon-prototype/.deed-token` (chmod 600). 같은 slug로 다시 올리면 새 버전(v9…)이 같은 URL에 반영된다.
+`gh-pages`에 푸시하면 GitHub Pages가 1분 안에 같은 주소에 반영한다. (Pages 설정 API는 GitHub App 권한 문제로 403 — 저장소 화면에서 바꾸지 않는다.)
+
+이전 deed.page 배포용 토큰: `app-aircon-prototype/.deed-token` (chmod 600, 저장소에는 올리지 않음).
 
 ## 로컬 검수 방법
 이 환경의 Playwright Chromium은 시스템 라이브러리가 빠져 있어 `LD_LIBRARY_PATH`가 필요하다.

@@ -21,15 +21,18 @@ app-aircon-prototype/       앱 소스
 ## 수정 후 다시 배포하기
 
 ```sh
-cd app-aircon-prototype
-python3 make_assets.py       # 아이콘·QR을 다시 만들 때만
-mkdir -p ../downloads
-python3 build_app.py         # → ../downloads/에어컨_에러코드_앱_프로토타입.html
-cp ../downloads/에어컨_에러코드_앱_프로토타입.html ../index.html
-cd .. && git add -A && git commit -m "update app" && git push
+./deploy.sh
 ```
 
-푸시하면 GitHub Pages 가 1분 안에 같은 주소에 반영합니다.
+`deploy.sh`는 `app_template.html` → 단일 HTML 빌드 → `index.html` 갱신 → `main`과 `gh-pages` 브랜치에 푸시까지 한다. **GitHub Pages 배포 소스는 `gh-pages` 브랜치**(경로 `/`)이고, 푸시하면 1분 안에 같은 주소에 반영된다.
+
+수동으로 할 때:
+
+```sh
+cd app-aircon-prototype && mkdir -p ../downloads && python3 build_app.py
+cp ../downloads/에어컨_에러코드_앱_프로토타입.html ../index.html
+cd .. && git add -A && git commit -m "update app" && git push origin main && git push origin main:gh-pages
+```
 
 ## 앱 구성
 
