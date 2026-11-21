@@ -4,7 +4,8 @@
 - **https://nicehama.github.io/aircode/** (GitHub Pages — 배지·광고 없음, 로그인·비밀번호 없음)
 - 저장소: **https://github.com/nicehama/aircode** (Public, `main` = 소스 / `gh-pages` = 배포본)
 - 배포 파일: `index.html` (저장소 루트 = `dist/index.html` = `downloads/에어컨_에러코드_앱_프로토타입.html`)
-- 최신 배포: **v10 (GitHub Pages)** — 2026-11-21 21:58 KST, 536,331 bytes, QR·PWA 매니페스트 주소 `https://nicehama.github.io/aircode/`
+- 최신 배포: **v11 (GitHub Pages)** — 2026-11-21 22:06 KST, 543,116 bytes (sha256 `a2047138…c9c91`), QR·PWA 매니페스트 주소 `https://nicehama.github.io/aircode/`
+  - v10 22:00 → **v11 22:05: 아카데미 탭에 쾌적하마 홍보(서비스 대상·기종·절차·강점)·홈페이지/네이버 블로그/대표번호 링크·문의 모달 링크 보강**
   - v1 11-17 20:35 (체크리스트 탭) → v2 20:58 (현장 진단 개편) → v3 21:00 (코드바·진행바) → v4 21:10 (반응 띠)
   - **v5~v10 11-21: 에어코드 이름·QR 배포 모달·즐겨찾기·tel 링크·실제 LED 영상 판독 엔진** (v6 tel 정규식, v7 PWA 매니페스트, v8 모드 칩 폭, v9 미매칭 코드 전화 링크, v10 전화 링크 스타일)
 - 이전 deed.page 주소(`https://aircon-code-demo-1120.deed.page/`)는 옛 빌드로 남아 있다(QR이 deed.page를 가리키고 "Published with deed.page" 배지가 붙음). **새로 배포·공유할 주소는 GitHub Pages만 쓴다.**
@@ -34,12 +35,28 @@
   - `삼성 4WAY`·정지 사진: 켜진 램프의 위치·색을 클러스터로 찾아 보여 주고, **[4WAY 조합기에서 확정 →]** 으로 램프 개수(4/5)에 맞는 조합기를 바로 연다.
 - **결과 카드**: 실측 파형(캔버스, 적/녹/밝기 + 점멸 구간 음영), `적색 2회 · 녹색 1회` 같은 실측값, **±1 보정 버튼**(적/녹·자릿수·횟수 — 빛번짐 1회 오차를 재촬영 없이 수정), 매칭 코드·원인·점검·리셋, [상세 점검 보기]·[현장 진단 시작 →], 그리고 "영상은 기기 내에서만 실시간 분석되며 외부로 전송되지 않습니다." 문구.
 
+## v11에서 바뀐 것 — 아카데미 탭 쾌적하마 홍보
+- 히어로 버튼을 2×2로: `아카데미 홈페이지`(cjyacademy.com, 청록) · `쾌적하마 홈페이지`(nicehama.co.kr, 주황) · `교육 문의` · `출장·견적 문의`. 390px에서 159px씩 두 줄, 320px 이하에서는 한 줄씩으로 자연스럽게 접힌다(`flex:1 1 calc(50% - 4px); min-width:132px`).
+- 쾌적하마 카드: 대상·기종·장비·약품 요약 + 태그 6개 + 링크 3개 — `nicehama.co.kr`(홈페이지) · `네이버 블로그`(blog.naver.com/nice_hama) · `02-6346-0075`(`tel:` 원터치) + `출장·견적 문의` 버튼.
+- 새 패널 **쾌적하마 서비스 안내**: 서비스 대상(가정·주택/매장·상가/기업·오피스/학교/병원·의료/관공서), 취급 기종(벽걸이·스탠드·천장형 1/2/4WAY·원형·매립덕트), 진행 절차 5단계, 강점 4개(완전 분해·40℃/120bar 고온고압·친환경 전용 약품·S2B 학교장터 등록/나라장터 입찰 요건).
+- `data-inquiry="service"` 모달에 `nicehama.co.kr` · `네이버 블로그` · `02-6346-0075` 링크(`#modalLinks`, 서비스 모달에서만 노출).
+- 공개 홍보 정보만 수록: 옛 법인명(`(주)잡고릴라`)·주소·사업자번호·대표자명은 넣지 않았다(본문 문자열 0건 검증).
+
 ## GitHub Pages 라이브 검증 (2026-11-21 21:58, `verify_pages.py`)
 - `https://nicehama.github.io/aircode/` → **HTTP 200**, 내려받은 HTML이 로컬 `dist/index.html`과 **바이트 동일**(sha256 `29f4738…0334`, 536,331 bytes).
-- 메인: `deed.page`·`Published with`·`Report abuse` 문자열 **0건**, 외부 링크는 `cjyacademy.com` 2개(브랜드 링크)뿐. 하단 탭바 4개(검색·LED 찾기·현장 진단·아카데미) 모두 뷰포트 안(`783~838px`, 844px 화면), 다른 요소에 가려짐 없음(`elementFromPoint` 일치).
+- 메인: `deed.page`·`Published with`·`Report abuse` 문자열 **0건**, 외부 링크는 `cjyacademy.com` 2개 + `nicehama.co.kr`(히어로·카드·모달) · `blog.naver.com/nice_hama`(카드·모달) · `tel:02-6346-0075`(카드·모달) 등 쾌적하마 공식 채널뿐. 하단 탭바 4개(검색·LED 찾기·현장 진단·아카데미) 모두 뷰포트 안(`783~838px`, 844px 화면), 다른 요소에 가려짐 없음(`elementFromPoint` 일치).
 - QR 모달: 표기 `https://nicehama.github.io/aircode/`, QR 이미지를 OpenCV `QRCodeDetector`로 디코드한 값 **동일**.
 - LED 찾기: `test_led_ch21.mp4` 업로드 → **`CH21` / 적색 2회 · 녹색 1회 / 122프레임 / 자동 ROI**, 점멸 6개.
 - **콘솔·페이지 오류 0건.** 스크린샷: `downloads/gh_pages_main.png` · `gh_pages_qr.png` · `gh_pages_led_ch21.png`
+
+## v11 라이브 검증 — 아카데미 탭 쾌적하마 홍보 (`verify_promo_live.py`)
+- `https://nicehama.github.io/aircode/` → **HTTP 200**, 내려받은 HTML이 `index.html`과 **바이트 동일**(sha256 `a2047138…c9c91`, 543,116 bytes). 푸시 후 약 20초(폴링 5회)에 새 본문 반영.
+- 히어로 버튼 4개 모두 159×42px·두 줄 배치, 가로 넘침 0(`scrollWidth > clientWidth` 검사). 링크: `cjyacademy.com`·`https://www.nicehama.co.kr`.
+- 쾌적하마 카드(362×381px): `nicehama.co.kr`·`네이버 블로그`·`tel:02-6346-0075`·`출장·견적 문의` 4개 모두 카드 안에 들어옴(오버플로 0).
+- 문의 모달: 제목 `출장·견적 문의`, 링크 3개(`nicehama.co.kr`·`네이버 블로그`·`02-6346-0075`) 노출.
+- 금지어 `잡고릴라` 본문 **0건**. 문서 가로 스크롤 없음, 탭바 4개 모두 뷰포트 안.
+- 회귀: 검색 `CH21` → `‘CH21’ 검색` 1건, QR URL·OpenCV 디코드 `https://nicehama.github.io/aircode/` 일치, LED `test_led_ch21.mp4` → **`CH21`**(123프레임·점멸 6개), **콘솔·페이지 오류 0건**.
+- 스크린샷: `downloads/gh_pages_academy_promo.png`(390×1600 한눈에) · `gh_pages_academy_promo_top.png`(390×844 상단) · `gh_pages_academy_promo_card.png` · `gh_pages_academy_inquiry_modal.png` · `gh_pages_search_regress.png`
 
 ## 검증 기록 (이전 deed.page 배포, Playwright 390×844, `LD_LIBRARY_PATH=/workspace/tmp/libs/root/usr/lib/x86_64-linux-gnu`)
 - **실제 영상 E2E**(WebM·H.264 mp4 둘 다 확인): `make_test_video.py`로 적색 2회 → 녹색 1회 패턴이 두 번 반복되는 9.5초 640×480 30fps 영상(`downloads/test_led_ch21.mp4`, H.264 30KB)을 만들고, 배포 URL에서 `#fileIn`에 실제 업로드 → **`CH21` / 적색 2회 · 녹색 1회 / 123프레임 / 자동 ROI** 판독. 파형에 점멸 6개(2묶음)가 그려지고 ± 보정으로 CH22↔CH21 전환 확인.
