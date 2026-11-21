@@ -37,7 +37,7 @@ def qr_svg(matrix, module=8, quiet=3, dark='#0B2E3A', light='#FFFFFF'):
                 x += 1
     d = ''.join(parts)
     return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d" '
-            'shape-rendering="crispEdges" role="img" aria-label="에어코드 설치 QR">'
+            'shape-rendering="crispEdges" role="img" aria-label="에러코드.zip 설치 QR">'
             '<rect width="%d" height="%d" fill="%s"/>'
             '<path d="%s" fill="%s"/></svg>') % (n + quiet * 2, n + quiet * 2, size, size,
                                                  n + quiet * 2, n + quiet * 2, light, d, dark)

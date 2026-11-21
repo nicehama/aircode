@@ -1,10 +1,11 @@
-# 에어코드 (AirCode) — 에어컨 LED·에러코드 현장 앱
+# 에러코드.zip — 에어컨 LED·에러코드 현장 앱
 
 ## 배포 URL
 - **https://nicehama.github.io/aircode/** (GitHub Pages — 배지·광고 없음, 로그인·비밀번호 없음)
 - 저장소: **https://github.com/nicehama/aircode** (Public, `main` = 소스 / `gh-pages` = 배포본)
 - 배포 파일: `index.html` (저장소 루트 = `dist/index.html` = `downloads/에어컨_에러코드_앱_프로토타입.html`)
-- 최신 배포: **v11 (GitHub Pages)** — 2026-11-21 22:06 KST, 543,116 bytes (sha256 `a2047138…c9c91`), QR·PWA 매니페스트 주소 `https://nicehama.github.io/aircode/`
+- 최신 배포: **v12 (GitHub Pages)** — 앱 표시 이름을 **에러코드.zip**으로 변경. 주소·저장소·`qr_site.svg`·`localStorage` 키(`aircode_fav_v1`·`aircode_recent_v1`)는 그대로.
+  - v11 22:06 (543,116 bytes, sha256 `a2047138…c9c91`) → **v12: `<title>`·apple/application-name·PWA 매니페스트(name/short_name)·상단 헤더·공유 제목·QR aria-label을 `에러코드.zip`으로** (헤더의 `AirCode` 영문 표기 제거)
   - v10 22:00 → **v11 22:05: 아카데미 탭에 쾌적하마 홍보(서비스 대상·기종·절차·강점)·홈페이지/네이버 블로그/대표번호 링크·문의 모달 링크 보강**
   - v1 11-17 20:35 (체크리스트 탭) → v2 20:58 (현장 진단 개편) → v3 21:00 (코드바·진행바) → v4 21:10 (반응 띠)
   - **v5~v10 11-21: 에어코드 이름·QR 배포 모달·즐겨찾기·tel 링크·실제 LED 영상 판독 엔진** (v6 tel 정규식, v7 PWA 매니페스트, v8 모드 칩 폭, v9 미매칭 코드 전화 링크, v10 전화 링크 스타일)
@@ -12,7 +13,7 @@
 - GitHub Pages 소스는 `gh-pages` 브랜치다(빈 저장소에 `gh-pages`를 처음 푸시했을 때 자동 활성화됨, `build_type: legacy`, 경로 `/`). Pages 설정 API는 GitHub App 권한(`Pages`)이 없어 403이므로, 배포는 `gh-pages` 푸시로 한다.
 
 ## v5에서 바뀐 것 — 앱 이름과 배포
-- 이름을 **에어코드 (AirCode)** 로 확정: `<title>`, 헤더 타이틀, `apple-mobile-web-app-title`, `application-name`, PWA 매니페스트(name/short_name), 아이콘.
+- 이름 표기 위치: `<title>`, 헤더 타이틀, `apple-mobile-web-app-title`, `application-name`, PWA 매니페스트(name/short_name), 아이콘. (v5~v11 `에어코드 (AirCode)` → **v12 `에러코드.zip`**)
 - 아이콘은 `assets/icon.svg`(파비콘·매니페스트)와 `assets/icon-180.png`·`icon-512.png`(apple-touch-icon)를 **base64로 HTML 안에 인라인**했다. 외부 CDN·별도 파일 없이 동작한다.
 - **교육생 배포 QR 모달**: 헤더 오른쪽 QR 버튼, 아카데미 탭 '교육생에게 앱 배포' 카드에서 연다. QR은 `assets/qr_site.svg`(빌드 시 생성한 SVG path)로 HTML에 내장돼 **인터넷 없이도 화면에 뜨고**, [링크 복사]·[공유하기](`navigator.share` 있으면 공유 시트)가 붙는다.
   - QR이 실제로 읽히는지 배포 화면을 캡처해 OpenCV `QRCodeDetector`로 디코드해 확인했다 → `https://aircon-code-demo-1120.deed.page/`.

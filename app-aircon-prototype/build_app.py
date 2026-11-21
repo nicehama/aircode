@@ -36,8 +36,8 @@ if os.path.exists(qr):
 # PWA 매니페스트 (앱 이름·아이콘·테마색) — 데이터 URI 라 별도 파일·CDN 없이 동작
 import urllib.parse
 manifest = {
-    'name': '에어코드 (AirCode)',
-    'short_name': '에어코드',
+    'name': '에러코드.zip',
+    'short_name': '에러코드.zip',
     'description': '에어컨 LED 점멸을 영상으로 읽어 에러코드와 점검 순서를 알려 주는 현장 도구',
     'lang': 'ko',
     'start_url': SITE_URL,

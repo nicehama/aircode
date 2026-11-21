@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B6E6E">
-<title>에어코드 (AirCode) — 에어컨 LED·에러코드</title>
-<meta name="description" content="에어코드(AirCode) — 에어컨 LED 점멸을 영상으로 읽어 에러코드와 점검 순서를 알려 주는 현장 도구. 최정예홈케어아카데미·쾌적하마.">
+<title>에러코드.zip — 에어컨 LED·에러코드</title>
+<meta name="description" content="에러코드.zip — 에어컨 LED 점멸을 영상으로 읽어 에러코드와 점검 순서를 알려 주는 현장 도구. 최정예홈케어아카데미·쾌적하마.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="에어코드">
-<meta name="application-name" content="에어코드">
+<meta name="apple-mobile-web-app-title" content="에러코드.zip">
+<meta name="application-name" content="에러코드.zip">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,__ICON_SVG_B64__">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,__ICON_180__">
 <link rel="apple-touch-icon" sizes="512x512" href="data:image/png;base64,__ICON_512__">
@@ -499,8 +499,8 @@ nav.tabbar button.on .navdot{opacity:1}
 .modal-box .row{margin-top:14px;display:flex;gap:8px}
 .modal-box .row button{flex:1;height:42px;border-radius:11px;font-size:12.5px;font-weight:700}
 
-/* ---------- 에어코드 v5 ---------- */
-.top-title .top-en{font-size:10.5px;font-weight:700;letter-spacing:.4px;opacity:.72;margin-left:3px}
+/* ---------- 에러코드.zip v5 ---------- */
+.top-title .top-ext{opacity:.8}
 .qr-btn{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;flex:none}
 .qr-btn svg{width:18px;height:18px}
 .qr-btn:active{background:rgba(255,255,255,.28)}
@@ -602,7 +602,7 @@ nav.tabbar button.on .navdot{opacity:1}
     <div class="top-row">
       <div class="logo"><svg><use href="#i-snow"/></svg></div>
       <div class="top-titles">
-        <div class="top-title">에어코드<span class="top-en">AirCode</span></div>
+        <div class="top-title">에러코드<span class="top-ext">.zip</span></div>
         <div class="top-sub" id="topSub">삼성 · LG · 캐리어 · 위니아 · 파세코 · FCU</div>
       </div>
       <button class="qr-btn" id="qrBtn" aria-label="교육생 배포용 QR·링크"><svg><use href="#i-qr"/></svg></button>
@@ -2867,7 +2867,7 @@ function initQr(){
   $('#qrCopy').addEventListener('click', () => copyText(SITE_URL));
   $('#qrShare').addEventListener('click', async () => {
     if (navigator.share){
-      try { await navigator.share({ title:'에어코드 (AirCode)', text:'에어컨 LED·에러코드 현장 도구', url:SITE_URL }); return; }
+      try { await navigator.share({ title:'에러코드.zip', text:'에어컨 LED·에러코드 현장 도구', url:SITE_URL }); return; }
       catch(e){ if (e && e.name === 'AbortError') return; }
     }
     copyText(SITE_URL);
