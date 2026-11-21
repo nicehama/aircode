@@ -381,12 +381,13 @@ main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;p
 .promo-hero h2{margin:7px 0 6px;font-size:19px;letter-spacing:-.5px;line-height:1.3}
 .promo-hero p{margin:0;font-size:11.8px;line-height:1.65;color:#C6E6E2}
 .promo-hero .glow{position:absolute;width:170px;height:170px;right:-60px;bottom:-80px;border-radius:50%;background:radial-gradient(circle,rgba(56,225,198,.22),transparent 70%)}
-.promo-btns{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1}
-.promo-btns a,.promo-btns button{flex:1;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:6px;
-  font-size:12.5px;font-weight:700;text-decoration:none}
+.promo-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;position:relative;z-index:1}
+.promo-btns a,.promo-btns button{flex:1 1 calc(50% - 4px);min-width:132px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;letter-spacing:-.2px}
 .promo-btns .solid{background:#38E1C6;color:#04302E}
+.promo-btns .warm{background:#EE7B3C;color:#3A1A05}
 .promo-btns .line{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff}
-.promo-btns svg{width:14px;height:14px}
+.promo-btns svg{width:14px;height:14px;flex:none}
 .promo-card{margin:12px 14px;background:#fff;border-radius:var(--r);padding:15px;box-shadow:var(--shadow);border:1px solid #EDF2F4;display:flex;gap:12px}
 .promo-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;color:#fff;font-weight:800;font-size:13px;letter-spacing:-.5px}
 .promo-mark.a{background:linear-gradient(150deg,#0E8A80,#0B6E6E)}
@@ -397,6 +398,28 @@ main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;p
 .promo-txt p{font-size:11.8px;color:var(--ink2);line-height:1.6;margin:6px 0 0}
 .promo-txt .link-btn{margin-top:9px;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--primary);text-decoration:none}
 .promo-txt .link-btn svg{width:13px;height:13px}
+.promo-txt .link-btn.go{margin-top:10px;width:100%;height:38px;border-radius:10px;background:var(--primary);color:#fff;
+  justify-content:center;font-size:12px;gap:5px}
+.promo-txt .link-btn.go svg{width:13px;height:13px}
+.promo-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.promo-tags span{font-size:10.5px;background:#F4F8F8;border:1px solid #E7EEEE;border-radius:6px;padding:3px 7px;color:#4C6666;font-weight:600;line-height:1.4}
+.promo-links{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.promo-links a{height:38px;border-radius:10px;background:var(--accent-soft);border:1px solid #F6E2D3;display:flex;align-items:center;justify-content:center;
+  gap:5px;font-size:11.5px;font-weight:700;color:#A9500F;text-decoration:none;white-space:nowrap;min-width:0;letter-spacing:-.2px}
+.promo-links a svg{width:12px;height:12px;flex:none}
+.promo-links a.tel{grid-column:1/-1;background:#FDE7D8;border-color:#F3D3BC;color:#8F4107;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;letter-spacing:.2px}
+.svc-row{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F0F4F5;align-items:flex-start}
+.svc-row.last{border-bottom:0;padding-bottom:2px}
+.svc-k{flex:none;width:62px;font-size:11px;font-weight:800;color:var(--primary);padding-top:3px;letter-spacing:-.2px}
+.svc-chips{display:flex;flex-wrap:wrap;gap:5px;flex:1;min-width:0}
+.svc-chips span{font-size:10.5px;background:var(--primary-soft);border:1px solid #D5E9E6;border-radius:6px;padding:3px 7px;color:#0B5B58;font-weight:600;line-height:1.4}
+.svc-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.svc-list li{display:flex;gap:8px;font-size:11.5px;color:var(--ink2);line-height:1.55}
+.svc-list li .n{flex:none;width:17px;height:17px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:800;
+  display:grid;place-items:center;margin-top:1px}
+.svc-list li b{color:var(--ink);font-weight:700}
+.svc-foot{margin-top:10px;padding-top:9px;border-top:1px solid #F0F4F5;font-size:10.5px;color:var(--muted);line-height:1.6}
 .center-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #F0F4F5;font-size:12px}
 .center-row:last-child{border-bottom:0}
 .center-row .cm{font-weight:600;color:var(--ink);flex:1;min-width:0}
@@ -466,6 +489,13 @@ nav.tabbar button.on .navdot{opacity:1}
 .modal-box{background:#fff;border-radius:20px;padding:20px;max-width:340px;width:100%}
 .modal-box h3{margin:0 0 8px;font-size:16px;letter-spacing:-.3px}
 .modal-box p{margin:0;font-size:12.5px;line-height:1.65;color:var(--ink2)}
+.modal-box .modal-links{display:none;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.modal-box .modal-links.on{display:grid}
+.modal-box .modal-links a{height:40px;border-radius:10px;background:#F4F8F8;border:1px solid #E4EDED;display:flex;align-items:center;justify-content:center;
+  gap:5px;font-size:11.5px;font-weight:700;color:var(--primary);text-decoration:none;white-space:nowrap;letter-spacing:-.2px}
+.modal-box .modal-links a svg{width:12px;height:12px;flex:none}
+.modal-box .modal-links a.tel{grid-column:1/-1;background:var(--primary);border-color:var(--primary);color:#fff;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
 .modal-box .row{margin-top:14px;display:flex;gap:8px}
 .modal-box .row button{flex:1;height:42px;border-radius:11px;font-size:12.5px;font-weight:700}
 
@@ -783,7 +813,9 @@ nav.tabbar button.on .navdot{opacity:1}
         <p>최정예홈케어아카데미는 가전세척·에어컨 수리 교육을, 쾌적하마는 분해세척·수리·유지보수를 맡습니다. 이 앱은 두 곳의 현장 도구로 쓰입니다.</p>
         <div class="promo-btns">
           <a class="solid" href="https://cjyacademy.com" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>아카데미 홈페이지</a>
+          <a class="warm" href="https://www.nicehama.co.kr" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>쾌적하마 홈페이지</a>
           <button class="line" data-inquiry="academy">교육 문의</button>
+          <button class="line" data-inquiry="service">출장·견적 문의</button>
         </div>
       </div>
 
@@ -814,9 +846,42 @@ nav.tabbar button.on .navdot{opacity:1}
         <div class="promo-mark b">쾌적</div>
         <div class="promo-txt">
           <b>쾌적하마</b>
-          <div class="tagline">에어컨 분해세척 · 수리 · 유지보수</div>
-          <p>가정·매장·사무실 에어컨 분해세척과 고장 수리, 정기 유지보수를 진행합니다. 출장 견적은 현장 사진과 모델명을 함께 주시면 빠릅니다.</p>
-          <button class="link-btn" data-inquiry="service">출장·견적 문의 <svg><use href="#i-chev"/></svg></button>
+          <div class="tagline">에어컨 완전 분해 세척 · 수리 · 유지보수</div>
+          <p>가정·매장·기업·관공서까지. 벽걸이·스탠드·천장형(1/2/4WAY·원형)·매립덕트 전 기종을 고온·고압 장비와 친환경 전용 약품으로 완전 분해 세척합니다. 출장 견적은 현장 사진과 모델명을 함께 주시면 빠릅니다.</p>
+          <div class="promo-tags">
+            <span>가정·매장·기업·관공서</span><span>전 기종 완전 분해</span><span>고온·고압 장비</span><span>친환경 전용 약품</span><span>S2B 학교장터 등록</span><span>나라장터 입찰 요건 충족</span>
+          </div>
+          <div class="promo-links">
+            <a href="https://www.nicehama.co.kr" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>nicehama.co.kr</a>
+            <a href="https://blog.naver.com/nice_hama" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>네이버 블로그</a>
+            <a class="tel" href="tel:02-6346-0075"><svg><use href="#i-tel"/></svg>02-6346-0075 전화 걸기</a>
+          </div>
+          <button class="link-btn go" data-inquiry="service">출장·견적 문의 <svg><use href="#i-chev"/></svg></button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-head" style="padding:4px 4px 8px"><div class="sec-title">쾌적하마 서비스 안내</div><div class="sec-sub">공식 홈페이지 기준</div></div>
+        <div class="panel">
+          <div class="svc-row">
+            <div class="svc-k">서비스 대상</div>
+            <div class="svc-chips"><span>가정·주택</span><span>매장·상가</span><span>기업·오피스</span><span>학교</span><span>병원·의료</span><span>관공서</span></div>
+          </div>
+          <div class="svc-row">
+            <div class="svc-k">취급 기종</div>
+            <div class="svc-chips"><span>벽걸이</span><span>스탠드</span><span>천장형 1WAY</span><span>2WAY</span><span>4WAY</span><span>원형</span><span>매립덕트</span></div>
+          </div>
+          <div class="svc-row last">
+            <div class="svc-k">진행 절차</div>
+            <div class="svc-chips"><span>상담·문의</span><span>현장 방문 견적</span><span>일정 조율</span><span>세척·조립</span><span>정상 작동 확인</span></div>
+          </div>
+          <ol class="svc-list">
+            <li><span class="n">1</span><div><b>완전 분해 세척</b> — 그릴·프론트판넬·PCB·드레인팬·송풍팬을 순서대로 분해해 부품별로 세척합니다.</div></li>
+            <li><span class="n">2</span><div><b>고온·고압 장비</b> — 40℃ 온수와 120bar 고압 세척으로 열교환기의 묵은 오염까지 제거합니다.</div></li>
+            <li><span class="n">3</span><div><b>친환경 전용 약품</b> — 오염 물질 제거 성능을 공인받은 세척 전용 약품으로 제품 부식을 방지합니다.</div></li>
+            <li><span class="n">4</span><div><b>공공 입찰 대응</b> — S2B 학교장터 공식 등록 업체이며 나라장터 입찰 요건을 충족합니다.</div></li>
+          </ol>
+          <div class="svc-foot">수리·유지보수 상담은 대표번호 02-6346-0075, 서비스 신청과 작업 사례는 홈페이지·블로그에서 확인하실 수 있습니다.</div>
         </div>
       </div>
 
@@ -867,6 +932,7 @@ nav.tabbar button.on .navdot{opacity:1}
   <div class="modal-box">
     <h3 id="modalTitle"></h3>
     <p id="modalText"></p>
+    <div class="modal-links" id="modalLinks"></div>
     <div class="row"><button class="btn-ghost" id="modalOk">확인</button></div>
   </div>
 </div>
@@ -2770,7 +2836,16 @@ function initPromo(){
     $('#modalTitle').textContent = acad ? '교육 문의' : '출장·견적 문의';
     $('#modalText').textContent = acad
       ? '교육 과정과 일정은 최정예홈케어아카데미 홈페이지(cjyacademy.com)에서 확인하실 수 있습니다. 정식 앱에서는 상담 신청서가 이 자리에 들어갑니다.'
-      : '에어컨 분해세척·수리 출장 견적은 현장 사진과 모델명을 함께 주시면 안내드립니다. 정식 앱에서는 견적 요청서가 이 자리에 들어갑니다.';
+      : '에어컨 분해세척·수리 출장 견적은 현장 사진과 모델명을 함께 주시면 안내드립니다. 쾌적하마 홈페이지에서 서비스 신청도 가능합니다. 정식 앱에서는 견적 요청서가 이 자리에 들어갑니다.';
+    const links = $('#modalLinks');
+    if (acad){
+      links.classList.remove('on'); links.innerHTML = '';
+    } else {
+      links.classList.add('on');
+      links.innerHTML = '<a href="https://www.nicehama.co.kr" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>nicehama.co.kr</a>' +
+        '<a href="https://blog.naver.com/nice_hama" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>네이버 블로그</a>' +
+        '<a class="tel" href="tel:02-6346-0075"><svg><use href="#i-tel"/></svg>02-6346-0075</a>';
+    }
     $('#modal').classList.add('on');
   }));
   $('#modalOk').addEventListener('click', () => $('#modal').classList.remove('on'));
