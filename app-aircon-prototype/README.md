@@ -1,0 +1,107 @@
+# 에어코드 (AirCode) — 에어컨 LED·에러코드 현장 앱
+
+## 배포 URL
+- **https://aircon-code-demo-1120.deed.page/** (deed.page 무료 플랜, 만료 없음, 비밀번호 없음)
+- 배포 파일: `dist/index.html` (원본 `downloads/에어컨_에러코드_앱_프로토타입.html`과 같은 파일)
+- 최신 배포: **v10** — 2026-11-21 / slug `aircon-code-demo-1120`, 536,289 bytes, `permanent: true`
+  - v1 11-17 20:35 (체크리스트 탭) → v2 20:58 (현장 진단 개편) → v3 21:00 (코드바·진행바) → v4 21:10 (반응 띠)
+  - **v5~v10 11-21: 에어코드 이름·QR 배포 모달·즐겨찾기·tel 링크·실제 LED 영상 판독 엔진** (v6 tel 정규식, v7 PWA 매니페스트, v8 모드 칩 폭, v9 미매칭 코드 전화 링크, v10 전화 링크 스타일)
+- 무료 플랜이라 페이지 오른쪽 아래에 작은 "Published with deed.page" 링크가 붙는다(검색 노출은 `listed:false`로 미등록).
+
+## v5에서 바뀐 것 — 앱 이름과 배포
+- 이름을 **에어코드 (AirCode)** 로 확정: `<title>`, 헤더 타이틀, `apple-mobile-web-app-title`, `application-name`, PWA 매니페스트(name/short_name), 아이콘.
+- 아이콘은 `assets/icon.svg`(파비콘·매니페스트)와 `assets/icon-180.png`·`icon-512.png`(apple-touch-icon)를 **base64로 HTML 안에 인라인**했다. 외부 CDN·별도 파일 없이 동작한다.
+- **교육생 배포 QR 모달**: 헤더 오른쪽 QR 버튼, 아카데미 탭 '교육생에게 앱 배포' 카드에서 연다. QR은 `assets/qr_site.svg`(빌드 시 생성한 SVG path)로 HTML에 내장돼 **인터넷 없이도 화면에 뜨고**, [링크 복사]·[공유하기](`navigator.share` 있으면 공유 시트)가 붙는다.
+  - QR이 실제로 읽히는지 배포 화면을 캡처해 OpenCV `QRCodeDetector`로 디코드해 확인했다 → `https://aircon-code-demo-1120.deed.page/`.
+- 검색 탭: 카드마다 **★ 즐겨찾기** 토글 + `전체 코드 / ★ 즐겨찾기 / 최근 본` 필터. `localStorage: aircode_fav_v1 · aircode_recent_v1`(최근 20건)에 남아 새로고침·앱 전환 후에도 유지된다.
+- 제조사 고객센터 8곳 중 번호가 있는 7곳과 현장 진단 판정 화면의 고객센터가 **`tel:` 원터치 전화** 링크가 됐다(파세코·신우공조·에이피의 지역번호, 삼성·LG·캐리어·위니아의 1588·1544 번호 모두).
+
+## 핵심: 실제 작동하는 LED 영상 판독 엔진 (서버·API 키 없음)
+`app_template.html`의 `ai` 객체 + `AI_MODES`가 전부다. 업로드한 영상은 브라우저 메모리에서만 읽고 어디로도 보내지 않는다.
+
+- **입력**: ① 영상 바로 찍기(`<input type="file" accept="video/*" capture="environment">`) ② 영상·사진 불러오기(`video/*,image/*`) ③ 샘플로 체험. 모드 칩은 `LG 실외기(적/녹) · LG 실내기(단색) · 캐리어(운전램프) · 삼성 4WAY(사진·램프)`.
+- **샘플링**: `<video>`를 160×120 캔버스에 그려 13fps로 최대 12초(최소 3초) 프레임을 읽는다. 재생이 멈추면(헤드리스·코덱 문제) `seeked` 이벤트 기반 시킹으로 자동 전환한다. 4×4px 셀(40×30 격자) 평균 R/G/B만 남겨 메모리를 2MB 안쪽으로 유지한다.
+- **ROI(보는 지점)**: 미리보기 위를 한 번 누르면 그 지점을, 누르지 않으면 중앙 가이드 안에서 **시간에 따른 적색·녹색·밝기 변화가 가장 큰 셀 군집**을 자동으로 찾는다(3×3 평균으로 군집화). 분석 후 다른 곳을 눌러도 재촬영 없이 캐시된 프레임으로 즉시 다시 센다.
+- **신호**: 셀별 `적색 우세 = R − max(G,B)×0.6`, `녹색 우세 = G − max(R,B)×0.6`, `휘도 = 0.299R+0.587G+0.114B`를 ROI 가중 평균으로 시계열화.
+- **검출**: 3프레임 평균 → 10/90 백분위 기반 **적응형 임계값(히스테리시스 30%/60%)** → 짧은 소등 병합(60ms)·1프레임 미만 제거. 점멸마다 적/녹/무채색을 판정하고, 점멸 사이 **휴지 구간**으로 코드 묶음을 나눈다(적2·녹1이 두 번 반복되면 한 묶음만 센다 — 첫 묶음이 잘려도 가장 많이 반복된 패턴을 고른다).
+- **품질 게이트**: ROI 신호의 절대 변화폭이 12레벨 미만이거나 점멸이 26회를 넘으면 **엉뚱한 코드를 만들지 않고 '검출 실패'** 로 돌려보낸다(어두운 곳을 눌렀을 때 CH09 같은 오판 방지).
+- **코드 매칭**
+  - `LG 실외기`: 적색 횟수×10 + 녹색 횟수 → `CH21`, `DATA.led.lgPcb`·`DATA.entries` 대조
+  - `LG 실내기`: 0.8초 이상 긴 소등으로 자릿수 분리 → `CH{1}{2}`(한 자리면 `CH0{n}`)
+  - `캐리어`: 연속 점멸 횟수 → `DATA.led.carrierLamp`(운전램프 5회 등)
+  - `삼성 4WAY`·정지 사진: 켜진 램프의 위치·색을 클러스터로 찾아 보여 주고, **[4WAY 조합기에서 확정 →]** 으로 램프 개수(4/5)에 맞는 조합기를 바로 연다.
+- **결과 카드**: 실측 파형(캔버스, 적/녹/밝기 + 점멸 구간 음영), `적색 2회 · 녹색 1회` 같은 실측값, **±1 보정 버튼**(적/녹·자릿수·횟수 — 빛번짐 1회 오차를 재촬영 없이 수정), 매칭 코드·원인·점검·리셋, [상세 점검 보기]·[현장 진단 시작 →], 그리고 "영상은 기기 내에서만 실시간 분석되며 외부로 전송되지 않습니다." 문구.
+
+## 검증 기록 (배포 URL, Playwright 390×844, `LD_LIBRARY_PATH=/workspace/tmp/libs/root/usr/lib/x86_64-linux-gnu`)
+- **실제 영상 E2E**(WebM·H.264 mp4 둘 다 확인): `make_test_video.py`로 적색 2회 → 녹색 1회 패턴이 두 번 반복되는 9.5초 640×480 30fps 영상(`downloads/test_led_ch21.mp4`, H.264 30KB)을 만들고, 배포 URL에서 `#fileIn`에 실제 업로드 → **`CH21` / 적색 2회 · 녹색 1회 / 123프레임 / 자동 ROI** 판독. 파형에 점멸 6개(2묶음)가 그려지고 ± 보정으로 CH22↔CH21 전환 확인.
+- 샘플 3종: LG 실내기 `CH21`(1번째 2회·2번째 1회), 캐리어 `운전램프 5회 연속 점멸`(냉매 점검 필요), 삼성 4WAY `램프 2개 감지`.
+- ROI를 LED가 없는 구석으로 옮기면 `LED 점멸을 찾지 못했습니다`로 바뀌고, LED 자리로 되돌리면 `CH21` 복귀.
+- 사진 업로드: `불빛 2곳` 감지 + "사진 한 장으로는 점멸 횟수를 셀 수 없습니다" 안내, [영상으로 찍기] 버튼.
+- QR: 모달 열림, 링크 복사 → 클립보드에 `https://aircon-code-demo-1120.deed.page/`, 캡처 PNG를 OpenCV로 디코드해 같은 URL 확인.
+- 검색 Enter(`C101` 1건·포커스 해제)·`배수` 15건, 즐겨찾기 1건(새로고침 후 유지), 최근 본 2건, LG 카운터 적2+녹1=`CH21`.
+- 현장 진단: 계열 8·상황 7, 1→2→3단계, 해결 카드(3줄), 팬 4단계 전부 그대로 → 판정 카드 + 고객센터 tel 1건(`1544-7777`).
+- 아카데미: 고객센터 8행·tel 7개, 수록 통계 378건.
+- **콘솔/페이지 오류 0건**. 375×667에서도 결과·버튼 정상. 오버플로 검사에 잡히는 `promo-hero`·`ai-card`는 장식용 글로우 원이 `overflow:hidden`으로 잘린 것으로 실제 가로 스크롤은 없다.
+- 기존 회귀: `verify_live.py`(배포 URL)와 `test_dx.py`(로컬) 모두 오류 0으로 통과.
+
+## 스크린샷 (`downloads/`)
+| 파일 | 내용 |
+|---|---|
+| `app_v5_01_main.png` | 배포 URL 메인 — 에어코드 헤더·QR 버튼·378건·즐겨찾기/최근 필터 |
+| `app_v5_02_video_ch21.png` | 실제 영상 업로드 판독 결과 `CH21` + 파형·±보정 |
+| `app_v5_03_result_card.png` | 결과 카드 확대 |
+| `app_v5_04_sheet.png` | 결과에서 연 상세 점검 시트 |
+| `app_v5_05_qr_modal.png` / `app_v5_06_qr_only.png` | 교육생 배포 QR 모달 / QR만 캡처(디코드 검증용) |
+| `app_v5_07_star_sheet.png` / `app_v5_08_recent.png` | 즐겨찾기·최근 본 |
+| `app_v5_09_dx_escalate.png` / `app_v5_09b_dx_tel.png` | 현장 진단 판정·고객센터 전화 |
+| `app_v5_10_academy.png` | 아카데미 탭(배포 카드·고객센터 tel) |
+| `app_v5_frame_video.png` / `app_v5_frame_roi.png` | 업로드 영상 미리보기 / LED 위치(ROI) 지정 |
+| `app_v5_11_375_main.png` / `app_v5_12_375_result.png` | 375×667 소형 화면 |
+| `app_v5_13_led_top.png` | LED 탭 상단(모드 칩·가이드 프레임·촬영 버튼) |
+| `app_v5_14_unmatched.png` | 표에 없는 조합 → 고객센터 전화 링크 |
+| `app_v5_15_live_mp4.png` | 라이브에서 H.264 mp4 업로드 판독 |
+| `test_led_ch21.mp4` / `test_led_frame_*.png` | E2E용 실제 점멸 영상(H.264 30KB)·프레임 |
+
+## 파일 구성
+```
+app_template.html      앱 원본 (여기만 고치면 된다)
+build_app.py           템플릿 + JSON + 아이콘 + QR + 매니페스트 → 단일 HTML
+make_assets.py         아이콘 SVG/PNG, 배포 QR SVG 생성 (assets/)
+make_test_video.py     E2E용 CH21 점멸 영상 생성
+verify_v5_live.py      배포 URL 전 기능 + 실제 영상 업로드 E2E
+test_v5_local.py       로컬 파일 기준 기능 전수 점검
+test_v5_small.py       375×667 + 매니페스트 확인
+test_upload.py         파일 하나만 지정해 판독 결과 확인 (python3 test_upload.py 경로)
+verify_live.py         기존(현장 진단·검색) 회귀
+test_dx.py             기존 현장 진단 로컬 회귀
+smoke_v5.py            빠른 로드 점검
+```
+
+## 빌드 · 배포 방법 (같은 URL 유지)
+```sh
+cd /workspace/app-aircon-prototype
+python3 make_assets.py      # 아이콘·QR 다시 만들 때만
+python3 build_app.py        # app_template.html → downloads/…html (자원 인라인)
+cp ../downloads/에어컨_에러코드_앱_프로토타입.html dist/index.html
+cd dist && curl -s -T index.html "https://deed.page/v1/sites?slug=aircon-code-demo-1120" \
+  -H "Authorization: Bearer $(cat ../.deed-token)" -H "X-Client: pickle-agent"
+```
+토큰: `app-aircon-prototype/.deed-token` (chmod 600). 같은 slug로 다시 올리면 새 버전(v9…)이 같은 URL에 반영된다.
+
+## 로컬 검수 방법
+이 환경의 Playwright Chromium은 시스템 라이브러리가 빠져 있어 `LD_LIBRARY_PATH`가 필요하다.
+```sh
+LD_LIBRARY_PATH=/workspace/tmp/libs/root/usr/lib/x86_64-linux-gnu python3 verify_v5_live.py   # 배포 URL
+LD_LIBRARY_PATH=/workspace/tmp/libs/root/usr/lib/x86_64-linux-gnu python3 test_v5_local.py    # 로컬 dist
+```
+
+## 3번째 탭: 현장 진단 (단계별 고장 추적, v2 개편 유지)
+- 진입 4가지: 고장 계열 8장 / 자주 나오는 상황 7종 / 코드 직접 입력 / 검색 시트·LED 결과의 [현장 진단]
+- 진행 화면: 코드 배너 → 진행 바 + [처음부터 다시] → 시도 타임라인 → 현재 단계 카드(조치 / 정상 기준 / 주의)
+- `✅ 에러 없어짐` → 해결 카드 + 조치 내역 복사, `❌ 그대로 뜸` → 다음 예상 원인으로 전개, 4단계 모두 그대로면 부품·기판 교체/제조사 접수 판정 + 제조사 고객센터(전화 걸기)
+- 진행 상태는 `localStorage: aircon_dx_v2`, 현장 메모는 `aircon_memo_v1`에 저장. 진단 단계 문구는 `DX_FAMILIES` 배열에서 고친다.
+
+## 개인정보 점검
+- 휴대폰 번호(010), 이메일 주소, 주소, 계좌번호, 사업자번호: 없음
+- 페이지에 나온 전화번호 031-492-8341 / 031-953-8725 / 031-942-2237 / 1588·1544 번호는 모두 **제조사 고객센터** 번호다.
+- 사업명(최정예홈케어아카데미·쾌적하마)과 cjyacademy.com 링크는 이미 공개된 브랜드 정보. 앱에 입력한 영상·사진은 서버로 전송되지 않고 브라우저 안에서만 처리된다.

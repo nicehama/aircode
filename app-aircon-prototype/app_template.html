@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B6E6E">
+<title>에어코드 (AirCode) — 에어컨 LED·에러코드</title>
+<meta name="description" content="에어코드(AirCode) — 에어컨 LED 점멸을 영상으로 읽어 에러코드와 점검 순서를 알려 주는 현장 도구. 최정예홈케어아카데미·쾌적하마.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="에어코드">
+<meta name="application-name" content="에어코드">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,__ICON_SVG_B64__">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,__ICON_180__">
+<link rel="apple-touch-icon" sizes="512x512" href="data:image/png;base64,__ICON_512__">
+<link rel="manifest" href="__MANIFEST__">
+<style>
+:root{
+  --bg:#F1F5F6; --card:#FFFFFF; --ink:#12232E; --ink2:#3C515B; --muted:#6C8189;
+  --line:#E2EAED; --primary:#0B6E6E; --primary-2:#0E8A80; --primary-soft:#E4F3F1;
+  --accent:#EE7B3C; --accent-soft:#FDEFE6; --danger:#C2410C; --warn-bg:#FFF6E8;
+  --r:18px; --shadow:0 2px 10px rgba(18,35,46,.05), 0 10px 30px rgba(18,35,46,.05);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Noto Sans KR",sans-serif;
+  background:var(--bg); color:var(--ink); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+button{font-family:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+#app{position:relative;height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:520px;margin:0 auto;background:var(--bg);overflow:hidden}
+
+/* ---------- header ---------- */
+header.top{
+  background:linear-gradient(140deg,#0B6E6E 0%,#0E8378 55%,#12A08C 100%);
+  color:#fff;padding:13px 14px 15px;position:relative;flex:none;z-index:30;
+}
+header.top.has-search{padding-bottom:30px}
+header.top::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+  background:radial-gradient(120px 60px at 88% 10%,#fff 0%,transparent 70%),radial-gradient(90px 50px at 70% 100%,#fff 0%,transparent 70%);
+}
+.top-row{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.logo{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none}
+.logo svg{width:20px;height:20px}
+.top-titles{flex:1;min-width:0}
+.top-title{font-size:16.5px;font-weight:700;letter-spacing:-.3px;line-height:1.25}
+.top-sub{font-size:11.5px;opacity:.82;margin-top:1px;letter-spacing:-.1px}
+.top-badge{
+  font-size:11px;font-weight:600;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;padding:5px 9px;white-space:nowrap;
+}
+/* ---------- tab panels ---------- */
+main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:86px}
+.tab{display:none;animation:fade .22s ease}
+.tab.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- search ---------- */
+#topSearch{margin:12px 0 -24px;position:relative;z-index:6}
+.searchbox{
+  background:#fff;border-radius:15px;box-shadow:0 4px 14px rgba(6,40,44,.18);display:flex;align-items:center;
+  gap:9px;padding:0 13px;height:48px;border:1px solid rgba(255,255,255,.6);
+}
+.searchbox svg{width:19px;height:19px;color:var(--primary);flex:none}
+.searchbox input{border:0;outline:0;flex:1;font-size:15.5px;background:none;color:var(--ink);min-width:0}
+.searchbox input::placeholder{color:#9AABB2}
+.clear-btn{display:none;width:22px;height:22px;border-radius:50%;background:#E7EEF0;color:#5D737C;font-size:12px;line-height:22px;text-align:center;font-weight:700}
+.searchbox.has-value .clear-btn{display:block}
+#tab-search{padding-top:14px}
+.filters{padding:4px 14px 0}
+.chip-row{display:flex;gap:7px;overflow-x:auto;padding:2px 0 7px;scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{
+  flex:none;border:1px solid var(--line);background:#fff;color:var(--ink2);
+  font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap;
+  display:flex;align-items:center;gap:5px;
+}
+.chip .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.chip.on .dot{background:#fff !important}
+.chip.sub{font-weight:500;color:var(--muted);background:#fff}
+.chip.sub.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.list-head{display:flex;align-items:baseline;justify-content:space-between;padding:6px 18px 8px}
+.list-head b{font-size:13px;font-weight:700}
+.list-head span{font-size:11.5px;color:var(--muted)}
+.quick{display:flex;gap:6px;overflow-x:auto;padding:0 14px 10px;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.quick button{flex:none;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;font-weight:700;
+  color:var(--primary);background:var(--primary-soft);border-radius:9px;padding:6px 10px}
+.cards{padding:0 14px 8px;display:flex;flex-direction:column;gap:9px}
+.card{
+  width:100%;text-align:left;background:#fff;border-radius:14px;padding:12px 12px 12px 13px;
+  display:flex;gap:11px;align-items:flex-start;box-shadow:0 1px 3px rgba(18,35,46,.05);
+  border:1px solid #EDF2F4;position:relative;
+}
+.card:active{background:#FAFCFC}
+.card-code{
+  flex:none;min-width:62px;padding:5px 8px;border-radius:9px;background:#0F2E38;color:#fff;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;font-weight:700;text-align:center;
+  letter-spacing:-.2px;align-self:flex-start;line-height:1.35;
+}
+.card-code.lamp{background:var(--accent-soft);color:#B45309;font-family:inherit;font-size:11.5px;min-width:44px}
+.card-main{flex:1;min-width:0}
+.card-top{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);font-weight:600;flex-wrap:wrap}
+.bdot{width:7px;height:7px;border-radius:50%}
+.card-cause{font-size:13.5px;color:var(--ink);margin-top:3px;line-height:1.42;font-weight:500;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cat{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;background:#F1F5F7;color:#4E6670;white-space:nowrap}
+.cat.통신{background:#E8F1FE;color:#1D4ED8}
+.cat.센서{background:#EEF6E9;color:#3F7A1F}
+.cat.인버터{background:#F3EDFB;color:#6D28D9}
+.cat.냉매{background:#E7F6F8;color:#0E7490}
+.cat.배수{background:#E9F2FF;color:#1E64C8}
+.cat.팬{background:#FFF2E2;color:#B45309}
+.cat.설치{background:#F0EFFA;color:#4F46B8}
+.cat.전원{background:#FDECEC;color:#B91C1C}
+.cat.상태{background:#F1F3F4;color:#5C7079}
+.cat.기타{background:#F1F3F4;color:#5C7079}
+.chev{align-self:center;color:#C3D0D6;flex:none}
+.chev svg{width:16px;height:16px}
+.more-btn{margin:4px 14px 18px;width:calc(100% - 28px);background:#fff;border:1px solid var(--line);
+  border-radius:12px;padding:11px;font-size:13px;font-weight:600;color:var(--ink2)}
+.empty{padding:40px 30px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
+.empty b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:6px}
+.empty .mini-btn{display:inline-block;margin-top:14px;background:var(--primary);color:#fff;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600}
+.info-strip{margin:2px 14px 14px;background:var(--primary-soft);border-radius:12px;padding:10px 12px;font-size:11.5px;color:#0A5B57;line-height:1.55;display:flex;gap:8px;align-items:flex-start}
+.info-strip svg{width:15px;height:15px;flex:none;margin-top:1px}
+
+/* ---------- generic section ---------- */
+.sec{margin:0 14px 14px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 8px}
+.sec-title{font-size:14px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:7px}
+.sec-title .num{width:20px;height:20px;border-radius:7px;background:var(--primary);color:#fff;font-size:11px;display:grid;place-items:center;font-weight:700}
+.sec-sub{font-size:11.5px;color:var(--muted)}
+.panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;border:1px solid #EDF2F4}
+
+/* ---------- AI card ---------- */
+.ai-card{
+  margin:10px 14px 16px;border-radius:20px;padding:16px 15px 15px;color:#EAFBF8;position:relative;overflow:hidden;
+  background:linear-gradient(150deg,#0A2E3A 0%,#0B4348 52%,#0B6E6E 100%);box-shadow:0 12px 26px rgba(10,46,58,.22)
+}
+.ai-card::after{content:"";position:absolute;width:190px;height:190px;right:-70px;top:-90px;border-radius:50%;
+  background:radial-gradient(circle,rgba(56,225,198,.28),transparent 70%)}
+.ai-head{display:flex;align-items:center;gap:9px;position:relative;z-index:1}
+.ai-badge{font-size:9.5px;font-weight:800;letter-spacing:.6px;background:#38E1C6;color:#063C3C;border-radius:6px;padding:3px 6px}
+.ai-title{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.ai-desc{font-size:11.8px;line-height:1.55;color:#B7E7E1;margin:7px 2px 12px;position:relative;z-index:1}
+.frame{
+  position:relative;border-radius:14px;height:168px;background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.028) 0 8px,transparent 8px 16px),#082229;
+  border:1px solid rgba(56,225,198,.18);overflow:hidden;display:grid;place-items:center;
+}
+.frame .corner{position:absolute;width:22px;height:22px;border:2.5px solid #38E1C6;opacity:.85}
+.frame .corner.tl{top:12px;left:12px;border-right:0;border-bottom:0;border-top-left-radius:8px}
+.frame .corner.tr{top:12px;right:12px;border-left:0;border-bottom:0;border-top-right-radius:8px}
+.frame .corner.bl{bottom:12px;left:12px;border-right:0;border-top:0;border-bottom-left-radius:8px}
+.frame .corner.br{bottom:12px;right:12px;border-left:0;border-top:0;border-bottom-right-radius:8px}
+.frame-inner{text-align:center;color:#8FD6CE;padding:0 22px}
+.frame-inner svg{width:34px;height:34px;opacity:.9}
+.frame-inner .f1{font-size:12.5px;font-weight:600;margin-top:6px;color:#D8F6F1}
+.frame-inner .f2{font-size:10.5px;margin-top:3px;color:#7FBFB8;line-height:1.45}
+.frame video,.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.9;background:#05161b}
+.scan{position:absolute;left:9%;right:9%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#38E1C6,transparent);
+  box-shadow:0 0 14px #38E1C6;animation:scan 1.15s linear infinite;display:none}
+.frame.analyzing .scan{display:block}
+.frame.analyzing .frame-inner{opacity:.28}
+@keyframes scan{0%{top:8%}50%{top:88%}100%{top:8%}}
+.frame-tag{position:absolute;left:44px;top:13px;font-size:9.5px;color:#CFEFE9;background:rgba(4,24,30,.62);border-radius:6px;padding:2px 6px;max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;z-index:3}
+.ai-actions{display:flex;gap:8px;margin-top:12px;position:relative;z-index:1}
+.btn-file{
+  flex:1.15;background:#38E1C6;color:#04302E;border-radius:12px;height:44px;display:flex;align-items:center;
+  justify-content:center;gap:6px;font-size:13px;font-weight:800;letter-spacing:-.2px;
+}
+.btn-file svg{width:16px;height:16px}
+.btn-sample{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(56,225,198,.4);color:#C9F2EC;
+  border-radius:12px;height:44px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:700}
+.btn-sample svg{width:14px;height:14px}
+.samples{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;position:relative;z-index:1}
+.samples button{font-size:10.5px;color:#A8DCD5;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+  border-radius:7px;padding:5px 8px;font-weight:600}
+.steps-panel{margin-top:12px;background:rgba(0,0,0,.28);border-radius:12px;padding:11px 12px;position:relative;z-index:1;display:none}
+.steps-panel.on{display:block}
+.astep{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#7FAFAB;padding:3px 0;transition:.2s}
+.astep .tick{width:15px;height:15px;border-radius:50%;border:1.5px solid #3E6E6A;display:grid;place-items:center;font-size:9px;flex:none}
+.astep.done{color:#D9F7F2}
+.astep.done .tick{background:#38E1C6;border-color:#38E1C6;color:#04302E;font-weight:900}
+.astep.now .tick{border-color:#38E1C6;box-shadow:0 0 0 3px rgba(56,225,198,.14)}
+.ai-result{display:none;margin-top:12px;background:#F3FBF9;border-radius:14px;padding:13px;color:var(--ink);position:relative;z-index:1}
+.ai-result.on{display:block;animation:fade .3s ease}
+.ai-res-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ai-res-brand{font-size:11px;font-weight:700;color:#0B6E6E;display:flex;align-items:center;gap:5px}
+.ai-conf{font-size:10px;font-weight:700;color:#0B6E6E;background:#D6F0EB;border-radius:6px;padding:2px 6px}
+.ai-res-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:23px;font-weight:800;letter-spacing:-.5px;margin:7px 0 2px;color:#0A2E3A}
+.ai-res-code.small{font-size:15px;font-family:inherit;letter-spacing:-.3px}
+.ai-res-cause{font-size:12.5px;font-weight:600;color:#153F3D}
+.ai-res-check{font-size:11.5px;color:#4C6663;line-height:1.55;margin-top:6px;padding-top:7px;border-top:1px dashed #CFE7E2}
+.ai-res-check b{color:#0B6E6E}
+.ai-res-actions{display:flex;gap:7px;margin-top:10px}
+.ai-res-actions button{flex:1;height:36px;border-radius:9px;font-size:12px;font-weight:700}
+.ai-res-actions .go{background:var(--primary);color:#fff}
+.ai-res-actions .again{background:#E6F0EF;color:#0B6E6E}
+.demo-note{font-size:10px;color:#A6D3CD;line-height:1.5;margin-top:8px;position:relative;z-index:1}
+.demo-note.in-result{color:#6E8F8B;margin-top:9px}
+
+/* ---------- LED tools ---------- */
+.tool{margin:0 14px 12px;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);border:1px solid #EDF2F4;overflow:hidden}
+.tool-head{display:flex;align-items:center;gap:9px;padding:13px 14px;width:100%;text-align:left}
+.tool-ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--primary-soft);color:var(--primary)}
+.tool-ico svg{width:16px;height:16px}
+.tool-tt{flex:1;min-width:0}
+.tool-tt b{display:block;font-size:13.5px;font-weight:700;letter-spacing:-.2px}
+.tool-tt span{font-size:11px;color:var(--muted)}
+.tool-body{padding:0 14px 14px;display:none}
+.tool.open .tool-body{display:block}
+.chev2{transition:.2s;color:#B7C6CC}
+.chev2 svg{width:16px;height:16px}
+.tool.open .chev2{transform:rotate(180deg)}
+.seg{display:flex;background:#F1F5F6;border-radius:11px;padding:3px;gap:3px;margin-bottom:12px}
+.seg button{flex:1;font-size:11.5px;font-weight:600;color:var(--muted);border-radius:9px;padding:8px 3px;white-space:nowrap;letter-spacing:-.3px}
+.seg button.on{background:#fff;color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tapgrid{display:flex;gap:9px}
+.tapbtn{
+  flex:1;border-radius:14px;padding:14px 8px;text-align:center;color:#fff;font-weight:700;position:relative;
+  transition:transform .08s ease, filter .1s;
+}
+.tapbtn:active{transform:scale(.97);filter:brightness(1.12)}
+.tapbtn .t1{font-size:12px;opacity:.85;font-weight:600}
+.tapbtn .t2{font-size:26px;font-weight:800;line-height:1.2;font-family:ui-monospace,Menlo,monospace}
+.tapbtn .t3{font-size:10px;opacity:.8;margin-top:2px}
+.tapbtn.red{background:linear-gradient(160deg,#D93636,#B01F1F)}
+.tapbtn.green{background:linear-gradient(160deg,#159C6B,#0B7350)}
+.tapbtn.single{background:linear-gradient(160deg,#0E8A80,#0B6E6E);width:100%;padding:20px 10px}
+.readout{margin-top:11px;background:#0F2E38;border-radius:12px;padding:12px 13px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.readout .ro-l{font-size:10.5px;color:#8FB3BC;letter-spacing:.4px}
+.readout .ro-v{font-family:ui-monospace,Menlo,monospace;font-size:24px;font-weight:800;letter-spacing:.5px;line-height:1.15}
+.readout .ro-v small{font-size:11px;font-weight:600;color:#8FB3BC;letter-spacing:0}
+.reset-mini{background:rgba(255,255,255,.1);border-radius:8px;padding:6px 9px;font-size:10.5px;font-weight:600;color:#CFE9E4}
+.hint{font-size:11px;color:var(--muted);line-height:1.55;margin-top:9px}
+.match{margin-top:10px;border-radius:12px;border:1px solid #DCEAE7;background:#F6FCFB;padding:11px 12px;display:none}
+.match.on{display:block;animation:fade .2s}
+.match .m-code{font-family:ui-monospace,Menlo,monospace;font-size:17px;font-weight:800;color:#0A2E3A}
+.match .m-cause{font-size:12px;color:#22433F;margin-top:2px;font-weight:600}
+.match .m-check{font-size:11px;color:#5A7570;margin-top:5px;line-height:1.5}
+.match .m-none{font-size:11.5px;color:#8A5A2B}
+.iconrow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
+.iconbtn{border:1px solid var(--line);border-radius:11px;padding:8px 2px 6px;display:grid;place-items:center;gap:3px;background:#fff}
+.iconbtn svg{width:19px;height:19px;color:#7C929A}
+.iconbtn span{font-size:9px;color:var(--muted);font-weight:600}
+.iconbtn.on{background:var(--primary-soft);border-color:var(--primary)}
+.iconbtn.on svg{color:var(--primary)}
+.iconbtn.on span{color:var(--primary)}
+.lampchips{display:flex;flex-wrap:wrap;gap:6px}
+.lampchip{font-size:11px;font-weight:600;border:1px solid var(--line);border-radius:9px;padding:6px 8px;line-height:1.35;background:#fff;color:var(--ink2);text-align:left}
+.lampchip.on{background:#0F2E38;border-color:#0F2E38;color:#fff}
+.ledtable{width:100%;border-collapse:collapse;font-size:11.5px}
+.ledtable th{text-align:left;font-size:10.5px;color:var(--muted);font-weight:700;padding:6px 4px;border-bottom:1px solid var(--line)}
+.ledtable td{padding:7px 4px;border-bottom:1px solid #F0F4F5;vertical-align:top;line-height:1.45}
+.ledtable td:first-child{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:#0A2E38;white-space:nowrap}
+.note-card{background:#FFFBF3;border:1px solid #F5E6CB;border-radius:12px;padding:11px 12px;font-size:11.5px;color:#7A5A24;line-height:1.6}
+.note-card b{color:#8A4B12}
+
+/* ---------- 현장 진단 ---------- */
+.bar{height:7px;border-radius:99px;background:#EDF2F4;margin-top:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#0E8A80,#38B2A3);transition:width .3s}
+.dx-lead{margin:12px 14px 0;border-radius:18px;padding:16px 16px 14px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(140deg,#0B2E36 0%,#0E6A6A 55%,#12A08C 100%);box-shadow:0 10px 24px rgba(11,80,80,.18)}
+.dx-lead .kick{font-size:9.5px;font-weight:800;letter-spacing:1.3px;color:#8FE6DA}
+.dx-lead h3{margin:6px 0 5px;font-size:16.5px;letter-spacing:-.35px;line-height:1.32}
+.dx-lead p{margin:0;font-size:11.6px;line-height:1.62;color:#CDEDE8}
+.dx-lead .flowline{display:flex;align-items:center;gap:5px;margin-top:12px;font-size:9px;font-weight:800;color:#D8F4EF;letter-spacing:-.1px}
+.dx-lead .flowline i{flex:1;height:1px;background:rgba(255,255,255,.28);min-width:4px}
+.dx-sec{padding:0 14px}
+.dx-fams{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dx-fam{background:#fff;border:1px solid #EDF2F4;border-radius:14px;padding:11px 11px 9px;text-align:left;
+  box-shadow:0 1px 3px rgba(18,35,46,.05);display:flex;flex-direction:column;gap:3px;min-height:78px}
+.dx-fam:active{background:#F7FBFB;border-color:#CFE7E2}
+.dx-fam .fn{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;letter-spacing:-.2px}
+.dx-fam .fn .dt{width:6px;height:6px;border-radius:50%;flex:none}
+.dx-fam .fc{font-size:9.8px;color:var(--muted);line-height:1.45;letter-spacing:-.1px}
+.dx-fam .fd{font-size:10px;color:var(--primary);font-weight:800;margin-top:auto;padding-top:5px}
+.dx-situ{display:flex;flex-wrap:wrap;gap:6px}
+.dx-situ button{font-size:11.3px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:8px 10px;line-height:1.35;letter-spacing:-.2px}
+.dx-situ button:active{background:var(--primary-soft);border-color:#BFE0DB}
+.dx-codebox{background:#fff;border:1px solid #EDF2F4;border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(18,35,46,.05)}
+.dx-codebox .t{font-size:12px;font-weight:700;margin-bottom:8px}
+.dx-coderow{display:flex;gap:7px}
+.dx-coderow input{flex:1;min-width:0;height:42px;border:1px solid var(--line);border-radius:11px;padding:0 11px;
+  font-size:13px;font-family:ui-monospace,Menlo,monospace;outline:0;background:#FBFDFD;color:var(--ink)}
+.dx-coderow input:focus{border-color:var(--primary);background:#fff}
+.dx-coderow button{flex:none;height:42px;padding:0 13px;border-radius:11px;background:var(--primary);color:#fff;font-size:12.5px;font-weight:800}
+.dx-codebar{margin:12px 14px 0;background:#0F2E38;color:#fff;border-radius:16px;padding:13px 14px;display:flex;gap:11px;align-items:flex-start}
+.dx-cb-code{font-family:ui-monospace,Menlo,monospace;font-size:17px;font-weight:800;letter-spacing:-.4px;line-height:1.25;
+  flex:none;max-width:108px;word-break:break-all}
+.dx-cb-main{flex:1;min-width:0;font-size:11px;line-height:1.5;color:#A9CBCB}
+.dx-cb-main b{display:block;font-size:12.3px;color:#fff;font-weight:700;margin:3px 0 2px;line-height:1.42}
+.dx-cb-main .rs{color:#8FB8B8;font-size:10.3px;margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.12);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dx-prog{margin:10px 14px 0;background:#fff;border-radius:14px;padding:11px 13px;border:1px solid #EDF2F4;box-shadow:0 1px 3px rgba(18,35,46,.05)}
+.dx-pg-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dx-pg-top b{font-size:12.5px;letter-spacing:-.2px}
+.dx-pg-top .cnt{font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:800;color:var(--primary);white-space:nowrap}
+.dx-again-btn{flex:none;font-size:10.3px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:4px 7px;background:#fff}
+.dx-flash{margin:9px 14px 0;border-radius:11px;padding:9px 11px;font-size:11.5px;font-weight:700;line-height:1.45;
+  letter-spacing:-.1px;animation:dxpop .22s ease;transition:opacity .45s}
+.dx-flash.fail{background:#FFF3EF;border:1px solid #F3D3C6;color:#B45309}
+.dx-flash.ok{background:var(--primary-soft);border:1px solid #C7E5E1;color:#0A5B57}
+.dx-flash.skip{background:#F3F6F7;border:1px solid #E2EAED;color:#5C7079}
+.dx-flash.out{opacity:0}
+.dx-tl{margin:9px 14px 0}
+.dx-tl-i{display:flex;gap:8px;padding:4px 0;font-size:11.3px;color:var(--muted);align-items:flex-start;line-height:1.45}
+.dx-tl-i .dot{width:17px;height:17px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:9px;font-weight:900;margin-top:0}
+.dx-tl-i.fail .dot{background:#FDECEC;color:#B91C1C}
+.dx-tl-i.ok .dot{background:var(--primary);color:#fff}
+.dx-tl-i.skip .dot{background:#F1F3F4;color:#7B8F97}
+.dx-tl-i b{color:var(--ink2);font-weight:700}
+.dx-tl-i.fail em{font-style:normal;color:#B91C1C;font-weight:700}
+.dx-tl-i.ok em{font-style:normal;color:var(--primary);font-weight:700}
+.dx-tl-i.skip em{font-style:normal;color:#849AA2;font-weight:700}
+.dx-card{margin:10px 14px 0;background:#fff;border-radius:18px;padding:15px;border:1px solid #EDF2F4;box-shadow:var(--shadow)}
+.dx-card.pop{animation:dxpop .26s ease}
+@keyframes dxpop{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.dx-stepno{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;letter-spacing:.5px;
+  color:var(--primary);background:var(--primary-soft);border-radius:7px;padding:4px 8px}
+.dx-card h3{margin:9px 0 0;font-size:15.5px;letter-spacing:-.35px;line-height:1.35}
+.dx-fld{margin-top:10px}
+.dx-fld .lb{font-size:9.3px;font-weight:800;letter-spacing:.7px;color:var(--muted);display:block;margin-bottom:3px}
+.dx-fld p{margin:0;font-size:12.6px;line-height:1.6;color:var(--ink2);letter-spacing:-.1px}
+.dx-fld.norm{background:var(--primary-soft);border-radius:10px;padding:9px 10px}
+.dx-fld.norm p{color:#0A5B57;font-size:12.2px}
+.dx-fld.norm .lb{color:#0E8A80}
+.dx-fld.warn{background:var(--warn-bg);border-radius:10px;padding:9px 10px}
+.dx-fld.warn p{color:#70502A;font-size:12.2px}
+.dx-fld.warn .lb{color:#9A5B12}
+.dx-acts{margin-top:13px;display:flex;flex-direction:column;gap:7px}
+.dx-acts button{height:47px;border-radius:12px;font-size:13.2px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.2px}
+.dx-fix{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(11,110,110,.18)}
+.dx-fix:active{background:#0A5B57}
+.dx-again{background:#fff;border:1.5px solid #E9BCAE;color:#B45309}
+.dx-again:active{background:#FFF6F2}
+.dx-skip{align-self:center;font-size:11px;color:var(--muted);padding:6px 4px;text-decoration:underline}
+.dx-result{margin:12px 14px 0;border-radius:18px;padding:17px 16px 16px;text-align:center;
+  border:1px solid #CFE7E2;background:linear-gradient(160deg,#F0FBF9,#FFFFFF)}
+.dx-result.bad{border-color:#F1CFC2;background:linear-gradient(160deg,#FFF7F2,#fff)}
+.dx-emoji{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;margin:0 auto 9px;font-size:24px;
+  background:var(--primary);color:#fff;box-shadow:0 6px 16px rgba(11,110,110,.22);animation:dxpop .32s ease}
+.dx-result.bad .dx-emoji{background:#C2410C;box-shadow:0 6px 16px rgba(194,65,12,.2)}
+.dx-result h3{margin:0 0 5px;font-size:17px;letter-spacing:-.45px}
+.dx-result p{margin:0;font-size:11.8px;line-height:1.62;color:var(--ink2)}
+.dx-sum{margin:11px 14px 0;background:#fff;border-radius:14px;border:1px solid #EDF2F4;padding:12px 13px}
+.dx-sum .h{font-size:10.8px;font-weight:800;color:var(--primary);letter-spacing:.3px;margin-bottom:5px}
+.dx-sum .r{display:flex;justify-content:space-between;gap:10px;font-size:11.7px;padding:5px 0;border-bottom:1px dashed #EFF4F5;line-height:1.45}
+.dx-sum .r:last-child{border-bottom:0}
+.dx-sum .r b{font-weight:600;color:var(--ink2);min-width:0}
+.dx-sum .r em{font-style:normal;font-weight:800;font-size:10.3px;white-space:nowrap}
+.dx-sum .r em.ok{color:var(--primary)}
+.dx-sum .r em.fail{color:#B91C1C}
+.dx-sum .r em.skip{color:#849AA2}
+.dx-contact{margin:11px 14px 0;background:#fff;border-radius:14px;border:1px solid #EDF2F4;padding:6px 13px 8px}
+.dx-contact .ch{font-size:10.8px;font-weight:800;color:var(--primary);letter-spacing:.3px;padding:7px 0 2px}
+.dx-foot{margin:12px 14px 0;display:flex;gap:8px}
+.dx-foot button{flex:1;height:46px;border-radius:12px;font-size:12.4px;font-weight:700;letter-spacing:-.2px}
+.dx-foot button.sole{flex:none;width:100%}
+.memo{margin:0 14px 14px}
+.memo textarea{width:100%;min-height:104px;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-family:inherit;
+  font-size:12.5px;line-height:1.6;resize:vertical;outline:0;background:#fff;color:var(--ink)}
+.memo textarea:focus{border-color:var(--primary)}
+.memo-row{display:flex;gap:8px;margin-top:8px}
+.memo-row button{flex:1;height:42px;border-radius:11px;font-size:12.5px;font-weight:700}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink2)}
+
+/* ---------- promo ---------- */
+.promo-hero{margin:12px 14px 0;border-radius:20px;padding:20px 18px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(140deg,#0B2B36 0%,#12515A 60%,#0E7C74 100%);box-shadow:0 12px 26px rgba(11,43,54,.2)}
+.promo-hero .kicker{font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:#7FE0D2}
+.promo-hero h2{margin:7px 0 6px;font-size:19px;letter-spacing:-.5px;line-height:1.3}
+.promo-hero p{margin:0;font-size:11.8px;line-height:1.65;color:#C6E6E2}
+.promo-hero .glow{position:absolute;width:170px;height:170px;right:-60px;bottom:-80px;border-radius:50%;background:radial-gradient(circle,rgba(56,225,198,.22),transparent 70%)}
+.promo-btns{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1}
+.promo-btns a,.promo-btns button{flex:1;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:12.5px;font-weight:700;text-decoration:none}
+.promo-btns .solid{background:#38E1C6;color:#04302E}
+.promo-btns .line{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff}
+.promo-btns svg{width:14px;height:14px}
+.promo-card{margin:12px 14px;background:#fff;border-radius:var(--r);padding:15px;box-shadow:var(--shadow);border:1px solid #EDF2F4;display:flex;gap:12px}
+.promo-mark{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;color:#fff;font-weight:800;font-size:13px;letter-spacing:-.5px}
+.promo-mark.a{background:linear-gradient(150deg,#0E8A80,#0B6E6E)}
+.promo-mark.b{background:linear-gradient(150deg,#EE7B3C,#D2601F)}
+.promo-txt{flex:1;min-width:0}
+.promo-txt b{font-size:14px;letter-spacing:-.3px}
+.promo-txt .tagline{font-size:11.5px;color:var(--primary);font-weight:700;margin-top:2px}
+.promo-txt p{font-size:11.8px;color:var(--ink2);line-height:1.6;margin:6px 0 0}
+.promo-txt .link-btn{margin-top:9px;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--primary);text-decoration:none}
+.promo-txt .link-btn svg{width:13px;height:13px}
+.center-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #F0F4F5;font-size:12px}
+.center-row:last-child{border-bottom:0}
+.center-row .cm{font-weight:600;color:var(--ink);flex:1;min-width:0}
+.center-row .cp{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--primary);white-space:nowrap}
+.center-row .ci{display:block;font-size:10px;color:#849AA2;margin-top:1px}
+.disc{font-size:10.5px;color:var(--muted);line-height:1.7;padding:0 18px 8px}
+.stat-line{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.stat-line span{font-size:10.5px;background:#F4F8F8;border:1px solid #E7EEEE;border-radius:6px;padding:3px 7px;color:#4C6666;font-weight:600}
+
+/* ---------- bottom nav ---------- */
+nav.tabbar{
+  position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:rgba(255,255,255,.96);
+  backdrop-filter:saturate(180%) blur(12px);border-top:1px solid var(--line);display:flex;
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:40;
+}
+nav.tabbar button{flex:1;display:grid;place-items:center;gap:2px;padding:5px 0;color:#9AABB2;font-size:10px;font-weight:600;border-radius:12px}
+nav.tabbar button svg{width:21px;height:21px}
+nav.tabbar button.on{color:var(--primary)}
+nav.tabbar button.on .navdot{opacity:1}
+.navdot{width:4px;height:4px;border-radius:50%;background:var(--primary);opacity:0;margin-top:1px}
+
+/* ---------- sheet ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(10,30,36,.42);opacity:0;pointer-events:none;transition:.22s;z-index:60}
+.backdrop.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:#fff;border-radius:22px 22px 0 0;
+  transform:translateY(101%);transition:transform .28s cubic-bezier(.32,.72,0,1);z-index:70;
+  max-height:88vh;display:flex;flex-direction:column;
+}
+.sheet.on{transform:translateY(0)}
+.sheet-handle{width:38px;height:4px;border-radius:99px;background:#DFE7EA;margin:8px auto 0;flex:none}
+.sheet-head{padding:8px 16px 12px;border-bottom:1px solid #F0F4F5;flex:none}
+.sheet-top{display:flex;align-items:flex-start;gap:10px}
+.sheet-code{font-family:ui-monospace,Menlo,monospace;font-size:25px;font-weight:800;letter-spacing:-.6px;color:#0A2E38;line-height:1.15;flex:1;min-width:0;word-break:break-word}
+.sheet-code.small{font-family:inherit;font-size:19px;letter-spacing:-.4px}
+.close-x{width:30px;height:30px;border-radius:50%;background:#F1F5F6;display:grid;place-items:center;color:#5E747D;flex:none}
+.close-x svg{width:14px;height:14px}
+.sheet-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:var(--muted)}
+.pill{font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 7px;background:#F1F5F6;color:#4C6666}
+.pill.brand{color:#fff}
+.sheet-body{overflow-y:auto;padding:14px 16px 6px;-webkit-overflow-scrolling:touch}
+.blk{margin-bottom:16px}
+.blk h4{margin:0 0 6px;font-size:11.5px;font-weight:800;color:var(--primary);letter-spacing:.2px}
+.blk p{margin:0;font-size:13px;line-height:1.6;color:var(--ink)}
+.blk ol,.blk ul{margin:0;padding-left:0;list-style:none;counter-reset:s}
+.blk ol li{position:relative;padding:7px 0 7px 27px;font-size:12.8px;line-height:1.5;color:var(--ink2);border-bottom:1px dashed #EFF4F5}
+.blk ol li:last-child{border-bottom:0}
+.blk ol li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:6px;width:18px;height:18px;border-radius:6px;
+  background:var(--primary-soft);color:var(--primary);font-size:10.5px;font-weight:800;display:grid;place-items:center}
+.blk ul li{position:relative;padding:4px 0 4px 12px;font-size:12.3px;line-height:1.55;color:var(--ink2)}
+.blk ul li::before{content:"";position:absolute;left:2px;top:11px;width:4px;height:4px;border-radius:50%;background:#A9BCC2}
+.warn-box{background:var(--warn-bg);border:1px solid #F3E2C4;border-radius:12px;padding:11px 12px}
+.warn-box h4{color:#9A5B12}
+.warn-box p{font-size:12.3px;color:#70502A;line-height:1.6}
+.relchips{display:flex;flex-wrap:wrap;gap:6px}
+.relchips button{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;font-weight:700;color:var(--primary);
+  background:var(--primary-soft);border-radius:8px;padding:6px 9px}
+.sheet-foot{padding:10px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #F0F4F5;flex:none;display:flex;gap:8px}
+.sheet-foot button{flex:1;height:46px;border-radius:12px;font-size:13px;font-weight:700}
+.toast{
+  position:fixed;left:50%;bottom:96px;transform:translate(-50%,10px);background:#12232E;color:#fff;font-size:12px;
+  padding:9px 15px;border-radius:10px;opacity:0;pointer-events:none;transition:.22s;z-index:90;white-space:nowrap;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(10,30,36,.45)}
+.modal.on{display:flex}
+.modal-box{background:#fff;border-radius:20px;padding:20px;max-width:340px;width:100%}
+.modal-box h3{margin:0 0 8px;font-size:16px;letter-spacing:-.3px}
+.modal-box p{margin:0;font-size:12.5px;line-height:1.65;color:var(--ink2)}
+.modal-box .row{margin-top:14px;display:flex;gap:8px}
+.modal-box .row button{flex:1;height:42px;border-radius:11px;font-size:12.5px;font-weight:700}
+
+/* ---------- 에어코드 v5 ---------- */
+.top-title .top-en{font-size:10.5px;font-weight:700;letter-spacing:.4px;opacity:.72;margin-left:3px}
+.qr-btn{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;flex:none}
+.qr-btn svg{width:18px;height:18px}
+.qr-btn:active{background:rgba(255,255,255,.28)}
+.star{flex:none;margin-left:auto;font-size:15px;line-height:1;color:#CBD8DC;padding:2px 3px;border-radius:6px}
+.star.on{color:#F0A11E}
+.star:active{background:#F4F7F8}
+.card-star-top{display:flex;align-items:center;gap:6px;width:100%}
+
+/* 모드 선택 */
+.mode-chips{display:flex;gap:6px;overflow-x:auto;padding:1px 0 2px;position:relative;z-index:1;scrollbar-width:none;margin-bottom:10px}
+.mode-chips::-webkit-scrollbar{display:none}
+.mode{flex:none;min-width:74px;border-radius:11px;padding:7px 7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);text-align:left;line-height:1.25}
+.mode b{display:block;font-size:11px;font-weight:800;color:#D6F5F0;letter-spacing:-.3px;white-space:nowrap}
+.mode span{display:block;font-size:9.5px;color:#8FCFC7;margin-top:1px}
+.mode.on{background:#38E1C6;border-color:#38E1C6}
+.mode.on b{color:#04302E}
+.mode.on span{color:#0A5B57}
+.ai-live{margin-left:auto;font-size:9px;font-weight:700;color:#8FE6DA;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.ai-live i{width:5px;height:5px;border-radius:50%;background:#38E1C6;box-shadow:0 0 0 3px rgba(56,225,198,.16)}
+
+/* ROI 선택 */
+.roi-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:manipulation;z-index:2;cursor:crosshair}
+.roi-hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:9.5px;color:#9FD8D0;letter-spacing:-.1px;z-index:3;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.frame.hide-inner .frame-inner{display:none}
+.btn-file2{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(56,225,198,.4);color:#C9F2EC;border-radius:12px;height:44px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:700}
+.btn-file2 svg,.btn-file svg{width:15px;height:15px}
+.ai-actions.sub{margin-top:7px}
+.ai-actions.sub button{height:36px;font-size:11.5px;border-radius:10px}
+.aprog{height:4px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;margin-bottom:8px}
+.aprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38E1C6,#8AF3E3);transition:width .18s;border-radius:99px}
+
+/* 결과 – 파형·실측 보정 */
+.wave{margin-top:9px;background:#082229;border-radius:10px;padding:7px 8px 5px}
+.wave canvas{display:block;width:100%;height:64px}
+.wave-legend{display:flex;gap:9px;font-size:9px;color:#8FB8B8;margin-top:3px;flex-wrap:wrap}
+.wave-legend i{display:inline-block;width:7px;height:2px;border-radius:2px;margin-right:3px;vertical-align:2px}
+.meas{margin-top:8px;border:1px solid #DCEAE7;border-radius:10px;padding:8px 9px;background:#fff}
+.meas-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11.5px}
+.meas-row span{color:#4C6663;font-weight:600}
+.meas-row b{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#0A2E3A}
+.adj{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.adj button{font-size:10.5px;font-weight:700;border:1px solid #D6E6E2;background:#F7FBFA;color:#0B6E6E;border-radius:7px;padding:4px 7px}
+.adj button:active{background:#E4F3F1}
+.adj .lbl{font-size:10px;color:#7C9198;align-self:center;margin-right:1px}
+.res-leds{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.res-leds span{font-size:10.5px;font-weight:700;background:#EEF6F4;border-radius:6px;padding:3px 7px;color:#2A5B56}
+.call-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;font-weight:700;color:#0B6E6E;background:#E4F3F1;border:1px solid #C7E5E1;border-radius:9px;padding:8px 11px;text-decoration:none;line-height:1.2}
+.call-link svg{width:14px;height:14px;flex:none}
+.ai-warn{font-size:11.5px;color:#8A5A2B;line-height:1.5;margin-top:7px;background:#FFF7EC;border:1px solid #F3E2C4;border-radius:9px;padding:8px 9px}
+
+/* 교육생 배포 QR */
+.qr-box{max-width:330px;text-align:center}
+.qr-box h3{margin-bottom:4px}
+.qr-wrap{background:#fff;border:1px solid #E4EDEE;border-radius:14px;padding:10px;margin:10px auto 8px;width:220px;height:220px}
+.qr-wrap svg{width:100%;height:100%;display:block}
+.qr-url{font-size:11px;color:#0B6E6E;font-weight:700;word-break:break-all;font-family:ui-monospace,Menlo,monospace}
+.qr-acts{display:flex;gap:8px;margin-top:12px}
+.qr-acts button{flex:1;height:42px;border-radius:11px;font-size:12.5px;font-weight:700}
+.qr-note{font-size:10.5px;color:#6C8189;line-height:1.6;margin-top:10px;text-align:left}
+.deploy-card{display:flex;gap:12px;align-items:center}
+.deploy-card .mark{width:44px;height:44px;border-radius:13px;background:linear-gradient(150deg,#0E8A80,#0B4A5A);color:#fff;display:grid;place-items:center;flex:none}
+.deploy-card .mark svg{width:22px;height:22px}
+.deploy-btns{display:flex;gap:7px;margin-top:9px}
+.deploy-btns button{flex:1;height:36px;border-radius:9px;font-size:11.5px;font-weight:700}
+.center-row.tel{cursor:pointer}
+.center-row .call{font-size:10px;color:#0E8A80;font-weight:700;margin-left:4px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11M12 6l-2.5-2M12 6l2.5-2M12 18l-2.5 2M12 18l2.5 2M6.6 9.3 4 8.6M6.6 14.7 4 15.4M17.4 9.3 20 8.6M17.4 14.7 20 15.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.4.3.6.7.6 1.2v.4h5.8v-.4c0-.5.2-.9.6-1.2A6 6 0 0 0 12 3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 6h10M4 12h7M4 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m14.5 16.5 2.2 2.2 4-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 10v9h16v-9M3 10l2-6h14l2 6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-cam" viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m16 11 5-3v9l-5-3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m10 8.5 6 3.5-6 3.5z" fill="currentColor"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3c3.2 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2.8-6 6-10Z" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    <symbol id="i-fan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 9.8c0-3 1-5 3-5s2.4 4-1 6.2M14.2 13c2.6 1.6 3.2 3.8 1.8 5-1.6 1.3-4.2-1.4-2-5M9.8 13c-2.6 1.6-3.2 3.8-1.8 5 1.6 1.3 4.2-1.4 2-5M12 9.8c0-3-1-5-3-5s-2.4 4 1 6.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16" stroke="currentColor" stroke-width="1.2" opacity=".7"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7.5 6.5a7 7 0 1 0 9 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="currentColor"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9L3.5 9.7l5.9-.8z" fill="currentColor"/></symbol>
+    <symbol id="i-tel" viewBox="0 0 24 24"><path d="M6.2 3.5h3l1.6 4-2 1.5a11.5 11.5 0 0 0 5.2 5.2l1.5-2 4 1.6v3c0 1.1-.9 2-2 2A15.5 15.5 0 0 1 4.2 5.5c0-1.1.9-2 2-2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <header class="top">
+    <div class="top-row">
+      <div class="logo"><svg><use href="#i-snow"/></svg></div>
+      <div class="top-titles">
+        <div class="top-title">에어코드<span class="top-en">AirCode</span></div>
+        <div class="top-sub" id="topSub">삼성 · LG · 캐리어 · 위니아 · 파세코 · FCU</div>
+      </div>
+      <button class="qr-btn" id="qrBtn" aria-label="교육생 배포용 QR·링크"><svg><use href="#i-qr"/></svg></button>
+      <div class="top-badge" id="topBadge">378건</div>
+    </div>
+    <div id="topSearch">
+      <div class="searchbox" id="searchbox">
+        <svg><use href="#i-search"/></svg>
+        <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="코드·증상 검색 (C101, CH21, 통신, 배수)">
+        <button class="clear-btn" id="clearQ" aria-label="지우기">✕</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ 1. 검색 ============ -->
+    <section class="tab active" id="tab-search">
+      <div class="filters">
+        <div class="chip-row" id="brandChips"></div>
+        <div class="chip-row" id="deviceChips"></div>
+        <div class="chip-row" id="viewChips"></div>
+      </div>
+      <div class="quick" id="quickCodes"></div>
+      <div class="list-head"><b id="listTitle">전체 코드</b><span id="listCount"></span></div>
+      <div class="cards" id="cards"></div>
+      <button class="more-btn" id="moreBtn" style="display:none">더 보기</button>
+      <div class="info-strip">
+        <svg><use href="#i-info"/></svg>
+        <span>제조사 공식 고객지원·사용설명서에서 확인한 표시만 수록했습니다. 표에 없는 코드는 추측하지 말고 모델명과 함께 제조사에 확인하세요.</span>
+      </div>
+    </section>
+
+    <!-- ============ 2. LED ============ -->
+    <section class="tab" id="tab-led">
+      <!-- AI 판독 -->
+      <div class="ai-card">
+        <div class="ai-head">
+          <span class="ai-badge">AI</span>
+          <span class="ai-title">영상으로 LED 점멸 판독</span>
+          <span class="ai-live"><i></i>기기 내 분석</span>
+        </div>
+        <p class="ai-desc">깜빡이는 불을 5~10초 찍어 올리면 색과 점멸 횟수를 실제로 세어 코드로 바꿉니다. 눈으로 세다 틀리는 일을 줄여 줍니다.</p>
+
+        <div class="mode-chips" id="aiModes">
+          <button class="mode on" data-mode="lgOut"><b>LG 실외기</b><span>적/녹 2색</span></button>
+          <button class="mode" data-mode="lgIn"><b>LG 실내기</b><span>단색 점멸</span></button>
+          <button class="mode" data-mode="carrier"><b>캐리어</b><span>운전램프</span></button>
+          <button class="mode" data-mode="samsung"><b>삼성 4WAY</b><span>사진·램프</span></button>
+        </div>
+
+        <div class="frame" id="frame">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="frame-inner" id="frameInner">
+            <svg><use href="#i-cam"/></svg>
+            <div class="f1">LED가 네모 안에 오게 5~10초 촬영</div>
+            <div class="f2">실내기 표시부·실외기 기판 모두 가능<br>불이 화면 가운데 오게, 흔들리지 않게</div>
+          </div>
+          <canvas class="roi-canvas" id="roiCanvas"></canvas>
+          <div class="scan"></div>
+          <span class="frame-tag" id="frameTag">가이드 프레임 4:3</span>
+          <span class="roi-hint" id="roiHint">불이 보이면 그 자리를 한 번 눌러 주세요</span>
+        </div>
+
+        <div class="ai-actions">
+          <label class="btn-file" for="fileCam"><svg><use href="#i-cam"/></svg>영상 바로 찍기</label>
+          <input id="fileCam" type="file" accept="video/*" capture="environment" style="display:none">
+          <label class="btn-file2" for="fileIn"><svg><use href="#i-upload"/></svg>불러오기</label>
+          <input id="fileIn" type="file" accept="video/*,image/*" style="display:none">
+        </div>
+        <div class="ai-actions sub">
+          <button class="btn-sample" id="sampleBtn"><svg><use href="#i-play"/></svg>샘플로 체험</button>
+          <button class="btn-sample" id="aiClearBtn">처음부터</button>
+        </div>
+        <div class="samples" id="samples"></div>
+
+        <div class="steps-panel" id="stepsPanel">
+          <div class="aprog"><i id="aprogBar"></i></div>
+          <div class="astep" data-s="0"><span class="tick">✓</span>영상 프레임 읽기</div>
+          <div class="astep" data-s="1"><span class="tick">✓</span>LED 위치·색 찾기</div>
+          <div class="astep" data-s="2"><span class="tick">✓</span>점멸 횟수·휴지 구간 세기</div>
+          <div class="astep" data-s="3"><span class="tick">✓</span>코드 표 대조</div>
+        </div>
+        <div class="ai-result" id="aiResult"></div>
+        <p class="demo-note" id="demoNote">영상은 기기 내에서만 실시간 분석되며 외부로 전송되지 않습니다.</p>
+      </div>
+
+            <div class="sec-head"><div class="sec-title"><span class="num">2</span>직접 찾기</div><div class="sec-sub">AI 없이도 바로</div></div>
+
+      <!-- LG 카운터 -->
+      <div class="tool open" id="toolLg">
+        <button class="tool-head" data-toggle="toolLg">
+          <span class="tool-ico"><svg><use href="#i-bulb"/></svg></span>
+          <span class="tool-tt"><b>LG LED 깜빡임 카운터</b><span>불이 깜빡일 때마다 눌러 횟수 세기</span></span>
+          <span class="chev2"><svg><use href="#i-down"/></svg></span>
+        </button>
+        <div class="tool-body">
+          <div class="seg" id="lgSeg">
+            <button class="on" data-lgmode="pcb">실외기 · 적/녹</button>
+            <button data-lgmode="single">실내기 · 불 1개</button>
+          </div>
+          <div id="lgPcb">
+            <div class="tapgrid">
+              <button class="tapbtn red" id="tapRed"><span class="t1">적색 = 10의 자리</span><div class="t2" id="cntRed">0</div><span class="t3">탭해서 세기</span></button>
+              <button class="tapbtn green" id="tapGreen"><span class="t1">녹색 = 1의 자리</span><div class="t2" id="cntGreen">0</div><span class="t3">탭해서 세기</span></button>
+            </div>
+          </div>
+          <div id="lgSingle" style="display:none">
+            <button class="tapbtn single" id="tapSingle"><span class="t1">깜빡일 때마다 탭</span><div class="t2" id="cntSingle">0</div><span class="t3">숫자 사이 쉼이 길면 자리가 바뀝니다</span></button>
+          </div>
+          <div class="readout">
+            <div><div class="ro-l">읽은 코드</div><div class="ro-v" id="lgCode">CH—</div></div>
+            <button class="reset-mini" id="lgReset">초기화</button>
+          </div>
+          <div class="match" id="lgMatch"></div>
+          <p class="hint">실외기 기판은 <b>빨간 불 = 10의 자리, 초록 불 = 1의 자리</b>입니다. 빨강 2번 + 초록 1번이면 20+1 = <b>CH21</b>. 전원을 꺼도 초록·주황 불이 켜져 있으면 필터 알림일 수 있습니다.</p>
+        </div>
+      </div>
+
+      <!-- 삼성 카세트 -->
+      <div class="tool" id="toolSam">
+        <button class="tool-head" data-toggle="toolSam">
+          <span class="tool-ico"><svg><use href="#i-grid"/></svg></span>
+          <span class="tool-tt"><b>삼성 카세트 램프 조합</b><span>깜빡이는 아이콘을 눌러 원인 확인</span></span>
+          <span class="chev2"><svg><use href="#i-down"/></svg></span>
+        </button>
+        <div class="tool-body">
+          <div class="seg" id="samForms"></div>
+          <div id="samIcons"></div>
+          <div class="match" id="samMatch"></div>
+          <p class="hint" id="samHint">표시부의 램프 개수를 먼저 세세요. 4WAY 4개 제품과 5개 제품은 같은 아이콘이라도 뜻이 다릅니다.</p>
+        </div>
+      </div>
+
+      <!-- 캐리어·위니아 -->
+      <div class="tool" id="toolEtc">
+        <button class="tool-head" data-toggle="toolEtc">
+          <span class="tool-ico"><svg><use href="#i-power"/></svg></span>
+          <span class="tool-tt"><b>캐리어 · 위니아 램프 안내</b><span>운전램프·타이머램프 읽는 법</span></span>
+          <span class="chev2"><svg><use href="#i-down"/></svg></span>
+        </button>
+        <div class="tool-body" id="etcBody"></div>
+      </div>
+
+      <!-- 촬영 요령 -->
+      <div class="tool" id="toolShoot">
+        <button class="tool-head" data-toggle="toolShoot">
+          <span class="tool-ico"><svg><use href="#i-cam"/></svg></span>
+          <span class="tool-tt"><b>현장 촬영·판독 6단계</b><span>한두 번은 반드시 틀립니다. 찍어서 확인</span></span>
+          <span class="chev2"><svg><use href="#i-down"/></svg></span>
+        </button>
+        <div class="tool-body" id="shootBody"></div>
+      </div>
+      <div style="height:6px"></div>
+    </section>
+
+    <!-- ============ 3. 현장 진단 (단계별 고장 추적) ============ -->
+    <section class="tab" id="tab-check">
+      <div id="dxStart">
+        <div class="dx-lead">
+          <div class="kick">FIELD DIAGNOSIS · 4 STEPS</div>
+          <h3>조치해 보고, 에러가 없어졌는지<br>바로 확인하세요</h3>
+          <p>고장 계열을 고르면 예상 원인이 1→2→3→4단계로 나옵니다. 단계마다 조치한 뒤 ‘에러 없어짐’ 또는 ‘그대로 뜸’을 누르면 다음 원인으로 이어지고, 해결되면 조치 내역이 자동으로 정리됩니다.</p>
+          <div class="flowline"><span>조치</span><i></i><span>확인</span><i></i><span>다음 원인</span><i></i><span>판정</span></div>
+        </div>
+        <div class="sec">
+          <div class="sec-head" style="padding:14px 4px 8px"><div class="sec-title">고장 계열로 시작</div><div class="sec-sub">7계열 · 각 4단계</div></div>
+        </div>
+        <div class="dx-sec"><div class="dx-fams" id="dxFams"></div></div>
+        <div class="sec">
+          <div class="sec-head" style="padding:16px 4px 8px"><div class="sec-title">자주 나오는 상황</div><div class="sec-sub">증상으로 바로</div></div>
+        </div>
+        <div class="dx-sec"><div class="dx-situ" id="dxSitu"></div></div>
+        <div class="sec">
+          <div class="sec-head" style="padding:16px 4px 8px"><div class="sec-title">코드로 시작</div><div class="sec-sub">코드를 알면 바로</div></div>
+        </div>
+        <div class="dx-sec">
+          <div class="dx-codebox">
+            <div class="t">표시 코드를 그대로 입력하세요</div>
+            <div class="dx-coderow">
+              <input id="dxCode" type="search" inputmode="search" autocomplete="off" placeholder="예) C101, CH21, E1">
+              <button id="dxCodeGo">진단 시작</button>
+            </div>
+            <p class="hint" style="margin-top:8px">검색 탭의 코드 상세에서도 [이 코드로 현장 진단 시작]으로 들어올 수 있습니다.</p>
+          </div>
+        </div>
+        <div class="sec" style="margin-top:14px"><div class="note-card"><b>진단은 이렇게 흘러갑니다</b><br>조치 → 에러 확인 → 다음 예상 원인 → 끝까지 그대로면 부품·기판 교체 또는 제조사 접수 판정. 시도한 단계는 시간순으로 남아 그대로 보고서가 됩니다.</div></div>
+      </div>
+
+      <div id="dxRun" style="display:none"></div>
+
+      <div class="memo">
+        <div class="sec-head" style="padding:6px 4px 8px"><div class="sec-title">현장 메모</div><div class="sec-sub">모델명·코드·발생 조건</div></div>
+        <textarea id="memo" placeholder="예) 4WAY 카세트 · AR24TXFYAWKNEU · 물방울+시계 · 운전 30분 후 반복 · 실외기 환기창 막힘"></textarea>
+        <div class="memo-row">
+          <button class="btn-ghost" id="memoClear">지우기</button>
+          <button class="btn-primary" id="memoCopy"><svg style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"><use href="#i-copy"/></svg>메모 복사</button>
+        </div>
+      </div>
+      <div class="sec"><div class="note-card"><b>접수·인계 시 꼭 남기기</b><br>표시 코드나 점멸 횟수를 사진으로, 실내기·실외기 라벨의 모델명과 제조연월을 함께 적습니다. 같은 코드라도 계열을 구분하는 유일한 근거입니다.</div></div>
+      <div style="height:8px"></div>
+    </section>
+    <!-- ============ 4. 아카데미 ============ -->
+    <section class="tab" id="tab-promo">
+      <div class="promo-hero">
+        <div class="glow"></div>
+        <div class="kicker">ACADEMY · SERVICE</div>
+        <h2>에어컨 수리·세척을<br>배우고 맡기는 곳</h2>
+        <p>최정예홈케어아카데미는 가전세척·에어컨 수리 교육을, 쾌적하마는 분해세척·수리·유지보수를 맡습니다. 이 앱은 두 곳의 현장 도구로 쓰입니다.</p>
+        <div class="promo-btns">
+          <a class="solid" href="https://cjyacademy.com" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>아카데미 홈페이지</a>
+          <button class="line" data-inquiry="academy">교육 문의</button>
+        </div>
+      </div>
+
+      <div class="promo-card deploy-card">
+        <div class="mark"><svg><use href="#i-qr"/></svg></div>
+        <div class="promo-txt">
+          <b>교육생에게 앱 배포</b>
+          <div class="tagline">QR 찍으면 바로 열립니다</div>
+          <p>수강생 폰에서 카메라로 QR을 찍거나 링크를 눌러 바로 쓸 수 있습니다. 설치·가입 없이 열리고, 홈 화면에 추가하면 앱처럼 뜹니다.</p>
+          <div class="deploy-btns">
+            <button class="btn-primary" data-qr="1"><svg style="width:12px;height:12px;vertical-align:-2px;margin-right:4px"><use href="#i-qr"/></svg>QR 코드 보기</button>
+            <button class="btn-ghost" data-copy-link="1">링크 복사</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="promo-card">
+        <div class="promo-mark a">CJY</div>
+        <div class="promo-txt">
+          <b>최정예홈케어아카데미</b>
+          <div class="tagline">가전세척 · 에어컨 수리 전문 교육</div>
+          <p>에어컨 분해세척과 수리 실무를 현장 기준으로 가르칩니다. 이 앱의 에러코드·LED 판독 자료도 교육 교재로 쓰입니다.</p>
+          <a class="link-btn" href="https://cjyacademy.com" target="_blank" rel="noopener">cjyacademy.com <svg><use href="#i-ext"/></svg></a>
+        </div>
+      </div>
+
+      <div class="promo-card">
+        <div class="promo-mark b">쾌적</div>
+        <div class="promo-txt">
+          <b>쾌적하마</b>
+          <div class="tagline">에어컨 분해세척 · 수리 · 유지보수</div>
+          <p>가정·매장·사무실 에어컨 분해세척과 고장 수리, 정기 유지보수를 진행합니다. 출장 견적은 현장 사진과 모델명을 함께 주시면 빠릅니다.</p>
+          <button class="link-btn" data-inquiry="service">출장·견적 문의 <svg><use href="#i-chev"/></svg></button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-head" style="padding:4px 4px 8px"><div class="sec-title">제조사 고객센터</div><div class="sec-sub">표에 없는 코드는 여기로</div></div>
+        <div class="panel" id="centers" style="padding:6px 14px"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-head" style="padding:4px 4px 8px"><div class="sec-title">수록 범위</div><div class="sec-sub" id="statSub"></div></div>
+        <div class="panel">
+          <div style="font-size:12px;color:var(--ink2);line-height:1.65">제조사 공식 고객지원과 제품 사용설명서에서 확인한 코드만 담았습니다. ‘현장 점검 포인트’는 그 표시를 어떤 순서로 확인할지 정리한 교육용 해설입니다.</div>
+          <div class="stat-line" id="stats"></div>
+        </div>
+      </div>
+
+      <p class="disc">이 앱은 현장 보조 도구입니다. 냉매 회수·충전, 인버터 기판·압축기 단품 시험은 자격과 장비가 필요한 작업으로, 전원을 내린 상태에서 지도자 입회하에 진행합니다. 표시된 코드와 모델명을 그대로 제조사에 확인하는 것이 원칙입니다.</p>
+      <div style="height:8px"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar" id="tabbar">
+    <button class="on" data-tab="search"><svg><use href="#i-search"/></svg>검색<span class="navdot"></span></button>
+    <button data-tab="led"><svg><use href="#i-bulb"/></svg>LED 찾기<span class="navdot"></span></button>
+    <button data-tab="check"><svg><use href="#i-check"/></svg>현장 진단<span class="navdot"></span></button>
+    <button data-tab="promo"><svg><use href="#i-store"/></svg>아카데미<span class="navdot"></span></button>
+  </nav>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <div class="sheet-top">
+      <div class="sheet-code" id="shCode">—</div>
+      <button class="close-x" id="sheetClose" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="sheet-meta" id="shMeta"></div>
+  </div>
+  <div class="sheet-body" id="shBody"></div>
+  <div class="sheet-foot">
+    <button class="btn-ghost" id="shCopy"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><use href="#i-copy"/></svg>기록 복사</button>
+    <button class="btn-primary" id="shDiag">이 코드로 현장 진단 →</button>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <div class="row"><button class="btn-ghost" id="modalOk">확인</button></div>
+  </div>
+</div>
+<div class="modal" id="qrModal">
+  <div class="modal-box qr-box">
+    <h3>교육생에게 보여줄 링크</h3>
+    <div class="qr-wrap" id="qrWrap">__QR_SVG__</div>
+    <div class="qr-url" id="qrUrl">__SITE_URL__</div>
+    <div class="qr-acts">
+      <button class="btn-primary" id="qrCopy">링크 복사</button>
+      <button class="btn-ghost" id="qrShare">공유하기</button>
+    </div>
+    <p class="qr-note">QR은 앱 안에 들어 있어 인터넷이 없어도 뜹니다. 아이폰은 사파리 공유 → ‘홈 화면에 추가’로 앱처럼 쓸 수 있고, 안드로이드는 링크를 열면 설치 안내가 뜹니다.</p>
+    <div class="row"><button class="btn-ghost" id="qrClose">닫기</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script id="data" type="application/json">__DATA_JSON__</script>
+<script>
+"use strict";
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const norm = s => String(s || '').toUpperCase().replace(/\s+/g, '');
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const brandMap = Object.fromEntries(DATA.brands.map(b => [b.id, b]));
+
+/* ------------------------------------------------ 공통 */
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800);
+}
+function copyText(text){
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(() => toast('복사했습니다')).catch(() => fallbackCopy(text));
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('복사했습니다'); }
+  catch(e){ toast('복사가 되지 않았습니다'); }
+  document.body.removeChild(ta);
+}
+function telHref(phone){
+  const m = String(phone || '').match(/0\d{1,2}-\d{3,4}-\d{4}|\d{4}-\d{4}/);
+  return m ? 'tel:' + m[0].replace(/[^0-9]/g, '') : '';
+}
+function catClass(c){
+  if (!c) return '기타';
+  if (c.indexOf('통신') >= 0) return '통신';
+  if (c.indexOf('센서') >= 0) return '센서';
+  if (c.indexOf('인버터') >= 0) return '인버터';
+  if (c.indexOf('냉매') >= 0) return '냉매';
+  if (c.indexOf('배수') >= 0) return '배수';
+  if (c.indexOf('팬') >= 0) return '팬';
+  if (c.indexOf('설치') >= 0) return '설치';
+  if (c.indexOf('전원') >= 0) return '전원';
+  if (c.indexOf('상태') >= 0) return '상태';
+  return '기타';
+}
+
+/* ------------------------------------------------ 탭 */
+let currentTab = 'search';
+$$('#tabbar button').forEach(btn => btn.addEventListener('click', () => {
+  currentTab = btn.dataset.tab;
+  $$('#tabbar button').forEach(b => b.classList.toggle('on', b === btn));
+  $$('.tab').forEach(s => s.classList.toggle('active', s.id === 'tab-' + currentTab));
+  $('#main').scrollTop = 0;
+  const isSearch = currentTab === 'search';
+  $('#topSearch').style.display = isSearch ? 'block' : 'none';
+  $('header.top').classList.toggle('has-search', isSearch);
+  const titles = {search:'삼성 · LG · 캐리어 · 위니아 · 파세코 · FCU', led:'LED 점멸로 코드 찾기', check:'단계별 현장 진단 · 고장 추적', promo:'최정예홈케어아카데미 · 쾌적하마'};
+  $('#topSub').textContent = titles[currentTab];
+}));
+
+/* ------------------------------------------------ 검색 */
+const state = {q:'', brand:'all', device:'전체', limit:40, view:'all'};
+/* 즐겨찾기 · 최근 본 (localStorage) */
+const FAV_KEY = 'aircode_fav_v1', RECENT_KEY = 'aircode_recent_v1';
+function loadIds(k){ try { const v = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(v) ? v : []; } catch(e){ return []; } }
+function saveIds(k, a){ try { localStorage.setItem(k, JSON.stringify(a)); } catch(e){} }
+let favIds = loadIds(FAV_KEY), recentIds = loadIds(RECENT_KEY);
+function isFav(id){ return favIds.indexOf(id) >= 0; }
+function toggleFav(id){
+  const on = !isFav(id);
+  favIds = on ? [id].concat(favIds) : favIds.filter(x => x !== id);
+  saveIds(FAV_KEY, favIds);
+  renderList();
+  toast(on ? '즐겨찾기에 담았습니다' : '즐겨찾기에서 뺐습니다');
+}
+function pushRecent(id){
+  recentIds = [id].concat(recentIds.filter(x => x !== id)).slice(0, 20);
+  saveIds(RECENT_KEY, recentIds);
+}
+function entryById(id){ return DATA.entries.find(e => e.id === id) || null; }
+const quickCodes = ['C101','E101','CH05','CH21','E1','F1','P1','X1'];
+const BRAND_FILTERS = [{id:'all', name:'전체'}].concat(DATA.brands.map(b => ({id:b.id, name:b.short, color:b.color})));
+const DEVICES = ['전체','시스템','스탠드','벽걸이','창문형','카세트','FCU'];
+
+$('#topBadge').textContent = DATA.meta.count + '건';
+
+function buildChips(){
+  const bc = $('#brandChips');
+  bc.innerHTML = BRAND_FILTERS.map(b =>
+    `<button class="chip ${b.id==='all'?'on':''}" data-brand="${b.id}">${b.id==='all'?'':`<span class="dot" style="background:${b.color}"></span>`}${b.name}</button>`
+  ).join('');
+  bc.addEventListener('click', e => {
+    const el = e.target.closest('[data-brand]'); if (!el) return;
+    state.brand = el.dataset.brand; state.limit = 40;
+    $$('#brandChips .chip').forEach(c => c.classList.toggle('on', c === el));
+    renderList();
+  });
+  const dc = $('#deviceChips');
+  dc.innerHTML = DEVICES.map(d => `<button class="chip sub ${d==='전체'?'on':''}" data-dev="${d}">${d}</button>`).join('');
+  dc.addEventListener('click', e => {
+    const el = e.target.closest('[data-dev]'); if (!el) return;
+    state.device = el.dataset.dev; state.limit = 40;
+    $$('#deviceChips .chip').forEach(c => c.classList.toggle('on', c === el));
+    renderList();
+  });
+  const VIEWS = [{id:'all', name:'전체 코드'}, {id:'fav', name:'★ 즐겨찾기'}, {id:'recent', name:'최근 본'}];
+  const vc = $('#viewChips');
+  vc.innerHTML = VIEWS.map(v => `<button class="chip sub ${v.id==='all'?'on':''}" data-view="${v.id}">${v.name}</button>`).join('');
+  vc.addEventListener('click', e => {
+    const el = e.target.closest('[data-view]'); if (!el) return;
+    state.view = el.dataset.view; state.limit = 40;
+    $$('#viewChips .chip').forEach(c => c.classList.toggle('on', c === el));
+    renderList();
+  });
+  $('#quickCodes').innerHTML = quickCodes.map(c => `<button data-q="${c}">${c}</button>`).join('');
+  $('#quickCodes').addEventListener('click', e => {
+    const b = e.target.closest('[data-q]'); if (!b) return;
+    $('#q').value = b.dataset.q; state.q = b.dataset.q; state.limit = 40;
+    $('#searchbox').classList.add('has-value'); renderList(); $('#main').scrollTop = 0;
+  });
+}
+
+function scoreEntry(e, q){
+  if (!q) return 1;
+  const qn = norm(q);
+  const qnum = /^\d{1,3}$/.test(qn) ? String(parseInt(qn, 10)) : null;
+  let best = 0;
+  for (const c of e.codes){
+    const cn = norm(c);
+    if (cn === qn) best = Math.max(best, 100);
+    else if (cn.startsWith(qn)) best = Math.max(best, 86);
+    else if (cn.indexOf(qn) >= 0) best = Math.max(best, 72);
+  }
+  if (qnum){
+    for (const n of e.nums){
+      if (String(parseInt(n, 10)) === qnum) best = Math.max(best, 92);
+    }
+  }
+  const disp = norm(e.display);
+  if (disp === qn) best = Math.max(best, 98);
+  if (disp.indexOf(qn) >= 0) best = Math.max(best, 70);
+  if (norm(e.cause).indexOf(qn) >= 0) best = Math.max(best, 52);
+  if (norm(e.check).indexOf(qn) >= 0) best = Math.max(best, 42);
+  if (norm(e.category).indexOf(qn) >= 0) best = Math.max(best, 40);
+  // 절 제목의 코드 범위((CH21~CH38) 등)는 코드가 아닌 낱말을 넣었을 때만 약하게 반영한다
+  const looksCode = /^[A-Z]{0,2}\d{1,3}$/.test(qn) || /^[A-Z]{1,3}\d{1,3}$/.test(qn);
+  if (!best && !looksCode && norm(e.sectionTitle + e.section + e.brandName).indexOf(qn) >= 0) best = 18;
+  return best;
+}
+
+function filtered(){
+  const out = [];
+  let pool = DATA.entries;
+  if (state.view === 'fav') pool = favIds.map(entryById).filter(Boolean);
+  else if (state.view === 'recent') pool = recentIds.map(entryById).filter(Boolean);
+  for (const e of pool){
+    if (state.brand !== 'all' && e.chips.indexOf(state.brand) < 0) continue;
+    if (state.device !== '전체' && e.device.indexOf(state.device) < 0) continue;
+    const s = scoreEntry(e, state.q);
+    if (s > 0) out.push([s, e]);
+  }
+  if (state.view !== 'all') return out.map(x => x[1]);
+  const border = Object.fromEntries(DATA.brands.map((b, i) => [b.id, i]));
+  const isCode = e => e.kind === 'code' ? 0 : 1;
+  // 정확/접두 일치가 있으면 약한 일치(절 제목 등)는 접어 둔다
+  const top = out.length ? Math.max.apply(null, out.map(x => x[0])) : 0;
+  const kept = top >= 70 ? out.filter(x => x[0] >= 40) : out.slice();
+  kept.sort((a, b) =>
+    b[0] - a[0] ||
+    (border[a[1].brand] ?? 9) - (border[b[1].brand] ?? 9) ||
+    isCode(a[1]) - isCode(b[1]) ||
+    (a[1].codes[0] || a[1].display).localeCompare(b[1].codes[0] || b[1].display, 'ko', {numeric: true}));
+  return kept.map(x => x[1]);
+}
+
+function codeBadge(e){
+  if (e.kind === 'led') return `<div class="card-code lamp">램프</div>`;
+  const c = e.codes[0] || e.display;
+  return `<div class="card-code">${esc(c.length > 9 ? c.slice(0, 9) + '…' : c)}</div>`;
+}
+
+function renderList(){
+  const list = filtered();
+  const show = list.slice(0, state.limit);
+  const viewName = state.view === 'fav' ? '★ 즐겨찾기' : state.view === 'recent' ? '최근 본 코드' : '';
+  $('#listTitle').textContent = state.q ? `‘${state.q}’ 검색` : (viewName || (state.brand === 'all' ? '전체 코드' : brandMap[state.brand].name));
+  $('#listCount').textContent = list.length ? `${list.length}건 중 ${show.length}건` : '0건';
+  const cards = $('#cards');
+  if (!list.length){
+    cards.innerHTML = state.view === 'fav'
+      ? `<div class="empty"><b>즐겨찾기가 비어 있습니다</b>카드 오른쪽 ★를 누르면 여기에 모입니다.<div><a class="mini-btn" data-viewall="1">전체 코드 보기 →</a></div></div>`
+      : state.view === 'recent'
+      ? `<div class="empty"><b>최근 본 코드가 없습니다</b>코드 카드를 열면 자동으로 쌓입니다.<div><a class="mini-btn" data-viewall="1">전체 코드 보기 →</a></div></div>`
+      : `<div class="empty"><b>찾는 코드가 없습니다</b>코드는 C101·CH21·E1처럼, 증상은 ‘통신·배수·센서’처럼 입력해 보세요.<br>표에 없는 코드는 제조사 고객센터에서 확인합니다.<div><a class="mini-btn" data-goled="1">LED로 찾기 →</a></div></div>`;
+    const va = $('[data-viewall]', cards);
+    if (va) va.addEventListener('click', () => { state.view = 'all'; $$('#viewChips .chip').forEach(c => c.classList.toggle('on', c.dataset.view === 'all')); renderList(); });
+    const g = $('[data-goled]', cards);
+    if (g) g.addEventListener('click', () => $$('#tabbar button')[1].click());
+    $('#moreBtn').style.display = 'none';
+    return;
+  }
+  cards.innerHTML = show.map(e => {
+    const b = brandMap[e.brand] || {color:'#666'};
+    return `<div class="card" data-id="${e.id}" role="button" tabindex="0">
+      ${codeBadge(e)}
+      <div class="card-main">
+        <div class="card-top"><span class="bdot" style="background:${b.color}"></span>${esc(e.brandName)}
+          <span class="cat ${catClass(e.category)}">${esc(e.category)}</span>
+          <span>${esc(e.device.slice(0,2).join('·'))}</span>
+          <button class="star ${isFav(e.id)?'on':''}" data-star="${e.id}" aria-label="즐겨찾기" aria-pressed="${isFav(e.id)}">★</button></div>
+        <div class="card-cause">${esc(e.kind === 'led' ? e.display + ' — ' + e.cause : e.cause)}</div>
+      </div>
+      <span class="chev"><svg><use href="#i-chev"/></svg></span>
+    </div>`;
+  }).join('');
+  $('#moreBtn').style.display = list.length > show.length ? 'block' : 'none';
+  $('#moreBtn').textContent = `더 보기 (${list.length - show.length}건 남음)`;
+}
+
+$('#q').addEventListener('input', e => {
+  state.q = e.target.value.trim(); state.limit = 40;
+  $('#searchbox').classList.toggle('has-value', !!e.target.value);
+  renderList();
+});
+/* 모바일: Enter(검색) 시 키보드 닫고 즉시 결과 표시 */
+$('#q').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.keyCode === 13){
+    e.preventDefault();
+    state.q = e.target.value.trim(); state.limit = 40;
+    $('#searchbox').classList.toggle('has-value', !!e.target.value);
+    e.target.blur();
+    renderList();
+    $('#main').scrollTop = 0;
+  }
+});
+/* 한글 조합(compositionend) 완료 즉시 결과 갱신 */
+['compositionend','change'].forEach(ev => {
+  $('#q').addEventListener(ev, e => {
+    const v = (e.target.value || '').trim();
+    /* 입력 핸들러가 이미 반영한 값이면 다시 그리지 않는다 —
+       blur(change) 때 목록을 새로 그리면 누르던 카드가 사라져 탭이 먹힌다. */
+    if (v === state.q) return;
+    state.q = v; state.limit = 40;
+    $('#searchbox').classList.toggle('has-value', !!e.target.value);
+    renderList();
+  });
+});
+$('#clearQ').addEventListener('click', () => {
+  $('#q').value = ''; state.q = ''; $('#searchbox').classList.remove('has-value'); renderList();
+});
+$('#moreBtn').addEventListener('click', () => { state.limit += 60; renderList(); });
+$('#cards').addEventListener('click', e => {
+  const st = e.target.closest('[data-star]');
+  if (st){ e.preventDefault(); e.stopPropagation(); toggleFav(st.dataset.star); return; }
+  const c = e.target.closest('.card'); if (!c) return;
+  const entry = entryById(c.dataset.id);
+  if (entry) openSheet(entry);
+});
+$('#cards').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const c = e.target.closest('.card'); if (!c) return;
+  e.preventDefault();
+  const entry = entryById(c.dataset.id);
+  if (entry) openSheet(entry);
+});
+
+/* ------------------------------------------------ 상세 시트 */
+let sheetEntry = null;
+function openSheet(e){
+  sheetEntry = e;
+  if (e && e.id){ pushRecent(e.id); }
+  const b = brandMap[e.brand] || {name:'', color:'#666'};
+  $('#shCode').textContent = e.kind === 'led' ? e.display : (e.codes[0] || e.display);
+  $('#shCode').classList.toggle('small', e.kind === 'led' || (e.codes[0] || '').length > 10);
+  $('#shMeta').innerHTML = `<span class="pill brand" style="background:${b.color}">${esc(e.brandName)}</span>
+    <span class="pill">${esc(e.device.join(' · '))}</span>
+    <span class="pill">${esc(e.category)}</span>
+    <span>${esc(e.section)}</span>`;
+  const steps = e.steps && e.steps.length ? e.steps : [e.check].filter(Boolean);
+  const notes = (DATA.brandNotes[e.brand] || []).slice(0, 3);
+  const rel = DATA.entries.filter(x => x.id !== e.id && x.brand === e.brand && x.category === e.category && x.codes.length)
+    .slice(0, 6);
+  $('#shBody').innerHTML = `
+    ${e.kind === 'led' ? '' : `<div class="blk"><h4>표시</h4><p style="font-family:ui-monospace,Menlo,monospace;font-weight:700">${esc(e.display)}</p></div>`}
+    <div class="blk"><h4>원인</h4><p>${esc(e.cause)}</p></div>
+    ${steps.length ? `<div class="blk"><h4>현장 점검 순서</h4><ol>${steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol></div>` : ''}
+    <div class="blk warn-box"><h4>리셋 전 주의</h4><p>${esc(e.reset)}</p></div>
+    ${notes.length ? `<div class="blk"><h4>${esc(brandMap[e.brand].name)} 현장 노트</h4><ul>${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul><div style="font-size:10.5px;color:var(--muted);margin-top:6px">‘고객센터’ 탭에서 제조사 연락처를 볼 수 있습니다.</div></div>` : ''}
+    ${rel.length ? `<div class="blk"><h4>같은 계열 코드</h4><div class="relchips">${rel.map(r => `<button data-rel="${r.id}">${esc(r.codes[0] || r.display)}</button>`).join('')}</div></div>` : ''}
+    <div style="height:6px"></div>`;
+  $$('#shBody [data-rel]').forEach(btn => btn.addEventListener('click', () => {
+    const t = DATA.entries.find(x => x.id === btn.dataset.rel); if (t) openSheet(t);
+  }));
+  $('#backdrop').classList.add('on');
+  $('#sheet').classList.add('on');
+}
+function closeSheet(){
+  $('#backdrop').classList.remove('on');
+  $('#sheet').classList.remove('on');
+}
+$('#sheetClose').addEventListener('click', closeSheet);
+$('#shDiag').addEventListener('click', () => {
+  if (!sheetEntry) return;
+  const e = sheetEntry;
+  closeSheet();
+  startDxForEntry(e);
+});
+$('#backdrop').addEventListener('click', closeSheet);
+$('#shCopy').addEventListener('click', () => {
+  if (!sheetEntry) return;
+  const e = sheetEntry;
+  const txt = [
+    `[${e.brandName}] ${e.kind === 'led' ? e.display : e.codes[0] || e.display}`,
+    `표시: ${e.display}`,
+    `기종: ${e.device.join('·')} / ${e.section}`,
+    `원인: ${e.cause}`,
+    e.steps && e.steps.length ? `점검: ${e.steps.map((s,i) => (i+1) + ') ' + s).join(' ')}` : '',
+    `리셋: ${e.reset}`
+  ].filter(Boolean).join('\n');
+  copyText(txt);
+});
+
+/* ------------------------------------------------ LED 영상 판독 엔진 (100% 클라이언트) */
+const AI_MODES = {
+  lgOut:   {name:'LG 실외기(적/녹)', brand:'LG전자', brandId:'lg',      tone:'적색 10의 자리 · 녹색 1의 자리'},
+  lgIn:    {name:'LG 실내기(단색)',  brand:'LG전자', brandId:'lg',      tone:'점멸 횟수 · 긴 소등으로 자릿수 구분'},
+  carrier: {name:'캐리어(운전램프)', brand:'캐리어', brandId:'carrier', tone:'운전램프 연속 점멸 횟수'},
+  samsung: {name:'삼성 4WAY(사진·램프)', brand:'삼성전자', brandId:'samsung', tone:'켜진 램프 위치·색'}
+};
+const SAMPLE_W = 160, SAMPLE_H = 120, CELL = 4, CW = SAMPLE_W / CELL, CH = SAMPLE_H / CELL;
+const MAX_ANALYZE_MS = 12000, MIN_ANALYZE_MS = 3000, FPS = 13;
+
+const ai = {
+  mode:'lgOut', media:null, isVideo:false, url:null, roiNorm:null,
+  busy:false, derived:null, times:null, result:null, token:0, sampleOnly:false
+};
+
+function pad2(n){ return String(n).padStart(2, '0'); }
+function lgCodeOf(red, green){
+  const r = Math.max(0, Math.min(9, red)), g = Math.max(0, Math.min(9, green));
+  return 'CH' + pad2(r * 10 + g);
+}
+function matchedFor(code){
+  if (!code) return null;
+  const pcb = DATA.led.lgPcb.find(p => p.code === code);
+  const entry = DATA.entries.find(e => norm(e.codes[0] || '') === norm(code))
+    || DATA.entries.find(e => (e.codes || []).some(c => norm(c) === norm(code)));
+  if (!entry && !pcb) return null;
+  return {
+    code,
+    cause: (pcb && pcb.cause) || (entry && entry.cause) || '',
+    check: (pcb && pcb.check) || (entry && entry.check) || '',
+    reset: (pcb && pcb.reset) || (entry && DATA.reset[entry.brand]) || '',
+    entryId: entry ? entry.id : null,
+    brand: (entry && entry.brandName) || 'LG전자',
+    source: pcb ? 'LED 조합표' : '코드표'
+  };
+}
+
+/* ---- 촬영 프레임 샘플링 ---- */
+function newSampler(){
+  const cv = document.createElement('canvas');
+  cv.width = SAMPLE_W; cv.height = SAMPLE_H;
+  return cv.getContext('2d', { willReadFrequently: true });
+}
+function frameCells(cx){
+  const d = cx.getImageData(0, 0, SAMPLE_W, SAMPLE_H).data;
+  const out = new Float32Array(CW * CH * 3);
+  for (let y = 0; y < SAMPLE_H; y++){
+    const cy = (y / CELL) | 0;
+    for (let x = 0; x < SAMPLE_W; x++){
+      const si = (y * SAMPLE_W + x) * 4;
+      const ci = (cy * CW + ((x / CELL) | 0)) * 3;
+      out[ci] += d[si]; out[ci + 1] += d[si + 1]; out[ci + 2] += d[si + 2];
+    }
+  }
+  const px = CELL * CELL;
+  for (let i = 0; i < out.length; i++) out[i] /= px;
+  return out;
+}
+function deriveCells(cells){
+  const n = CW * CH;
+  const red = new Float32Array(n), green = new Float32Array(n), luma = new Float32Array(n);
+  for (let i = 0; i < n; i++){
+    const r = cells[i * 3], g = cells[i * 3 + 1], b = cells[i * 3 + 2];
+    red[i] = r - Math.max(g, b) * 0.6;
+    green[i] = g - Math.max(r, b) * 0.6;
+    luma[i] = 0.299 * r + 0.587 * g + 0.114 * b;
+  }
+  return { red, green, luma };
+}
+function seekTo(video, t){
+  return new Promise(res => {
+    let done = false;
+    const fin = () => {
+      if (done) return; done = true;
+      video.removeEventListener('seeked', fin); setTimeout(res, 8);
+    };
+    video.addEventListener('seeked', fin);
+    try { video.currentTime = t; } catch(e){ fin(); }
+    setTimeout(fin, 500);
+  });
+}
+async function captureByPlayout(video, onProgress){
+  const cx = newSampler();
+  const frames = [], times = [];
+  video.muted = true; video.playsInline = true;
+  try { video.currentTime = 0; } catch(e){}
+  const t0 = performance.now();
+  await video.play().catch(() => {});
+  return new Promise(resolve => {
+    let lastT = -1, stallMs = 0;
+    const tick = () => {
+      const now = performance.now(), elapsed = now - t0;
+      if (video.readyState >= 2 && video.videoWidth){
+        if (Math.abs(video.currentTime - lastT) > 1e-4 || frames.length === 0){
+          cx.drawImage(video, 0, 0, SAMPLE_W, SAMPLE_H);
+          frames.push(frameCells(cx)); times.push(video.currentTime);
+          lastT = video.currentTime; stallMs = 0;
+        } else stallMs += 1000 / FPS;
+      }
+      if (onProgress) onProgress(Math.min(1, elapsed / MAX_ANALYZE_MS));
+      const enough = elapsed > MAX_ANALYZE_MS
+        || (video.ended && frames.length > 28 && elapsed > MIN_ANALYZE_MS)
+        || (video.ended && frames.length > 90);
+      if (enough || stallMs > 2600){
+        video.pause();
+        resolve({ frames, times, stalled: stallMs > 2600 });
+        return;
+      }
+      if (video.ended){ try { video.currentTime = 0; video.play().catch(()=>{}); } catch(e){} }
+      setTimeout(tick, 1000 / FPS);
+    };
+    setTimeout(tick, 80);
+  });
+}
+async function captureBySeek(video, onProgress){
+  const cx = newSampler();
+  const frames = [], times = [];
+  video.pause();
+  const dur = isFinite(video.duration) && video.duration > 0 ? video.duration : 9;
+  const total = Math.min(dur, MAX_ANALYZE_MS / 1000);
+  const step = 1 / FPS;
+  for (let t = 0; t < total; t += step){
+    await seekTo(video, Math.min(t, dur - 0.03));
+    try { cx.drawImage(video, 0, 0, SAMPLE_W, SAMPLE_H); } catch(e){ continue; }
+    frames.push(frameCells(cx)); times.push(t);
+    if (onProgress) onProgress(Math.min(1, t / total));
+  }
+  return { frames, times, stalled:false };
+}
+
+/* ---- LED 위치(ROI) 찾기 ---- */
+function autoRoi(derived){
+  const score = new Float32Array(CW * CH);
+  const n = derived.length || 1;
+  for (let i = 0; i < CW * CH; i++){
+    let minR = 1e9, maxR = -1e9, minG = 1e9, maxG = -1e9, minL = 1e9, maxL = -1e9, sumL = 0;
+    for (let f = 0; f < n; f++){
+      const R = derived[f].red[i], G = derived[f].green[i], L = derived[f].luma[i];
+      if (R < minR) minR = R; if (R > maxR) maxR = R;
+      if (G < minG) minG = G; if (G > maxG) maxG = G;
+      if (L < minL) minL = L; if (L > maxL) maxL = L;
+      sumL += L;
+    }
+    const act = Math.max(maxR - minR, maxG - minG, (maxL - minL) * 0.75);
+    const bright = sumL / n / 255;
+    score[i] = act * (0.30 + bright);
+  }
+  const x0 = Math.round(CW * 0.12), x1 = Math.round(CW * 0.88);
+  const y0 = Math.round(CH * 0.08), y1 = Math.round(CH * 0.92);
+  let best = { x: CW >> 1, y: CH >> 1, s: -1 };
+  for (let y = y0; y < y1; y++){
+    for (let x = x0; x < x1; x++){
+      let sum = 0, c = 0;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++){
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= CW || ny >= CH) continue;
+        sum += score[ny * CW + nx]; c++;
+      }
+      const v = sum / c;
+      if (v > best.s) best = { x, y, s: v };
+    }
+  }
+  return { x: best.x, y: best.y, r: 2, strength: best.s, auto: true };
+}
+
+/* ---- ROI 시계열 추출 ---- */
+function buildSeries(derived, times, roi){
+  const n = derived.length;
+  const red = new Float32Array(n), green = new Float32Array(n), luma = new Float32Array(n);
+  const taps = [];
+  const r = roi.r || 2;
+  let wsum = 0;
+  for (let y = roi.y - r; y <= roi.y + r; y++){
+    for (let x = roi.x - r; x <= roi.x + r; x++){
+      if (x < 0 || y < 0 || x >= CW || y >= CH) continue;
+      const d = Math.hypot(x - roi.x, y - roi.y);
+      if (d > r + 0.25) continue;
+      const wt = Math.exp(-(d * d) * 1.1);
+      taps.push([y * CW + x, wt]); wsum += wt;
+    }
+  }
+  if (!wsum){ taps.push([roi.y * CW + roi.x, 1]); wsum = 1; }
+  for (let f = 0; f < n; f++){
+    let ar = 0, ag = 0, al = 0;
+    const dR = derived[f].red, dG = derived[f].green, dL = derived[f].luma;
+    for (let k = 0; k < taps.length; k++){
+      const idx = taps[k][0], wt = taps[k][1];
+      ar += dR[idx] * wt; ag += dG[idx] * wt; al += dL[idx] * wt;
+    }
+    red[f] = ar / wsum; green[f] = ag / wsum; luma[f] = al / wsum;
+  }
+  return { red, green, luma, times: times.slice(), roi };
+}
+
+/* ---- 점멸 검출 ---- */
+function smoothArr(a, k){
+  const out = new Float32Array(a.length), h = k >> 1;
+  for (let i = 0; i < a.length; i++){
+    let s = 0, c = 0;
+    for (let j = -h; j <= h; j++){
+      const n = i + j;
+      if (n >= 0 && n < a.length){ s += a[n]; c++; }
+    }
+    out[i] = s / c;
+  }
+  return out;
+}
+function normalizeArr(a){
+  let mn = Infinity, mx = -Infinity;
+  for (let i = 0; i < a.length; i++){ if (a[i] < mn) mn = a[i]; if (a[i] > mx) mx = a[i]; }
+  const span = Math.max(1e-6, mx - mn);
+  const out = new Float32Array(a.length);
+  for (let i = 0; i < a.length; i++) out[i] = (a[i] - mn) / span;
+  return { norm: out, mn, mx, span };
+}
+function spanOf(a){
+  let mn = Infinity, mx = -Infinity;
+  for (let i = 0; i < a.length; i++){ if (a[i] < mn) mn = a[i]; if (a[i] > mx) mx = a[i]; }
+  return isFinite(mn) ? (mx - mn) : 0;
+}
+function qualityGate(series, det){
+  const span = Math.max(spanOf(series.red), spanOf(series.green), spanOf(series.luma));
+  if (span < 12) return 'weak';
+  if (det.pulses.length > 26) return 'noisy';
+  return '';
+}
+function failResult(base, gate, mode){
+  base.code = null; base.match = null; base.adjustable = false; base.failed = true;
+  base.badge = '검출 실패';
+  base.title = gate === 'noisy' ? '점멸이 너무 많이 잡혔습니다' : 'LED 점멸을 찾지 못했습니다';
+  base.warn = gate === 'noisy'
+    ? '빛번짐이나 손떨림이 큽니다. LED가 화면 가운데 오게 하고 5~10초 다시 찍어 주세요.'
+    : '불이 보이는 자리를 화면에서 직접 눌러 지정하거나, 더 가까이에서 어둡게 찍어 주세요.';
+  base.hint = '자동 인식이 어려우면 아래 LG 카운터·삼성 조합기로 직접 세는 편이 빠릅니다.';
+  return base;
+}
+function medianDt(times){
+  const d = [];
+  for (let i = 1; i < times.length; i++){
+    const v = times[i] - times[i - 1];
+    if (v > 0.001) d.push(v);
+  }
+  if (!d.length) return 1 / FPS;
+  d.sort((a, b) => a - b);
+  return d[Math.floor(d.length / 2)];
+}
+function detectPulses(series){
+  const n = series.times.length;
+  if (n < 8) return { pulses: [], dt: 1 / FPS, weak: true };
+  const dt = medianDt(series.times);
+  const nr = normalizeArr(series.red).norm;
+  const ng = normalizeArr(series.green).norm;
+  const comb = new Float32Array(n);
+  for (let i = 0; i < n; i++) comb[i] = Math.max(nr[i], ng[i]);
+  const sm = smoothArr(comb, 3);
+  const srt = Array.from(sm).sort((a, b) => a - b);
+  const p10 = srt[Math.floor(n * 0.10)], p90 = srt[Math.floor(n * 0.90)];
+  const range = p90 - p10;
+  if (range < 0.12) return { pulses: [], dt, weak: true, nr, ng };
+  const lo = p10 + range * 0.30, hi = p10 + range * 0.60;
+  const raw = [];
+  let on = false, st = 0;
+  for (let i = 0; i < n; i++){
+    if (!on && sm[i] >= hi){ on = true; st = i; }
+    else if (on && sm[i] <= lo){ on = false; raw.push({ s: st, e: i }); }
+  }
+  if (on) raw.push({ s: st, e: n - 1 });
+  const minOff = Math.max(1, Math.round(0.06 / dt));
+  const merged = [];
+  for (const p of raw){
+    const last = merged[merged.length - 1];
+    if (last && p.s - last.e <= minOff) last.e = p.e;
+    else merged.push({ s: p.s, e: p.e });
+  }
+  const pulses = [];
+  for (const p of merged){
+    if (p.e - p.s < 1) continue;
+    let r = 0, g = 0, c = 0;
+    for (let i = p.s; i <= p.e; i++){ r += nr[i]; g += ng[i]; c++; }
+    r /= c; g /= c;
+    const color = (r - g) > 0.10 ? 'red' : (g - r) > 0.10 ? 'green' : 'luma';
+    const t0 = series.times[p.s], t1 = series.times[Math.min(p.e, n - 1)];
+    pulses.push({ color, t0, t1, dur: Math.max(0, t1 - t0), r, g, i0: p.s, i1: p.e });
+  }
+  return { pulses, dt, nr, ng, weak: false, range };
+}
+function groupCycles(pulses, restSec){
+  const groups = [];
+  let cur = [];
+  for (let i = 0; i < pulses.length; i++){
+    if (!cur.length){ cur = [pulses[i]]; continue; }
+    const gap = pulses[i].t0 - pulses[i - 1].t1;
+    if (gap >= restSec){ groups.push(cur); cur = [pulses[i]]; }
+    else cur.push(pulses[i]);
+  }
+  if (cur.length) groups.push(cur);
+  return groups;
+}
+function pulseSig(g){
+  return g.map(p => p.color === 'green' ? 'G' : p.color === 'red' ? 'R' : 'L').join('');
+}
+function pickCycle(groups){
+  if (!groups.length) return [];
+  const counts = {};
+  groups.forEach(g => { const k = pulseSig(g); counts[k] = (counts[k] || 0) + 1; });
+  let bestKey = pulseSig(groups[groups.length - 1]), bestN = 0;
+  Object.keys(counts).forEach(k => {
+    if (counts[k] > bestN || (counts[k] === bestN && k.length > bestKey.length)){ bestN = counts[k]; bestKey = k; }
+  });
+  for (let i = groups.length - 1; i >= 0; i--) if (pulseSig(groups[i]) === bestKey) return groups[i];
+  return groups[groups.length - 1];
+}
+
+/* ---- 결과 코드 만들기 ---- */
+function codeForResult(r){
+  if (r.mode === 'lgOut'){
+    if (!r.red && !r.green) return null;
+    return lgCodeOf(r.red, r.green);
+  }
+  if (r.mode === 'lgIn'){
+    const d = (r.digits || []).filter(x => x > 0);
+    if (!d.length) return null;
+    if (d.length === 1) return 'CH0' + Math.min(9, d[0]);
+    return 'CH' + d.slice(0, 2).map(x => Math.min(9, x)).join('');
+  }
+  return null;
+}
+function carrierMatch(n){
+  const row = DATA.led.carrierLamp.find(x => new RegExp('(^|[^0-9])' + n + '\\s*회').test(x.display));
+  return row || null;
+}
+
+/* ---- 파형 그리기 ---- */
+function drawWave(series, pulses){
+  const cv = $('#aiWave'); if (!cv) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth || 260, h = 64;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, w, h);
+  if (!series || !series.times.length) return;
+  const nr = normalizeArr(series.red).norm, ng = normalizeArr(series.green).norm;
+  const nl = normalizeArr(series.luma).norm;
+  const N = series.times.length;
+  const X = i => (N <= 1 ? 0 : i / (N - 1)) * (w - 2) + 1;
+  const Y = v => h - 6 - Math.max(0, Math.min(1, v)) * (h - 14);
+  // 점멸 구간 음영
+  (pulses || []).forEach(p => {
+    g.fillStyle = p.color === 'red' ? 'rgba(239,68,68,.16)' : p.color === 'green' ? 'rgba(16,185,129,.16)' : 'rgba(226,232,240,.12)';
+    const x0 = X(p.i0), x1 = X(p.i1);
+    g.fillRect(x0, 2, Math.max(1.5, x1 - x0), h - 4);
+  });
+  const line = (arr, color, width) => {
+    g.beginPath(); g.strokeStyle = color; g.lineWidth = width; g.lineJoin = 'round';
+    for (let i = 0; i < N; i++){ const x = X(i), y = Y(arr[i]); i ? g.lineTo(x, y) : g.moveTo(x, y); }
+    g.stroke();
+  };
+  line(nl, 'rgba(148,184,184,.55)', 1);
+  line(nr, '#F87171', 1.8);
+  line(ng, '#34D399', 1.8);
+  g.fillStyle = 'rgba(143,184,184,.75)'; g.font = '8px ui-monospace,monospace';
+  g.fillText('0s', 2, 9);
+  g.fillText((series.times[series.times.length - 1] || 0).toFixed(1) + 's', w - 20, 9);
+}
+
+/* ---- 결과 카드 ---- */
+function aiResultHTML(r){
+  const m = AI_MODES[r.mode];
+  const brand = brandMap[m.brandId] || { color:'#0B6E6E', name:m.brand };
+  const code = r.code || '';
+  const entryId = r.match && r.match.entryId;
+  const big = code ? `<div class="ai-res-code">${esc(code)}</div>`
+    : `<div class="ai-res-code small">${esc(r.title || '코드 확정 필요')}</div>`;
+  let body = '';
+  if (r.mode === 'samsung' || r.leds){
+    const lamps = (r.leds || []).map(l => `<span>${esc(l.color)} ${esc(l.pos)}</span>`).join('');
+    body = `<div class="res-leds">${lamps || '<span>켜진 램프를 찾지 못했습니다</span>'}</div>`;
+  }
+  const why = r.match ? `<div class="ai-res-cause">${esc(r.match.cause)}</div>` : '';
+  const check = r.match
+    ? `<b>읽은 값</b> ${esc(countTextPlain(r))}<br><b>점검</b> ${esc(r.match.check)}<br><b>리셋</b> ${esc(firstSentence(r.match.reset, 58))}`
+    : `<b>읽은 값</b> ${esc(countTextPlain(r))}<br><b>다음</b> ${esc(r.hint || '제조사 코드표로 확인합니다.')}`;
+  const adj = r.adjustable ? adjustHTML(r) : '';
+  const tel = r.tel ? `<a class="call-link" href="tel:${esc(r.tel.replace(/[^0-9]/g, ''))}"><svg><use href="#i-tel"/></svg>${esc(r.tel)} 고객센터 전화</a>` : '';
+  const actions = `
+    <div class="ai-res-actions">
+      ${entryId ? `<button class="go" data-ai-open="${esc(entryId)}">상세 점검 보기</button>` : ''}
+      ${entryId ? `<button class="again" data-ai-diag="${esc(entryId)}">현장 진단 시작 →</button>` : ''}
+      ${r.mode === 'samsung' ? `<button class="go" data-ai-4way="1">4WAY 조합기에서 확정 →</button>` : ''}
+      ${r.kind === 'image' ? `<button class="go" data-ai-cam="1">영상으로 찍기</button>` : ''}
+      <button class="again" id="aiAgain">다시 판독</button>
+    </div>`;
+  return `
+    <div class="ai-res-top">
+      <span class="ai-res-brand"><span class="bdot" style="background:${brand.color}"></span>${esc(m.name)}${r.kind === 'sample' ? ' · 샘플 시연' : r.kind === 'image' ? ' · 사진' : ' · 실측'}</span>
+      <span class="ai-conf">${esc(r.badge || (r.kind === 'sample' ? '샘플' : r.kind === 'image' ? '사진 분석' : '영상 실측'))}</span>
+    </div>
+    ${big}
+    ${why}
+    ${body}
+    ${(r.series && r.series.times && r.series.times.length > 1) ? `<div class="wave"><canvas id="aiWave"></canvas>
+      <div class="wave-legend"><span><i style="background:#F87171"></i>적색</span><span><i style="background:#34D399"></i>녹색</span><span><i style="background:rgba(148,184,184,.7)"></i>밝기</span><span>${esc((r.seconds || 0) ? r.seconds.toFixed(1) + '초 · ' + (r.frames || 0) + '프레임' : '')}</span></div>
+    </div>` : ''}
+    <div class="meas">
+      <div class="meas-row"><span>${r.kind === 'image' ? '사진에서 본 것' : '실측 점멸'}</span><b>${esc(countTextPlain(r))}</b></div>
+      ${adj}
+    </div>
+    <div class="ai-res-check">${check}</div>
+    ${r.warn ? `<div class="ai-warn">${esc(r.warn)}</div>` : ''}
+    ${tel}
+    ${actions}
+    <p class="demo-note in-result">영상은 기기 내에서만 실시간 분석되며 외부로 전송되지 않습니다.${r.adjustable ? ' 현장 빛번짐으로 1회 틀렸으면 ± 버튼으로 바로 보정하세요.' : ''}</p>`;
+}
+function firstSentence(t, max){
+  const str = String(t || '').trim();
+  if (!str) return '';
+  const cut = str.indexOf('. ');
+  let out = cut > 0 ? str.slice(0, cut + 1) : str;
+  if (out.length > max) out = out.slice(0, max - 1) + '…';
+  return out;
+}
+function countTextPlain(r){
+  if (r.failed) return '판독 실패';
+  if (!r.pulses || !r.pulses.length){
+    if (r.leds && r.leds.length) return r.mode === 'samsung' ? `램프 ${r.leds.length}개 감지` : `불빛 ${r.leds.length}곳`;
+    if (r.kind === 'image') return '—';
+  }
+  if (r.mode === 'lgOut') return `적색 ${r.red}회 · 녹색 ${r.green}회`;
+  if (r.mode === 'lgIn') return (r.digits || []).map((d, i) => `${i + 1}번째 ${d}회`).join(' · ');
+  if (r.mode === 'carrier') return `연속 ${r.count}회`;
+  if (r.leds && r.leds.length) return `램프 ${r.leds.length}개 감지`;
+  return '—';
+}
+function adjustHTML(r){
+  if (r.mode === 'lgOut')
+    return `<div class="adj"><span class="lbl">보정</span>
+      <button data-adj="red:-1">적색 −1</button><button data-adj="red:1">적색 +1</button>
+      <button data-adj="green:-1">녹색 −1</button><button data-adj="green:1">녹색 +1</button></div>`;
+  if (r.mode === 'lgIn'){
+    const d = r.digits || [];
+    return `<div class="adj"><span class="lbl">보정</span>
+      <button data-adj="g0:-1">1자리 −1</button><button data-adj="g0:1">1자리 +1</button>
+      <button data-adj="g1:-1">2자리 −1</button><button data-adj="g1:1">2자리 +1</button></div>`;
+  }
+  if (r.mode === 'carrier')
+    return `<div class="adj"><span class="lbl">보정</span>
+      <button data-adj="count:-1">−1회</button><button data-adj="count:1">+1회</button></div>`;
+  return '';
+}
+function renderAiResult(keepWave){
+  const box = $('#aiResult');
+  const r = ai.result;
+  if (!r){ box.innerHTML = ''; box.classList.remove('on'); return; }
+  box.innerHTML = aiResultHTML(r);
+  box.classList.add('on');
+  bindAiResult();
+  drawWave(r.series, r.pulses);
+  if (!keepWave) { try { box.scrollIntoView({ behavior:'smooth', block:'nearest' }); } catch(e){} }
+}
+function bindAiResult(){
+  const diag = $('[data-ai-diag]', $('#aiResult'));
+  if (diag) diag.addEventListener('click', () => {
+    const t = entryById(diag.dataset.aiDiag);
+    if (t) startDxForEntry(t);
+  });
+  const open = $('[data-ai-open]', $('#aiResult'));
+  if (open) open.addEventListener('click', () => {
+    const t = entryById(open.dataset.aiOpen);
+    if (t) openSheet(t);
+  });
+  const again = $('#aiAgain');
+  if (again) again.addEventListener('click', () => { clearAi(false); });
+  const cam = $('[data-ai-cam]', $('#aiResult'));
+  if (cam) cam.addEventListener('click', () => { $('#fileCam').click(); });
+  const fw = $('[data-ai-4way]', $('#aiResult'));
+  if (fw) fw.addEventListener('click', () => {
+    const n = (ai.result && ai.result.leds || []).length;
+    const tool = $('#toolSam');
+    if (tool){
+      tool.classList.add('open');
+      sam.form = n >= 5 ? '4WAY5' : '4WAY4'; sam.icons = []; sam.disp = null;
+      samRender();
+      tool.scrollIntoView({ behavior:'smooth', block:'start' });
+      toast(n >= 5 ? '5개 램프 기준 조합기로 열었습니다' : '4개 램프 기준 조합기로 열었습니다');
+    }
+  });
+  $$('[data-adj]', $('#aiResult')).forEach(b => b.addEventListener('click', () => {
+    const [k, v] = b.dataset.adj.split(':');
+    applyAdjust(k, Number(v));
+  }));
+}
+
+/* ---- 보정 ± ---- */
+function applyAdjust(k, dv){
+  const r = ai.result; if (!r) return;
+  if (k === 'red') r.red = Math.max(0, Math.min(9, r.red + dv));
+  else if (k === 'green') r.green = Math.max(0, Math.min(9, r.green + dv));
+  else if (k === 'count') r.count = Math.max(1, Math.min(15, r.count + dv));
+  else if (k === 'g0'){ r.digits[0] = Math.max(0, Math.min(9, (r.digits[0] || 0) + dv)); }
+  else if (k === 'g1'){ r.digits[1] = Math.max(0, Math.min(9, (r.digits[1] || 0) + dv)); }
+  r.adjusted = true;
+  rebuildResult(r);
+  renderAiResult(true);
+}
+function rebuildResult(r){
+  if (r.failed || r.kind === 'image' || (r.pulses && !r.pulses.length)) return;
+  if (r.mode === 'lgOut'){
+    r.code = codeForResult(r);
+    r.match = matchedFor(r.code);
+    if (!r.match){ r.hint = '표에 없는 조합입니다. 횟수를 다시 세거나 LG 고객센터에 확인하세요.'; r.tel = '1544-7777'; }
+  } else if (r.mode === 'lgIn'){
+    r.code = codeForResult(r);
+    r.match = matchedFor(r.code);
+    if (!r.match){ r.hint = '표에 없는 조합입니다. 긴 소등으로 자릿수를 다시 나눠 보세요.'; r.tel = '1544-7777'; }
+  } else if (r.mode === 'carrier'){
+    const hit = carrierMatch(r.count);
+    r.match = hit ? { code:'', cause:hit.cause, check:hit.check, reset:'전원을 10분 내렸다가 다시 넣어 확인합니다.', entryId:null, brand:'캐리어', source:'운전램프 표' } : null;
+    r.title = `운전램프 ${r.count}회 연속 점멸`;
+    r.hint = '캐리어는 점멸 횟수가 곧 코드 번호가 아닙니다. 횟수와 모델명을 1588-8866에 함께 알려 주세요.';
+    r.tel = '1588-8866';
+  }
+}
+
+/* ---- 영상/사진 처리 ---- */
+function setStep(i, mode){
+  const steps = $$('#stepsPanel .astep');
+  steps.forEach((el, k) => {
+    el.classList.toggle('done', k < i);
+    el.classList.toggle('now', k === i);
+  });
+  if (mode === 'done') steps.forEach(el => { el.classList.remove('now'); el.classList.add('done'); });
+}
+function setProgress(p){ const bar = $('#aprogBar'); if (bar) bar.style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + '%'; }
+
+function clearAi(keepMedia){
+  ai.token++;
+  ai.result = null; ai.derived = null; ai.times = null; ai.busy = false;
+  $('#aiResult').innerHTML = ''; $('#aiResult').classList.remove('on');
+  $('#stepsPanel').classList.remove('on'); setProgress(0);
+  $$('#stepsPanel .astep').forEach(el => el.classList.remove('done', 'now'));
+  $('#demoNote').style.display = 'block';
+  if (!keepMedia){
+    if (ai.url){ try { URL.revokeObjectURL(ai.url); } catch(e){} ai.url = null; }
+    ai.media = null; ai.isVideo = false; ai.roiNorm = null; ai.sampleOnly = false;
+    $('#frameInner').innerHTML = `<svg><use href="#i-cam"/></svg>
+      <div class="f1">LED가 네모 안에 오게 5~10초 촬영</div>
+      <div class="f2">실내기 표시부·실외기 기판 모두 가능<br>불이 화면 가운데 오게, 흔들리지 않게</div>`;
+    $('#frame').classList.remove('hide-inner', 'analyzing');
+    $('#frameTag').textContent = '가이드 프레임 4:3';
+    $('#roiHint').textContent = '불이 보이면 그 자리를 한 번 눌러 주세요';
+    drawRoiOverlay();
+  }
+  $('#fileCam').value = ''; $('#fileIn').value = '';
+}
+function loadMedia(file){
+  const isVideo = (file.type || '').indexOf('video') === 0;
+  clearAi(true);
+  if (ai.url){ try { URL.revokeObjectURL(ai.url); } catch(e){} }
+  ai.url = URL.createObjectURL(file);
+  ai.isVideo = isVideo;
+  ai.roiNorm = null;
+  const tag = (isVideo ? '영상' : '사진') + ' · ' + (file.name.length > 16 ? file.name.slice(0, 16) + '…' : file.name);
+  $('#frameTag').textContent = tag;
+  if (ai.result) { ai.result = null; }
+  if (isVideo){
+    const v = document.createElement('video');
+    v.src = ai.url; v.muted = true; v.playsInline = true; v.setAttribute('playsinline', '');
+    v.loop = false; v.preload = 'auto';
+    ai.media = v;
+    $('#frameInner').innerHTML = '';
+    $('#frameInner').appendChild(v);
+    return new Promise(res => {
+      let done = false;
+      const fin = () => { if (done) return; done = true; res(); };
+      v.addEventListener('loadedmetadata', fin);
+      v.addEventListener('loadeddata', fin);
+      v.addEventListener('error', () => { fin(); toast('이 영상은 브라우저에서 열 수 없습니다. mp4(H.264)나 mov로 다시 시도해 주세요.'); });
+      setTimeout(fin, 2500);
+    });
+  }
+  const img = document.createElement('img');
+  img.src = ai.url; img.alt = '업로드한 사진';
+  ai.media = img;
+  $('#frameInner').innerHTML = '';
+  $('#frameInner').appendChild(img);
+  return new Promise(res => {
+    let done = false;
+    const fin = () => { if (done) return; done = true; res(); };
+    img.onload = fin; img.onerror = fin;
+    setTimeout(fin, 2500);
+  });
+}
+
+async function analyzeMedia(){
+  if (!ai.media || ai.busy) return;
+  const token = ++ai.token;
+  ai.busy = true;
+  ai.result = null;
+  $('#aiResult').classList.remove('on');
+  $('#demoNote').style.display = 'none';
+  $('#stepsPanel').classList.add('on');
+  setStep(0); setProgress(0.02);
+  $('#frame').classList.add('analyzing');
+
+  if (!ai.isVideo){
+    // 정지 사진: 한 프레임에서 램프만 찾는다
+    await analyzeStill(token);
+    return;
+  }
+  let cap = await captureByPlayout(ai.media, p => { if (token === ai.token) setProgress(p * 0.72); });
+  if (cap.stalled || cap.frames.length < 12){
+    setProgress(0.1);
+    cap = await captureBySeek(ai.media, p => { if (token === ai.token) setProgress(p * 0.72); });
+  }
+  if (token !== ai.token) return;
+  if (!cap.frames.length){ finishError(token, '영상을 읽지 못했습니다. 다른 형식(mp4·mov)으로 다시 시도해 주세요.'); return; }
+  setProgress(0.76); setStep(1);
+  ai.derived = cap.frames.map(deriveCells);
+  ai.times = cap.times;
+  const roi = ai.roiNorm ? roiFromNorm(ai.roiNorm) : autoRoi(ai.derived);
+  setProgress(0.86); setStep(2);
+  const series = buildSeries(ai.derived, cap.times, roi);
+  const det = detectPulses(series);
+  setProgress(0.94); setStep(3);
+  const res = buildFromDetection(series, det, { kind:'video', frames:cap.frames.length, seconds: cap.times[cap.times.length - 1] || 0, auto:!ai.roiNorm });
+  if (token !== ai.token) return;
+  finishWith(res);
+}
+
+function roiFromNorm(n){
+  return { x: Math.max(0, Math.min(CW - 1, Math.round(n.nx * CW - 0.5))),
+           y: Math.max(0, Math.min(CH - 1, Math.round(n.ny * CH - 0.5))), r:2, auto:false };
+}
+
+function finishError(token, msg){
+  if (token !== ai.token) return;
+  ai.busy = false;
+  $('#frame').classList.remove('analyzing');
+  $('#stepsPanel').classList.remove('on');
+  $('#demoNote').style.display = 'block';
+  toast(msg);
+}
+function finishWith(res){
+  ai.busy = false;
+  ai.result = res;
+  $('#frame').classList.remove('analyzing');
+  setStep(4, 'done'); setProgress(1);
+  rebuildResult(res);
+  renderAiResult(false);
+  setTimeout(() => { if (ai.result === res) setStep(4, 'done'); }, 120);
+}
+
+function buildFromDetection(series, det, meta){
+  const mode = ai.mode;
+  const base = { mode, kind: meta.kind, series, pulses: det.pulses, frames: meta.frames, seconds: meta.seconds,
+                 red:0, green:0, digits:[], count:0, auto:meta.auto, badge: meta.kind === 'sample' ? '샘플' : '영상 실측' };
+  if (mode === 'lgOut'){
+    const gaps = [];
+    for (let i = 1; i < det.pulses.length; i++) gaps.push(det.pulses[i].t0 - det.pulses[i - 1].t1);
+    const mg = gaps.length ? gaps.slice().sort((a, b) => a - b)[Math.floor(gaps.length / 2)] : 0.8;
+    const rest = Math.max(1.2, Math.min(4.5, mg * 2.6));
+    const groups = groupCycles(det.pulses, rest);
+    const cyc = pickCycle(groups);
+    base.red = cyc.filter(p => p.color === 'red').length;
+    base.green = cyc.filter(p => p.color === 'green').length;
+    base.groups = groups.length;
+    base.rest = rest;
+    base.adjustable = true;
+    const gate = qualityGate(series, det);
+    if (gate || (!base.red && !base.green) || base.red > 9 || base.green > 9){
+      return failResult(base, gate || ((base.red > 9 || base.green > 9) ? 'noisy' : 'weak'), 'lgOut');
+    }
+    base.code = codeForResult(base);
+    base.match = matchedFor(base.code);
+    if (!base.match){
+      base.hint = '표에 없는 조합입니다. 횟수를 다시 세거나 LG 고객센터(1544-7777)에 확인하세요.';
+      base.warn = `${base.red}·${base.green} 조합은 수록된 LED 표에 없습니다.`;
+      base.tel = '1544-7777';
+    }
+    if (!base.red && base.green) base.warn = '적색(10의 자리)이 감지되지 않았습니다. 적색 불도 함께 보이게 찍었는지 확인하세요.';
+    return base;
+  }
+  if (mode === 'lgIn'){
+    const groups = groupCycles(det.pulses, 0.8);
+    const cyc = pickCycle(groups);
+    base.digits = cyc.length ? [cyc.length] : [];
+    if (groups.length > 1){
+      // 긴 소등으로 자릿수가 나뉜 경우 각 그룹의 점멸 수를 자리로 쓴다
+      base.digits = [groups[0].length, groups[1].length];
+    }
+    base.adjustable = true;
+    const gate = qualityGate(series, det);
+    if (gate || !det.pulses.length || base.digits.some(d => d > 9)){
+      return failResult(base, gate || 'weak', 'lgIn');
+    }
+    base.code = codeForResult(base);
+    base.match = matchedFor(base.code);
+    if (!base.match){ base.hint = '표에 없는 조합입니다. 긴 소등(0.8초 이상)으로 자릿수를 다시 나눠 보세요.'; base.tel = '1544-7777'; }
+    return base;
+  }
+  if (mode === 'carrier'){
+    const gaps = [];
+    for (let i = 1; i < det.pulses.length; i++) gaps.push(det.pulses[i].t0 - det.pulses[i - 1].t1);
+    const mg = gaps.length ? gaps.slice().sort((a, b) => a - b)[Math.floor(gaps.length / 2)] : 0.8;
+    const groups = groupCycles(det.pulses, Math.max(1.5, Math.min(5, mg * 3)));
+    const cyc = pickCycle(groups);
+    base.count = cyc.length;
+    base.adjustable = true;
+    base.tel = '1588-8866';
+    const gate = qualityGate(series, det);
+    if (gate || !det.pulses.length || base.count > 15){
+      base.tel = '1588-8866';
+      return failResult(base, gate || (base.count > 15 ? 'noisy' : 'weak'), 'carrier');
+    }
+    base.title = `운전램프 ${base.count}회 연속 점멸`;
+    const hit = carrierMatch(base.count);
+    base.match = hit ? { code:'', cause:hit.cause, check:hit.check, reset:'전원을 10분 내렸다가 다시 넣어 확인합니다.', entryId:null, brand:'캐리어', source:'운전램프 표' } : null;
+    if (!hit) base.hint = '이 횟수의 표시는 수록된 표에 없습니다. 횟수와 모델명을 1588-8866에 함께 알려 주세요.';
+    return base;
+  }
+  // samsung
+  return buildSamsungStill(series, meta);
+}
+
+/* ---- 정지 사진 / 삼성 4WAY ---- */
+async function analyzeStill(token){
+  const cx = newSampler();
+  const img = ai.media;
+  try { cx.drawImage(img, 0, 0, SAMPLE_W, SAMPLE_H); } catch(e){}
+  const cells = frameCells(cx);
+  if (token !== ai.token) return;
+  $('#stepsPanel').classList.remove('on');
+  const der = deriveCells(cells);
+  const leds = findLamps(der, cells);
+  setProgress(0);
+  let res;
+  if (ai.mode === 'samsung'){
+    res = buildSamsungStill({ red:new Float32Array([0]), green:new Float32Array([0]), luma:new Float32Array([0]), times:[0] },
+      { kind:'image', frames:1, seconds:0, leds });
+  } else {
+    res = {
+      mode: ai.mode, kind:'image', series:{ red:[], green:[], luma:[], times:[] }, pulses: [], leds,
+      adjustable:false, code:null, match:null, badge:'사진',
+      title: leds.length ? `불빛 ${leds.length}곳 감지` : '불빛을 찾지 못했습니다',
+      hint:'사진 한 장으로는 점멸 횟수를 셀 수 없습니다. 같은 자리에서 5~10초 영상을 찍어 주세요.',
+      warn:'영상으로 찍으면 색과 점멸 횟수를 자동으로 세어 코드로 바꿉니다.'
+    };
+  }
+  res.leds = leds;
+  finishWith(res);
+}
+function findLamps(der, cells){
+  // 밝기 상위 셀을 클러스터로 묶어 램프 위치·색을 추정
+  const n = CW * CH;
+  const vals = [];
+  for (let i = 0; i < n; i++) vals.push(der.luma[i]);
+  const sorted = vals.slice().sort((a, b) => a - b);
+  const p95 = sorted[Math.floor(n * 0.95)] || 0, p50 = sorted[Math.floor(n * 0.5)] || 0;
+  const th = Math.max(60, p50 + (p95 - p50) * 0.55);
+  const seen = new Uint8Array(n), blobs = [];
+  for (let i = 0; i < n; i++){
+    if (seen[i] || der.luma[i] < th) continue;
+    const stack = [i]; seen[i] = 1;
+    let sx = 0, sy = 0, c = 0, cr = 0, cg = 0, cb = 0;
+    while (stack.length){
+      const j = stack.pop();
+      const x = j % CW, y = (j / CW) | 0;
+      sx += x; sy += y; c++;
+      cr += cells[j * 3]; cg += cells[j * 3 + 1]; cb += cells[j * 3 + 2];
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++){
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= CW || ny >= CH) continue;
+        const nj = ny * CW + nx;
+        if (!seen[nj] && der.luma[nj] >= th){ seen[nj] = 1; stack.push(nj); }
+      }
+    }
+    if (c < 2) continue;
+    const r = cr / c, g = cg / c, b = cb / c;
+    const color = (r > g * 1.35 && r > b * 1.35) ? '적색' : (g > r * 1.25 && g > b * 1.2) ? '녹색'
+      : (b > r * 1.3) ? '청색' : (r > g && g > b) ? '주황' : '흰색';
+    const px = sx / c / CW, py = sy / c / CH;
+    const pos = (py < 0.34 ? '위' : py > 0.66 ? '아래' : '가운데') + ' · ' + (px < 0.34 ? '왼쪽' : px > 0.66 ? '오른쪽' : '중앙');
+    blobs.push({ color, pos, x: px, y: py, area: c });
+  }
+  blobs.sort((a, b) => b.area - a.area);
+  return blobs.slice(0, 6);
+}
+function buildSamsungStill(series, meta){
+  const leds = meta.leds || [];
+  const r = {
+    mode:'samsung', kind: meta.kind, series, pulses: [], frames: meta.frames || 1, seconds: meta.seconds || 0,
+    leds, adjustable:false, code:null, match:null,
+    badge: meta.kind === 'image' ? '사진 분석' : '샘플',
+    title: leds.length ? `램프 ${leds.length}개 감지` : '켜진 램프를 찾지 못했습니다',
+    hint: leds.length ? '4WAY는 램프 개수와 조합으로 뜻이 갈립니다. 조합기에서 켜진 아이콘을 눌러 확정하세요.' : '표시부가 화면 가운데 오게 다시 찍어 주세요.'
+  };
+  if (!leds.length) r.warn = '어두운 곳에서 표시부만 크게 찍으면 인식이 잘 됩니다.';
+  return r;
+}
+
+/* ---- 샘플 시연 (같은 검출기를 그대로 통과) ---- */
+function synthSeries(spec, seconds){
+  const dt = 1 / FPS;
+  const n = Math.round(seconds / dt);
+  const red = new Float32Array(n), green = new Float32Array(n), luma = new Float32Array(n);
+  const times = new Float32Array(n);
+  for (let i = 0; i < n; i++){ times[i] = i * dt; luma[i] = 22 + (i % 7) * 0.7; red[i] = 2; green[i] = 2; }
+  spec.forEach(p => {
+    const i0 = Math.round(p.t0 / dt), i1 = Math.round(p.t1 / dt);
+    for (let i = i0; i < Math.min(n, i1); i++){
+      const edge = Math.min(1, Math.min(i - i0, i1 - i) / 1);
+      if (p.c === 'r'){ red[i] = 190; luma[i] += 70 * edge; }
+      else if (p.c === 'g'){ green[i] = 175; luma[i] += 60 * edge; }
+      else { luma[i] += 150; red[i] += 40; green[i] += 40; }
+    }
+  });
+  return { red, green, luma, times: Array.from(times) };
+}
+function runSample(){
+  clearAi(true);
+  ai.roiNorm = null;
+  const mode = ai.mode;
+  let spec = [], secs = 9.2, leds = null;
+  if (mode === 'lgOut'){
+    spec = [{c:'r',t0:0.4,t1:0.75},{c:'r',t0:1.4,t1:1.75},{c:'g',t0:2.4,t1:2.75},
+            {c:'r',t0:5.6,t1:5.95},{c:'r',t0:6.6,t1:6.95},{c:'g',t0:7.6,t1:7.95}];
+  } else if (mode === 'lgIn'){
+    spec = [{c:'l',t0:0.4,t1:0.7},{c:'l',t0:1.0,t1:1.3},
+            {c:'l',t0:2.6,t1:2.9},
+            {c:'l',t0:5.0,t1:5.3},{c:'l',t0:5.6,t1:5.9},
+            {c:'l',t0:7.2,t1:7.5}];
+  } else if (mode === 'carrier'){
+    spec = [0,1,2,3,4].map(i => ({ c:'l', t0: 0.5 + i * 0.65, t1: 0.5 + i * 0.65 + 0.3 }));
+    spec = spec.concat([0,1,2,3,4].map(i => ({ c:'l', t0: 5.2 + i * 0.65, t1: 5.2 + i * 0.65 + 0.3 })));
+    secs = 9.5;
+  } else {
+    leds = [{ color:'적색', pos:'가운데 · 왼쪽' }, { color:'주황', pos:'가운데 · 오른쪽' }];
+    finishWith(buildSamsungStill({ red:new Float32Array([0]), green:new Float32Array([0]), luma:new Float32Array([0]), times:[0] },
+      { kind:'sample', frames:0, seconds:0, leds }));
+    return;
+  }
+  $('#frameTag').textContent = '샘플 패턴 · ' + AI_MODES[mode].name;
+  $('#demoNote').style.display = 'none';
+  const series = synthSeries(spec, secs);
+  ai.derived = null;
+  const det = detectPulses(series);
+  const res = buildFromDetection(series, det, { kind:'sample', frames: series.times.length, seconds: secs, auto:true });
+  ai.roiNorm = null;
+  finishWith(res);
+}
+
+/* ---- UI 연결 ---- */
+function initAi(){
+  $$('#aiModes .mode').forEach(b => b.addEventListener('click', () => {
+    ai.mode = b.dataset.mode;
+    $$('#aiModes .mode').forEach(x => x.classList.toggle('on', x === b));
+    clearAi(true);
+    const m = AI_MODES[ai.mode];
+    $('#roiHint').textContent = ai.mode === 'samsung'
+      ? '표시부 램프가 보이게 찍은 사진·영상을 올려 주세요'
+      : m.tone + ' · 불이 보이면 그 자리를 눌러 주세요';
+    if (ai.mode === 'samsung'){
+      $('#frameTag').textContent = '사진 · 램프 조합';
+    }
+    if (ai.media) analyzeMedia();
+  }));
+  const onFile = async e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    await loadMedia(f);
+    drawRoiOverlay();
+    analyzeMedia();
+  };
+  $('#fileCam').addEventListener('change', onFile);
+  $('#fileIn').addEventListener('change', onFile);
+  $('#sampleBtn').addEventListener('click', runSample);
+  $('#aiClearBtn').addEventListener('click', () => { clearAi(false); toast('처음 상태로 되돌렸습니다'); });
+  $('#roiCanvas').addEventListener('click', ev => {
+    if (!ai.media) return;
+    const rect = ev.currentTarget.getBoundingClientRect();
+    const c = mediaContentRect(rect.width, rect.height);
+    const nx = (ev.clientX - rect.left - c.x) / (c.w || 1);
+    const ny = (ev.clientY - rect.top - c.y) / (c.h || 1);
+    if (nx < 0 || nx > 1 || ny < 0 || ny > 1) return;
+    ai.roiNorm = { nx, ny };
+    drawRoiOverlay();
+    $('#roiHint').textContent = '이 지점만 분석합니다 · 다시 누르면 이동';
+    if (ai.derived && ai.times && !ai.busy) reanalyzeFromCache();
+    else if (ai.media && !ai.busy && !ai.result) analyzeMedia();
+  });
+  $('#samples').innerHTML = [
+    {id:'lgOut', label:'LG 적2·녹1 → CH21'},
+    {id:'lgIn', label:'LG 실내기 2·1'},
+    {id:'carrier', label:'캐리어 5회'},
+    {id:'samsung', label:'삼성 4WAY 사진'}
+  ].map(s => `<button data-samp="${s.id}">${esc(s.label)}</button>`).join('');
+  $('#samples').addEventListener('click', e => {
+    const b = e.target.closest('[data-samp]'); if (!b) return;
+    ai.mode = b.dataset.samp;
+    $$('#aiModes .mode').forEach(x => x.classList.toggle('on', x.dataset.mode === ai.mode));
+    runSample();
+  });
+  window.addEventListener('resize', () => drawRoiOverlay());
+}
+function mediaContentRect(W, H){
+  const el = ai.media;
+  let vw = 4, vh = 3;
+  if (el){ vw = el.videoWidth || el.naturalWidth || 4; vh = el.videoHeight || el.naturalHeight || 3; }
+  const scale = Math.min(W / vw, H / vh);
+  const w = vw * scale, h = vh * scale;
+  return { x: (W - w) / 2, y: (H - h) / 2, w, h };
+}
+function drawRoiOverlay(){
+  const cv = $('#roiCanvas'); if (!cv) return;
+  const rect = $('#frame').getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(rect.width * dpr); cv.height = Math.round(rect.height * dpr);
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, rect.width, rect.height);
+  if (!ai.roiNorm || !ai.media) return;
+  const c = mediaContentRect(rect.width, rect.height);
+  const x = c.x + ai.roiNorm.nx * c.w, y = c.y + ai.roiNorm.ny * c.h;
+  const rad = Math.max(20, Math.min(c.w, c.h) * 0.15);
+  g.strokeStyle = '#38E1C6'; g.lineWidth = 2; g.setLineDash([5, 4]);
+  g.beginPath(); g.arc(x, y, rad, 0, Math.PI * 2); g.stroke();
+  g.setLineDash([]);
+  g.beginPath();
+  g.moveTo(x - rad - 7, y); g.lineTo(x - rad + 3, y);
+  g.moveTo(x + rad - 3, y); g.lineTo(x + rad + 7, y);
+  g.moveTo(x, y - rad - 7); g.lineTo(x, y - rad + 3);
+  g.moveTo(x, y + rad - 3); g.lineTo(x, y + rad + 7);
+  g.stroke();
+  g.fillStyle = 'rgba(56,225,198,.14)';
+  g.beginPath(); g.arc(x, y, rad, 0, Math.PI * 2); g.fill();
+}
+function reanalyzeFromCache(){
+  const roi = ai.roiNorm ? roiFromNorm(ai.roiNorm) : autoRoi(ai.derived);
+  const series = buildSeries(ai.derived, ai.times, roi);
+  const det = detectPulses(series);
+  const res = buildFromDetection(series, det, {
+    kind: ai.result && ai.result.kind === 'video' ? 'video' : 'video',
+    frames: ai.times.length, seconds: ai.times[ai.times.length - 1] || 0, auto: !ai.roiNorm
+  });
+  finishWith(res);
+}
+
+/* ---- LG 카운터 ---- */
+const lg = {mode:'pcb', red:0, green:0, single:[], groups:[]};
+function lgRender(){
+  if (lg.mode === 'pcb'){
+    $('#cntRed').textContent = lg.red; $('#cntGreen').textContent = lg.green;
+    const n = lg.red * 10 + lg.green;
+    const code = (lg.red || lg.green) ? 'CH' + String(n).padStart(2, '0') : 'CH—';
+    $('#lgCode').textContent = code;
+    const m = $('#lgMatch');
+    if (lg.red || lg.green){
+      const hit = DATA.led.lgPcb.find(p => p.code === code);
+      if (hit){
+        m.className = 'match on';
+        m.innerHTML = `<div class="m-code">${esc(hit.code)}</div><div class="m-cause">${esc(hit.cause)}</div><div class="m-check">${esc(hit.check || '제조사 서비스 매뉴얼의 조합표로 확인')}</div>`;
+      } else {
+        m.className = 'match on';
+        m.innerHTML = `<div class="m-none">표에 없는 조합입니다. 횟수를 다시 세어 보거나, 영상을 찍어 모델명과 함께 LG 고객센터(1544-7777)에 확인하세요.</div>`;
+      }
+    } else m.className = 'match';
+  } else {
+    const g = lg.groups;
+    const nums = g.map(x => x.count);
+    const code = nums.length ? 'CH' + nums.join('') : 'CH—';
+    $('#cntSingle').textContent = lg.single.length;
+    $('#lgCode').textContent = code;
+    const m = $('#lgMatch');
+    if (nums.length){
+      const hit = DATA.led.lgPcb.find(p => p.code === code) || DATA.entries.find(e => norm(e.codes[0] || '') === norm(code));
+      m.className = 'match on';
+      m.innerHTML = hit
+        ? `<div class="m-code">${esc(code)}</div><div class="m-cause">${esc(hit.cause)}</div><div class="m-check">${esc(hit.check || '')}</div>`
+        : `<div class="m-none">읽은 숫자 ${esc(nums.join(' + '))} → ${esc(code)}. 표에 없는 조합이면 영상을 찍어 LG 고객센터(1544-7777)에 확인하세요.</div>`;
+    } else m.className = 'match';
+  }
+}
+function lgTap(which){
+  if (which === 'red') lg.red = Math.min(lg.red + 1, 9);
+  if (which === 'green') lg.green = Math.min(lg.green + 1, 9);
+  if (which === 'single'){
+    const now = Date.now();
+    if (lg.single.length && now - lg.single[lg.single.length - 1] > 900) lg.groups.push({count: 0});
+    if (!lg.groups.length) lg.groups.push({count: 0});
+    lg.single.push(now); lg.groups[lg.groups.length - 1].count++;
+    clearTimeout(lg._t);
+    lg._t = setTimeout(() => {}, 1800);
+  }
+  lgRender();
+}
+function lgReset(){ lg.red = 0; lg.green = 0; lg.single = []; lg.groups = []; lgRender(); }
+function initLg(){
+  $('#tapRed').addEventListener('click', () => lgTap('red'));
+  $('#tapGreen').addEventListener('click', () => lgTap('green'));
+  $('#tapSingle').addEventListener('click', () => lgTap('single'));
+  $('#lgReset').addEventListener('click', lgReset);
+  $('#lgSeg').addEventListener('click', e => {
+    const b = e.target.closest('[data-lgmode]'); if (!b) return;
+    lg.mode = b.dataset.lgmode;
+    $$('#lgSeg button').forEach(x => x.classList.toggle('on', x === b));
+    $('#lgPcb').style.display = lg.mode === 'pcb' ? 'block' : 'none';
+    $('#lgSingle').style.display = lg.mode === 'single' ? 'block' : 'none';
+    lgReset();
+  });
+  lgRender();
+}
+
+/* ---- 삼성 카세트 ---- */
+const sam = {form:'4WAY4', icons:[], disp:null, color:null};
+const ICONS = [
+  {k:'전원', i:'i-power'}, {k:'물방울', i:'i-drop'}, {k:'바람개비', i:'i-fan'},
+  {k:'시계', i:'i-clock'}, {k:'바둑판', i:'i-grid'}
+];
+const FORM_LABEL = {'360':'360 원형', '4WAY4':'4WAY 4개', '4WAY5':'4WAY 5개', '1WAY4':'1WAY 4개'};
+function samRender(){
+  const forms = ['360','4WAY4','4WAY5','1WAY4'];
+  $('#samForms').innerHTML = forms.map(f => `<button data-form="${f}" class="${sam.form===f?'on':''}">${FORM_LABEL[f]}</button>`).join('');
+  const box = $('#samIcons');
+  if (sam.form === '360'){
+    const rows = DATA.led.cassette.filter(c => c.group === '360');
+    const colorOf = d => d.indexOf('번갈아') >= 0 ? '여러 색'
+      : d.indexOf('하늘') === 0 ? '하늘색' : d.indexOf('연두') === 0 ? '연두색'
+      : d.indexOf('파란') === 0 ? '파란색' : d.indexOf('빨간') === 0 ? '빨간색' : '기타';
+    const colors = ['하늘색','연두색','파란색','빨간색','여러 색'];
+    const shown = sam.color ? rows.filter(r => colorOf(r.display) === sam.color) : [];
+    box.innerHTML = `<div class="lampchips" style="margin-bottom:8px">${colors.map(c =>
+        `<button class="lampchip ${sam.color===c?'on':''}" data-color="${c}" style="flex:1;text-align:center">${c}</button>`).join('')}</div>
+      ${sam.color ? `<div class="lampchips">${shown.map(r => `<button class="lampchip ${sam.disp===r.display?'on':''}" data-disp="${esc(r.display)}">${esc(r.display)}</button>`).join('')}</div>`
+        : `<p class="hint" style="margin-top:0">360 원형은 램프가 하나입니다. <b>불 색</b>을 먼저 고르면 그 색에서 나오는 표시가 나옵니다.</p>`}`;
+  } else {
+    const meta = DATA.led.formMeta.find(m => (sam.form==='1WAY4' ? m.form.indexOf('1WAY')>=0 : sam.form==='4WAY5' ? (m.form.indexOf('4WAY')>=0 && m.lamps==='5개') : m.form.indexOf('4WAY')>=0 && m.lamps==='4개'));
+    let pool = ['전원','물방울','바람개비','시계','바둑판'];
+    if (meta && meta.icons) pool = pool.filter(p => meta.icons.indexOf(p) >= 0);
+    box.innerHTML = `<div class="iconrow">${pool.map(k => {
+      const ic = ICONS.find(x => x.k === k);
+      return `<button class="iconbtn ${sam.icons.indexOf(k)>=0?'on':''}" data-icon="${k}"><svg><use href="#${ic.i}"/></svg><span>${k}</span></button>`;
+    }).join('')}</div>
+    <button class="lampchip ${sam.icons[0]==='전체'?'on':''}" data-icon="전체" style="width:100%;text-align:center">전체 램프가 한꺼번에 깜박</button>`;
+  }
+  samMatch();
+}
+function samMatch(){
+  const m = $('#samMatch');
+  let hit = null;
+  if (sam.form === '360' && sam.disp){
+    hit = DATA.led.cassette.find(c => c.group === '360' && c.display === sam.disp);
+  } else if (sam.form !== '360' && sam.icons.length){
+    const set = sam.icons.slice().sort().join('|');
+    hit = DATA.led.cassette.find(c => c.group === sam.form && c.tokens.slice().sort().join('|') === set);
+    if (!hit && sam.icons.length > 1){
+      // 부분 일치 후보
+      const cands = DATA.led.cassette.filter(c => c.group === sam.form && sam.icons.every(k => c.tokens.indexOf(k) >= 0));
+      if (cands.length) hit = cands[0];
+    }
+  }
+  if (hit){
+    m.className = 'match on';
+    m.innerHTML = `<div class="m-code" style="font-family:inherit;font-size:13.5px">${esc(hit.display)}</div>
+      <div class="m-cause">${esc(hit.cause)}</div><div class="m-check">${esc(hit.check)}</div>`;
+  } else {
+    m.className = 'match';
+  }
+}
+function initSam(){
+  $('#samForms').addEventListener('click', e => {
+    const b = e.target.closest('[data-form]'); if (!b) return;
+    sam.form = b.dataset.form; sam.icons = []; sam.disp = null; samRender();
+  });
+  $('#samIcons').addEventListener('click', e => {
+    const col = e.target.closest('[data-color]');
+    if (col){ sam.color = (sam.color === col.dataset.color) ? null : col.dataset.color; sam.disp = null; samRender(); return; }
+    const d = e.target.closest('[data-disp]');
+    if (d){ sam.disp = (sam.disp === d.dataset.disp) ? null : d.dataset.disp; samRender(); return; }
+    const ic = e.target.closest('[data-icon]');
+    if (ic){
+      const k = ic.dataset.icon;
+      if (k === '전체'){ sam.icons = sam.icons[0] === '전체' ? [] : ['전체']; }
+      else {
+        sam.icons = sam.icons.filter(x => x !== '전체');
+        sam.icons = sam.icons.indexOf(k) >= 0 ? sam.icons.filter(x => x !== k) : sam.icons.concat(k);
+      }
+      samRender();
+    }
+  });
+  samRender();
+}
+
+/* ---- 캐리어 · 위니아 안내 / 촬영 6단계 ---- */
+function initEtc(){
+  const rows = DATA.led.carrierLamp;
+  $('#etcBody').innerHTML = `
+    <table class="ledtable"><thead><tr><th>표시</th><th>원인</th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td>${esc(r.display)}</td><td>${esc(r.cause)}<div style="color:#7C9198;font-size:10.5px;margin-top:2px">${esc(r.product)}</div></td></tr>`).join('')}
+    </tbody></table>
+    <div class="note-card" style="margin-top:10px"><b>위니아</b> — 깜빡임을 코드로 풀어 주는 공식 표가 없습니다. 억지로 해석하지 말고 깜빡이는 모습과 모델명을 찍어 큐에이드(1588-9588)에 확인합니다. CL은 청소 알림이라 서비스 대상이 아닙니다.</div>
+    <p class="hint">캐리어는 불의 횟수가 곧 코드 번호가 아닙니다. 횟수만 세어 짐작하지 말고, 촬영한 영상과 모델명을 1588-8866에 함께 알려 확인합니다.</p>`;
+
+  $('#shootBody').innerHTML = `<ol style="margin:0;padding-left:0;list-style:none;counter-reset:s">
+    ${DATA.led.order.map(r => `<li style="position:relative;padding:7px 0 7px 27px;font-size:12.3px;line-height:1.5;border-bottom:1px dashed #EFF4F5"><span style="position:absolute;left:0;top:6px;width:18px;height:18px;border-radius:6px;background:var(--primary-soft);color:var(--primary);font-size:10px;font-weight:800;display:grid;place-items:center">${esc(r[0].replace(/[^①-⑤]/g,'') || '·')}</span><b>${esc(r[0].replace(/[①-⑤]\s*/,''))}</b> — ${esc(r[2])}</li>`).join('')}
+  </ol>
+  <p class="hint">판독의 절반은 촬영입니다. 불은 1초 안팎으로 빠르게 깜빡여 눈으로 세면 한두 번은 반드시 틀립니다. 휴대전화로 10초 이상 찍어 한 묶음이 두세 번 반복되는 구간을 보세요.</p>`;
+}
+
+/* ---- 도구 접기/펴기 ---- */
+$$('[data-toggle]').forEach(b => b.addEventListener('click', () => {
+  $('#' + b.dataset.toggle).classList.toggle('open');
+}));
+
+/* ------------------------------------------------ 현장 진단 (단계별 고장 추적) */
+const DX_KEY = 'aircon_dx_v2';
+const DX_FAMILIES = [
+  {id:'comm', name:'통신', color:'#1D4ED8', codes:'C101 · CH05 · E1',
+   desc:'실내기와 실외기가 신호를 주고받지 못할 때',
+   steps:[
+    {t:'실외기 전원·차단기 확인',
+     do:'분전반의 에어컨 전용 차단기와 실외기 전원코드·단자대를 확인합니다. 실내기는 켜지는데 실외기 전원이 빠진 경우가 가장 흔합니다.',
+     norm:'차단기 ON 유지, 실외기 기판 표시등 점등, 전원단자에 정격 전압',
+     warn:'차단기는 마른 손으로 조작하고, 축전 콘덴서 방전을 위해 차단 후 5분을 둡니다.'},
+    {t:'통신선 단선·극성(A/B) 확인',
+     do:'실내외 통신 2선의 단자 체결과 A/B 극성을 확인합니다. 신규 설치라면 오결선과 다른 실내기와의 혼선을 먼저 봅니다.',
+     norm:'단자 풀림·피복 손상 없음, A/B 뒤바뀜 없음, 실내기별 통신선 바르게 물림',
+     warn:'통신선과 전원선을 같은 구멍으로 넣어 간섭이 생기지 않았는지 함께 봅니다.'},
+    {t:'실외기 기판·설정 확인',
+     do:'실외기 기판 표시등과 통신 단자, 설정된 실내기 대수를 확인합니다. 실내기 1대씩만 물려 통신되는 구간을 좁힙니다.',
+     norm:'기판 표시등 정상, 설정된 실내기 대수와 실제 대수 일치',
+     warn:'기판 커넥터를 뽑을 때는 반드시 전원을 내린 상태에서 합니다.'},
+    {t:'전원 리셋 후 재확인',
+     do:'실내기·실외기 차단기를 함께 내리고 3~5분 뒤 투입해 코드가 사라지는지 봅니다. 설치 직후라면 고객센터 접수보다 설치 서비스매니저 확인이 먼저입니다.',
+     norm:'리셋 후 코드 소거, 실내기·실외기 동시 운전',
+     warn:'리모컨 OFF는 리셋이 아닙니다. 반복 리셋은 기판에 부담을 줍니다.'}
+   ]},
+  {id:'sensor', name:'온도 센서', color:'#3F7A1F', codes:'C121 · CH01 · E1',
+   desc:'온도 센서 값이 범위를 벗어났을 때',
+   steps:[
+    {t:'센서 커넥터 체결 확인',
+     do:'코드가 가리키는 센서(실내 액관·가스관, 실외 열교환기·배관)를 찾아 커넥터 체결 상태를 봅니다.',
+     norm:'딸깍 소리로 체결, 핀 부식·물기·놀림 없음',
+     warn:'커넥터를 뽑기 전에 전원을 내립니다. 센서는 모델별 사양이 달라 임의 교체하지 않습니다.'},
+    {t:'센서 저항 측정',
+     do:'전원 차단 후 센서를 분리해 실온에서 저항을 재고, 제조사 서비스 자료의 온도-저항표와 대조합니다.',
+     norm:'상온에서 수 kΩ(모델별 표 기준), 손으로 잡으면 저항이 서서히 변함',
+     warn:'0Ω(단락)이나 무한대(개방)는 불량입니다. 측정 전 테스터 영점을 확인합니다.'},
+    {t:'배관 삽입·클립 확인',
+     do:'센서가 배관에 제대로 삽입되고 클립으로 고정됐는지 봅니다. 열교환기에서 빠져 허공 온도를 재는 경우가 있습니다.',
+     norm:'센서 끝이 배관에 밀착, 클립·홀더 고정',
+     warn:'배관에서 빼낸 센서는 원위치를 표시해 두고 다시 넣습니다.'},
+    {t:'센서 교체 후 리셋',
+     do:'같은 사양 센서로 교체한 뒤 전원을 넣어 코드가 사라지는지 확인합니다.',
+     norm:'교체 후 코드 소거, 운전 30분 유지',
+     warn:'교체해도 같은 코드면 기판(센서 입력부)을 의심하고 제조사 자료로 확인합니다.'}
+   ]},
+  {id:'inv', name:'인버터·압축기', color:'#6D28D9', codes:'C461 · CH21 · F1',
+   desc:'압축기 구동부나 압축기 자체 문제',
+   steps:[
+    {t:'입력 전압 확인',
+     do:'실외기 전원 단자에서 상간·단상 전압을 재고, 운전 중 전압 강하가 큰지 봅니다.',
+     norm:'정격 전압 ±10% 이내, 운전 중 급격한 강하 없음',
+     warn:'380V 기종은 결상·상 불평형을 함께 봅니다. 측정은 마른 손, 절연 장갑을 착용합니다.'},
+    {t:'모듈(IPM) 방열·환기 확인',
+     do:'실외기 방열판 먼지, 냉각팬 회전, 실외기실 환기창 막힘을 확인합니다. 방열판 온도 코드는 환기 문제인 경우가 많습니다.',
+     norm:'방열판 먼지 없음, 팬 정상 회전, 실외기 앞뒤 30cm 이상 개방',
+     warn:'커버를 덮은 채 가동하거나 적재물이 있으면 같은 코드가 반복됩니다.'},
+    {t:'압축기 절연·권선 측정',
+     do:'전원 차단 5분 후 압축기 단자에서 절연저항과 권선 저항을 잽니다.',
+     norm:'절연 수 MΩ 이상(제조사 기준), 3상 권선 저항 균형',
+     warn:'절연이 떨어졌으면 재가동하지 말고 압축기 교체·제조사 접수로 판정합니다.'},
+    {t:'기동 전류 측정',
+     do:'램프 미터로 기동·운전 전류를 재고 명판 정격전류와 비교합니다.',
+     norm:'명판 정격전류 이내, 기동 후 안정',
+     warn:'순간 과전류가 반복되면 압축기 소손 위험이 큽니다. 이 상태로 리셋을 반복하지 않습니다.'}
+   ]},
+  {id:'refrig', name:'냉매·압력', color:'#0E7490', codes:'C554 · CH38 · EC',
+   desc:'냉매가 부족하거나 압력이 비정상일 때',
+   steps:[
+    {t:'서비스 밸브 개방 확인',
+     do:'실외기 2방·3방 밸브가 열려 있는지 봅니다. 신규 설치에서 밸브가 잠긴 채 가동하는 경우가 있습니다.',
+     norm:'2방·3방 밸브 모두 반시계 끝까지 개방, 캡 체결',
+     warn:'밸브 잠금 상태로 오래 운전하면 압축기가 손상됩니다. 즉시 전원을 내립니다.'},
+    {t:'고·저압 측정',
+     do:'운전 중 매니폴드로 저압·고압을 재고 실외 온도에 맞는 제조사 기준과 비교합니다.',
+     norm:'제조사 표의 실외온도별 압력 범위, 냉방 시 저압이 비정상적으로 낮지 않음',
+     warn:'압력만 보고 냉매를 보충하지 않습니다. 먼저 누설 지점을 찾습니다.'},
+    {t:'과열도 확인',
+     do:'흠입관 온도와 저압 포화온도로 과열도를 계산해 과충전·부족을 구분합니다.',
+     norm:'제조사 기준 과열도 범위(통상 5~10℃ 수준)',
+     warn:'과충전은 압축기 액압축으로 이어집니다. 보충 후 과열도를 다시 봅니다.'},
+    {t:'누설 탐지',
+     do:'플레어 연결부·용접부·배관 크랙을 누설탐지기나 비눗물로 확인합니다. 설치 직후라면 플레어 작업부를 먼저 봅니다.',
+     norm:'탐지기 반응 없음, 연결부 거품 없음, 오일 자국 없음',
+     warn:'냉매 회수·충전은 자격과 장비가 필요합니다. R32 등 가연성 냉매는 환기와 점화원 제거를 먼저 합니다.'}
+   ]},
+  {id:'drain', name:'배수·드레인', color:'#1E64C8', codes:'C153 · CH04 · FL',
+   desc:'응축수가 빠지지 않아 만수·누수 표시가 뜰 때',
+   steps:[
+    {t:'배수호스 꺾임·막힘 확인',
+     do:'배수호스 구배와 눌린 곳, 슬러지 막힘을 확인하고 물받이 상태를 봅니다.',
+     norm:'호스가 아래로 자연 배수, 꺾임·눌림 없음, 물받이 슬러지 없음',
+     warn:'누수로 벽지·천장이 젖었으면 배수 점검 전에 고객 피해를 먼저 확인합니다.'},
+    {t:'배수펌프 토출 확인',
+     do:'운전 중 펌프 동작음과 토출량을 확인합니다. 토출이 약하면 임펠러 이물질을 봅니다.',
+     norm:'펌프 소리 일정, 토출 지속, 물이 역류하지 않음',
+     warn:'펌프를 뺄 때 남은 물이 떨어지므로 수건과 받침을 준비합니다.'},
+    {t:'플로트 스위치 확인',
+     do:'플로트 스위치가 걸리거나 오염돼 만수로 오인하는지 봅니다. 손으로 들어 올려 접점이 바뀌는지 확인합니다.',
+     norm:'부드럽게 상승·하강, 걸림 없음, 접점 반응',
+     warn:'플로트를 임의로 고정해 두지 않습니다. 누수·만수 보호가 무력화됩니다.'},
+    {t:'배수팬·트레이 청소 후 리셋',
+     do:'물받이와 배수팬을 청소하고 전원을 넣어 코드가 사라지는지 확인합니다.',
+     norm:'청소 후 만수 해제, 운전 30분 누수 없음',
+     warn:'청소 후에도 반복되면 펌프·기판을 제조사 자료로 확인합니다.'}
+   ]},
+  {id:'fan', name:'팬·송풍', color:'#B45309', codes:'C458 · CH10 · E3',
+   desc:'실내·실외 팬이 돌지 않거나 구속됐을 때',
+   steps:[
+    {t:'이물질·구속 확인',
+     do:'팬 날개에 걸린 이물, 베어링 뻑뻑함, 날개 파손을 확인합니다. 전원을 내린 뒤 손으로 천천히 돌려 봅니다.',
+     norm:'손으로 부드럽게 회전, 좌우 흔들림·소음 없음',
+     warn:'전원이 들어온 상태에서 날개에 손을 대지 않습니다.'},
+    {t:'팬 회전·모터 전원 확인',
+     do:'전원을 넣고 팬 회전 유무와 모터에 전원이 들어오는지 확인합니다.',
+     norm:'지시된 풍량으로 회전, 모터 전압 인가',
+     warn:'회전이 잠깐 돌다 멈추면 구속 또는 모터 보호 동작입니다.'},
+    {t:'모터 커넥터·구동 전압 확인',
+     do:'모터 커넥터 체결과 구동 전압(직류 모터는 제어 신호 포함)을 확인합니다.',
+     norm:'커넥터 체결, 구동 전압 정상, 제어 신호 인가',
+     warn:'직류 모터는 극성이 바뀌면 역회전·무회전이 됩니다. 원래 결선을 사진으로 남깁니다.'},
+    {t:'모터·커패시터 교체 판정',
+     do:'전원이 정상인데 회전하지 않으면 모터·커패시터(교류 모터) 교체를 판정합니다.',
+     norm:'교체 후 정상 회전·전류',
+     warn:'교체 전 기판 출력이 정상인지 확인합니다. 기판 불량이면 새 모터도 같은 증상이 납니다.'}
+   ]},
+  {id:'install', name:'설치·설정', color:'#4F46B8', codes:'C503 · CH07 · E2',
+   desc:'설치 설정·시운전·운전모드 문제',
+   steps:[
+    {t:'설정값(대수·용량·주소) 대조',
+     do:'실내기 대수·용량·주소 설정이 실제 설치와 맞는지 확인합니다. 신규 설치·증설 후에 자주 뜼니다.',
+     norm:'설정 대수 = 실제 실내기 대수, 용량·주소 중복 없음',
+     warn:'설정을 바꾸면 전원을 내리고 다시 투입해 반영합니다.'},
+    {t:'시운전 실행 확인',
+     do:'시운전이 완료됐는지 확인하고, 미실시 코드가 뜨면 시운전을 다시 실행합니다.',
+     norm:'시운전 완료 후 코드 소거',
+     warn:'시운전 중에는 실내기·실외기 전원을 끊지 않습니다.'},
+    {t:'운전모드 통일',
+     do:'실외기 1대에 여러 실내기가 연결된 구조에서 냉방·난방이 섞이지 않았는지 확인합니다.',
+     norm:'모든 실내기 같은 모드, 코드 소거',
+     warn:'모드 통일만으로 풀리는 코드를 부품 불량으로 오판하지 않습니다.'},
+    {t:'실내기 조합·용량 확인',
+     do:'실내기 총용량이 실외기 허용 조합을 넘지 않는지 제조사 조합표로 확인합니다.',
+     norm:'조합표 범위 안, 조합률 정상',
+     warn:'조합을 바꿔야 하면 설치 설계를 다시 확인합니다.'}
+   ]},
+  {id:'basic', name:'기본 점검', color:'#5C7079', codes:'표에 없는 코드 · 계열을 모를 때',
+   desc:'전원 → 결선 → 부품 → 제조사 확인 순',
+   steps:[
+    {t:'표시 코드·모델명 기록',
+     do:'표시되는 코드(점멸 횟수 포함)와 실내기·실외기 라벨의 모델명을 사진으로 남깁니다.',
+     norm:'코드·모델명·발생 조건이 기록됨',
+     warn:'표에 없는 코드를 추측해 부품을 교체하지 않습니다.'},
+    {t:'전원 리셋 후 재확인',
+     do:'실내기·실외기 차단기를 함께 내리고 3~5분 뒤 투입해 코드가 다시 뜨는지 봅니다.',
+     norm:'리셋 후 코드 소거 또는 같은 코드 재발',
+     warn:'리모컨 OFF는 리셋이 아닙니다.'},
+    {t:'결선·커넥터 전수 확인',
+     do:'실내외 통신선, 센서 커넥터, 전원 단자의 체결과 극성을 확인합니다.',
+     norm:'풀림·부식·오결선 없음',
+     warn:'전원을 내린 상태에서 확인합니다.'},
+    {t:'제조사 서비스 자료 대조',
+     do:'모델명과 코드를 제조사 고객센터·서비스 자료에 그대로 확인합니다.',
+     norm:'제조사 확인 결과와 현장 증상 일치',
+     warn:'확인 결과는 교육 자료에 계속 보강합니다.'}
+   ]}
+];
+const DX_FAM = Object.fromEntries(DX_FAMILIES.map(f => [f.id, f]));
+const DX_SITU = [
+  {label:'실내기 켜지는데 실외기 안 돎', fam:'comm'},
+  {label:'바람은 나오는데 안 시원함', fam:'refrig'},
+  {label:'물이 떨어짐·누수', fam:'drain'},
+  {label:'소리·진동이 심함', fam:'fan'},
+  {label:'설치·이사 직후 코드', fam:'install'},
+  {label:'코드가 자꾸 바뀜', fam:'basic'},
+  {label:'표에 없는 코드', fam:'basic'}
+];
+const DX_RESULT = {ok:['✓','해결'], fail:['!','그대로'], skip:['–','확인함']};
+let dxs = null;
+
+function dxSave(){ try { localStorage.setItem(DX_KEY, JSON.stringify(dxs)); } catch(e){} }
+function dxLoad(){
+  try { const raw = localStorage.getItem(DX_KEY); dxs = raw ? JSON.parse(raw) : null; } catch(e){ dxs = null; }
+  if (dxs && (!DX_FAM[dxs.fam] || !Array.isArray(dxs.steps) || !dxs.steps.length)) dxs = null;
+  if (dxs && !Array.isArray(dxs.log)) dxs = {fam:dxs.fam, entryId:null, code:dxs.code||'', brand:dxs.brand||'', cause:dxs.cause||'',
+    reset:dxs.reset||'', steps:DX_FAM[dxs.fam].steps.slice(), idx:0, log:[], status:'run', started:Date.now()};
+  if (dxs && dxs.status === 'run' && dxs.idx >= dxs.steps.length) dxs.status = 'escalate';
+}
+function dxStamp(ms){
+  const d = new Date(ms || Date.now()), p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '.' + p(d.getMonth()+1) + '.' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function dxFamilyForEntry(e){
+  const c = (e && e.category) || '';
+  if (c.indexOf('통신') >= 0) return 'comm';
+  if (c.indexOf('센서') >= 0) return 'sensor';
+  if (c.indexOf('인버터') >= 0 || c.indexOf('압축기') >= 0) return 'inv';
+  if (c.indexOf('냉매') >= 0 || c.indexOf('압력') >= 0) return 'refrig';
+  if (c.indexOf('배수') >= 0) return 'drain';
+  if (c.indexOf('팬') >= 0 || c.indexOf('송풍') >= 0) return 'fan';
+  if (c.indexOf('설치') >= 0 || c.indexOf('설정') >= 0) return 'install';
+  if (c.indexOf('전원') >= 0) return 'comm';
+  return 'basic';
+}
+function dxGoTab(){ $$('#tabbar button')[2].click(); }
+function startDxForEntry(e, codeText){
+  const fam = dxFamilyForEntry(e);
+  dxs = {
+    fam, entryId: e ? e.id : null,
+    code: e ? (e.kind === 'led' ? e.display : (e.codes[0] || e.display)) : String(codeText || '').toUpperCase(),
+    brand: e ? e.brandName : '',
+    cause: e ? e.cause : '',
+    reset: e ? (DATA.reset[e.brand] || '') : '',
+    steps: DX_FAM[fam].steps.slice(),
+    idx: 0, log: [], status: 'run', started: Date.now()
+  };
+  dxFlash = null; dxSave(); renderDx(); dxGoTab();
+  $('#main').scrollTop = 0;
+}
+function dxReset(){ dxs = null; dxFlash = null; dxSave(); renderDx(); $('#main').scrollTop = 0; }
+
+function dxBarHTML(){
+  const f = DX_FAM[dxs.fam];
+  const total = dxs.steps.length;
+  const done = dxs.status === 'run' ? dxs.idx : dxs.log.length;
+  const pct = dxs.status === 'solved' ? 100 : Math.max(6, Math.round(done / total * 100));
+  const label = dxs.status === 'solved' ? '해결 완료' : dxs.status === 'escalate' ? '교체·접수 판정' : '진행 중';
+  const cnt = dxs.status === 'run' ? (dxs.idx + 1) + ' / ' + total + ' 단계' : done + ' / ' + total + ' 단계';
+  return `<div class="dx-prog">
+    <div class="dx-pg-top"><b>${esc(f.name)} · ${label}</b>
+      <span class="cnt">${cnt}</span>
+      <button class="dx-again-btn" data-dx="reset">처음부터 다시</button></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+  </div>`;
+}
+function dxCodeBarHTML(){
+  const f = DX_FAM[dxs.fam];
+  const head = dxs.brand ? esc(dxs.brand) : esc(f.name) + ' 계열';
+  const line = dxs.cause || f.desc;
+  const cs = dxs.code.length > 8 ? ' style="font-size:12.5px;line-height:1.35;max-width:112px;font-family:inherit;letter-spacing:-.2px"' : '';
+  return `<div class="dx-codebar">
+    ${dxs.code ? `<div class="dx-cb-code"${cs}>${esc(dxs.code)}</div>` : ''}
+    <div class="dx-cb-main"><span>${head}</span><b>${esc(line)}</b>
+      ${dxs.reset ? `<div class="rs">리셋 ${esc(dxs.reset)}</div>` : ''}</div>
+  </div>`;
+}
+function dxTimelineHTML(){
+  if (!dxs.log.length) return '';
+  return `<div class="dx-tl">${dxs.log.map(l => {
+    const m = DX_RESULT[l.r] || DX_RESULT.skip;
+    return `<div class="dx-tl-i ${l.r}"><span class="dot">${m[0]}</span><span><b>${l.n}단계</b> ${esc(l.t)} — <em>${m[1]}</em></span></div>`;
+  }).join('')}</div>`;
+}
+function dxStepHTML(){
+  const s = dxs.steps[dxs.idx];
+  const n = dxs.idx + 1, total = dxs.steps.length;
+  return `<div class="dx-card pop">
+    <span class="dx-stepno">${n} / ${total} 단계 · 예상 원인 ${n}</span>
+    <h3>${esc(s.t)}</h3>
+    <div class="dx-fld"><span class="lb">조치</span><p>${esc(s.do)}</p></div>
+    <div class="dx-fld norm"><span class="lb">정상 기준</span><p>${esc(s.norm)}</p></div>
+    <div class="dx-fld warn"><span class="lb">주의</span><p>${esc(s.warn)}</p></div>
+    <div class="dx-acts">
+      <button class="dx-fix" data-dx="ok">✅ 에러 없어짐 (해결 완료)</button>
+      <button class="dx-again" data-dx="fail">❌ 그대로 뜸 (다음 조치 보기)</button>
+    </div>
+    <button class="dx-skip" data-dx="skip">이미 확인한 항목 — 넘기기</button>
+  </div>`;
+}
+function dxSumHTML(){
+  return `<div class="dx-sum"><div class="h">조치 내역</div>
+    ${dxs.log.map(l => {
+      const m = DX_RESULT[l.r] || DX_RESULT.skip;
+      return `<div class="r"><b>${l.n}단계. ${esc(l.t)}</b><em class="${l.r}">${m[1]}</em></div>`;
+    }).join('')}
+  </div>`;
+}
+function dxFootHTML(){
+  return `<div class="dx-foot">
+    <button class="btn-primary" data-dx="copy"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-copy"/></svg>조치 내역 복사</button>
+    <button class="btn-ghost" data-dx="reset">처음부터 다시</button>
+  </div>`;
+}
+function dxContactHTML(){
+  const center = dxs.brand ? DATA.centers.find(c => (c.maker || '').indexOf(dxs.brand) >= 0) : null;
+  const info = center ? (center.info || '').split('—')[0].trim() : '';
+  return `<div class="dx-contact">
+    <div class="ch">제조사 고객센터</div>
+    ${center
+      ? (telHref(center.phone)
+        ? `<a class="center-row tel" href="${telHref(center.phone)}"><span class="cm">${esc(center.maker)}${info ? `<span class="ci">${esc(info)}</span>` : ''}</span><span class="cp">${esc(center.phone || '문의')}<span class="call">전화</span></span></a>`
+        : `<div class="center-row"><span class="cm">${esc(center.maker)}${info ? `<span class="ci">${esc(info)}</span>` : ''}</span><span class="cp">${esc(center.phone || '문의')}</span></div>`)
+      : `<p class="hint" style="margin:2px 0 8px">브랜드를 알면 검색 탭에서 모델명과 코드를 확인한 뒤 제조사에 문의하세요. 아카데미 탭에 제조사별 연락처가 있습니다.</p>`}
+    <div class="ch" style="border-top:1px solid #F0F4F5">현장 지원</div>
+    <a class="center-row" href="https://cjyacademy.com" target="_blank" rel="noopener" style="text-decoration:none">
+      <span class="cm">최정예홈케어아카데미<span class="ci">판정 검토·교육 문의 · 쾌적하마 현장 지원</span></span>
+      <span class="cp">cjyacademy.com</span></a>
+    <p class="hint" style="margin:6px 0 4px">추측으로 부품을 교체하지 말고, 표시 코드와 모델명을 그대로 제조사에 확인합니다.</p>
+  </div>`;
+}
+function dxRunHTML(){
+  const total = dxs.steps.length;
+  let body = '';
+  if (dxs.status === 'run' && dxs.idx < total) body = dxStepHTML();
+  else if (dxs.status === 'solved'){
+    const last = dxs.log[dxs.log.length - 1] || {n:0};
+    body = `<div class="dx-result"><div class="dx-emoji">✓</div><h3>에러 없어짐 — 해결</h3>
+      <p>${last.n}단계 조치 후 코드가 사라졌습니다.<br>아래 내역을 복사해 고객·팀에 보고하세요.</p></div>`
+      + dxSumHTML() + dxFootHTML();
+  } else if (dxs.status === 'escalate'){
+    body = `<div class="dx-result bad"><div class="dx-emoji">!</div><h3>부품·기판 교체 또는<br>제조사 접수로 판정</h3>
+      <p>${total}단계를 모두 시도했는데 에러가 그대로입니다.<br>아래 내역과 모델명을 제조사에 확인하세요.</p></div>`
+      + dxSumHTML() + dxContactHTML() + dxFootHTML();
+  }
+  return dxCodeBarHTML() + dxBarHTML() + dxFlashHTML() + dxTimelineHTML() + body + '<div style="height:10px"></div>';
+}
+function renderDx(){
+  const start = $('#dxStart'), run = $('#dxRun');
+  if (!dxs){ start.style.display = 'block'; run.style.display = 'none'; run.innerHTML = ''; return; }
+  start.style.display = 'none'; run.style.display = 'block';
+  run.innerHTML = dxRunHTML();
+}
+let dxFlash = null;
+function dxFlashHTML(){
+  if (!dxFlash) return '';
+  return `<div class="dx-flash ${dxFlash.k}">${esc(dxFlash.msg)}</div>`;
+}
+function dxFlashTimer(){
+  clearTimeout(dxFlashHTML._t);
+  dxFlashHTML._t = setTimeout(() => {
+    const el = $('#dxRun .dx-flash');
+    if (el) el.classList.add('out');
+    dxFlash = null;
+  }, 2800);
+}
+function dxMark(r){
+  const total = dxs.steps.length;
+  const s = dxs.steps[dxs.idx];
+  dxs.log.push({n: dxs.idx + 1, t: s.t, r});
+  if (r === 'ok'){
+    dxs.status = 'solved'; dxs.ended = Date.now();
+    dxFlash = {k:'ok', msg:'✅ ' + (dxs.idx + 1) + '단계 조치로 해결 — 조치 내역을 복사할 수 있습니다.'};
+  } else if (r === 'skip'){
+    dxs.idx++;
+    if (dxs.idx >= total){ dxs.status = 'escalate'; dxs.ended = Date.now();
+      dxFlash = {k:'skip', msg:'모든 단계를 확인함으로 넘겼습니다 — 교체·접수 판정으로 봅니다.'}; }
+    else dxFlash = {k:'skip', msg:'확인함으로 넘겼습니다 → ' + (dxs.idx + 1) + '단계 ' + dxs.steps[dxs.idx].t};
+  } else {
+    dxs.idx++;
+    if (dxs.idx >= total){ dxs.status = 'escalate'; dxs.ended = Date.now();
+      dxFlash = {k:'fail', msg:'❌ 4단계 모두 그대로 — 부품·기판 교체 또는 제조사 접수 판정입니다.'}; }
+    else dxFlash = {k:'fail', msg:'❌ ' + s.t + ' 그대로 → ' + (dxs.idx + 1) + '단계 ' + dxs.steps[dxs.idx].t};
+  }
+  dxSave(); renderDx(); dxFlashTimer();
+  $('#main').scrollTop = 0;
+}
+function dxReportText(){
+  const f = DX_FAM[dxs.fam];
+  const head = '[현장 진단] ' + (dxs.brand ? dxs.brand + ' ' : '') + (dxs.code || f.name);
+  const lines = [head, '계열: ' + f.name + ' / 결과: ' + (dxs.status === 'solved' ? '해결' : '교체·접수 판정'),
+    '시각: ' + dxStamp(dxs.started)];
+  dxs.log.forEach(l => lines.push(l.n + '단계 ' + l.t + ' — ' + ((DX_RESULT[l.r] || DX_RESULT.skip)[1])));
+  if (dxs.cause) lines.push('표시 원인: ' + dxs.cause);
+  const memo = ($('#memo') && $('#memo').value || '').trim();
+  if (memo) lines.push('현장 메모: ' + memo);
+  return lines.join('\n');
+}
+function dxFindEntry(q){
+  const qn = norm(q);
+  if (!qn) return null;
+  return DATA.entries.find(e => (e.codes || []).some(c => norm(c) === qn))
+    || DATA.entries.find(e => norm(e.codes[0] || '') === qn)
+    || DATA.entries.find(e => qn.length >= 2 && norm(e.codes[0] || '').indexOf(qn) === 0)
+    || null;
+}
+function dxCodeStart(){
+  const q = ($('#dxCode').value || '').trim();
+  if (!q){ toast('코드를 입력하세요'); return; }
+  const e = dxFindEntry(q);
+  $('#dxCode').value = '';
+  if (e){ startDxForEntry(e); toast((e.codes[0] || e.display) + ' · ' + DX_FAM[dxFamilyForEntry(e)].name + ' 진단'); }
+  else { startDxForEntry(null, q); toast('표에 없는 코드 — 기본 점검으로 시작합니다'); }
+}
+
+function initDx(){
+  $('#dxFams').innerHTML = DX_FAMILIES.map(f =>
+    `<button class="dx-fam" data-fam="${f.id}" title="${esc(f.desc)}">
+      <span class="fn"><span class="dt" style="background:${f.color}"></span>${esc(f.name)}</span>
+      <span class="fc">${esc(f.codes)}</span>
+      <span class="fd">4단계 진단 →</span>
+    </button>`).join('');
+  $('#dxSitu').innerHTML = DX_SITU.map((s, i) => `<button data-situ="${i}">${esc(s.label)}</button>`).join('');
+  $('#dxFams').addEventListener('click', e => {
+    const b = e.target.closest('[data-fam]'); if (!b) return;
+    dxs = {fam:b.dataset.fam, entryId:null, code:'', brand:'', cause:'', reset:'',
+      steps:DX_FAM[b.dataset.fam].steps.slice(), idx:0, log:[], status:'run', started:Date.now()};
+    dxFlash = null; dxSave(); renderDx(); $('#main').scrollTop = 0;
+  });
+  $('#dxSitu').addEventListener('click', e => {
+    const b = e.target.closest('[data-situ]'); if (!b) return;
+    const s = DX_SITU[Number(b.dataset.situ)]; if (!s) return;
+    dxs = {fam:s.fam, entryId:null, code:'', brand:'', cause:s.label, reset:'',
+      steps:DX_FAM[s.fam].steps.slice(), idx:0, log:[], status:'run', started:Date.now()};
+    dxFlash = null; dxSave(); renderDx(); $('#main').scrollTop = 0;
+  });
+  $('#dxCodeGo').addEventListener('click', dxCodeStart);
+  $('#dxCode').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.keyCode === 13){ e.preventDefault(); e.target.blur(); dxCodeStart(); }
+  });
+  $('#dxRun').addEventListener('click', e => {
+    const b = e.target.closest('[data-dx]'); if (!b) return;
+    const k = b.dataset.dx;
+    if (k === 'reset') dxReset();
+    else if (k === 'copy') copyText(dxReportText());
+    else if (dxs && dxs.status === 'run') dxMark(k);
+  });
+  dxLoad();
+  renderDx();
+
+  const memo = $('#memo');
+  try { memo.value = localStorage.getItem('aircon_memo_v1') || ''; } catch(e){}
+  memo.addEventListener('input', () => { try { localStorage.setItem('aircon_memo_v1', memo.value); } catch(e){} });
+  $('#memoClear').addEventListener('click', () => { memo.value = ''; try { localStorage.removeItem('aircon_memo_v1'); } catch(e){} });
+  $('#memoCopy').addEventListener('click', () => {
+    const lines = [];
+    if (memo.value.trim()) lines.push(memo.value.trim());
+    if (dxs && dxs.log.length) lines.push(dxReportText());
+    if (!lines.length){ toast('메모가 비어 있습니다'); return; }
+    copyText(lines.join('\n'));
+  });
+}
+
+/* ------------------------------------------------ 홍보 탭 */
+function initPromo(){
+  $('#centers').innerHTML = DATA.centers.map(c => {
+    const short = (c.info || '').split('—')[0].trim();
+    const dial = telHref(c.phone);
+    const inner = `<span class="cm">${esc(c.maker)}${short ? `<span class="ci">${esc(short)}</span>` : ''}</span>
+      <span class="cp">${esc(c.phone || '문의')}${dial ? '<span class="call">전화</span>' : ''}</span>`;
+    return dial
+      ? `<a class="center-row tel" href="${dial}">${inner}</a>`
+      : `<div class="center-row">${inner}</div>`;
+  }).join('');
+  const st = DATA.meta.stats || {};
+  $('#stats').innerHTML = DATA.brands.map(b => `<span>${esc(b.short)} ${st[b.id] || 0}건</span>`).join('') + `<span>총 ${DATA.meta.count}건</span>`;
+  $('#statSub').textContent = DATA.meta.updated.replace(/-/g, '.') + ' 확인';
+  $$('[data-inquiry]').forEach(b => b.addEventListener('click', () => {
+    const acad = b.dataset.inquiry === 'academy';
+    $('#modalTitle').textContent = acad ? '교육 문의' : '출장·견적 문의';
+    $('#modalText').textContent = acad
+      ? '교육 과정과 일정은 최정예홈케어아카데미 홈페이지(cjyacademy.com)에서 확인하실 수 있습니다. 정식 앱에서는 상담 신청서가 이 자리에 들어갑니다.'
+      : '에어컨 분해세척·수리 출장 견적은 현장 사진과 모델명을 함께 주시면 안내드립니다. 정식 앱에서는 견적 요청서가 이 자리에 들어갑니다.';
+    $('#modal').classList.add('on');
+  }));
+  $('#modalOk').addEventListener('click', () => $('#modal').classList.remove('on'));
+  $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') $('#modal').classList.remove('on'); });
+}
+
+/* ------------------------------------------------ 교육생 배포 QR */
+const SITE_URL = '__SITE_URL__';
+function initQr(){
+  const openQr = () => {
+    $('#qrUrl').textContent = SITE_URL;
+    $('#qrModal').classList.add('on');
+  };
+  $('#qrBtn').addEventListener('click', openQr);
+  $$('[data-qr]').forEach(b => b.addEventListener('click', openQr));
+  $$('[data-copy-link]').forEach(b => b.addEventListener('click', () => copyText(SITE_URL)));
+  $('#qrClose').addEventListener('click', () => $('#qrModal').classList.remove('on'));
+  $('#qrModal').addEventListener('click', e => { if (e.target.id === 'qrModal') $('#qrModal').classList.remove('on'); });
+  $('#qrCopy').addEventListener('click', () => copyText(SITE_URL));
+  $('#qrShare').addEventListener('click', async () => {
+    if (navigator.share){
+      try { await navigator.share({ title:'에어코드 (AirCode)', text:'에어컨 LED·에러코드 현장 도구', url:SITE_URL }); return; }
+      catch(e){ if (e && e.name === 'AbortError') return; }
+    }
+    copyText(SITE_URL);
+  });
+}
+
+/* ------------------------------------------------ 시작 */
+buildChips();
+renderList();
+initAi();
+initLg();
+initSam();
+initEtc();
+initDx();
+initPromo();
+initQr();
+</script>
+</body>
+</html>
