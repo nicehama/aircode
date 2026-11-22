@@ -4,10 +4,9 @@
 - **https://nicehama.github.io/aircode/** (GitHub Pages — 배지·광고 없음, 로그인·비밀번호 없음)
 - 저장소: **https://github.com/nicehama/aircode** (Public, `main` = 소스 / `gh-pages` = 배포본)
 - 배포 파일: `index.html` (저장소 루트 = `dist/index.html` = `downloads/에어컨_에러코드_앱_프로토타입.html`)
-- 최신 배포: **v12 (GitHub Pages)** — 2026-11-21 22:19 KST, **543,036 bytes** (sha256 `8e7a4988…f6154`). 앱 표시 이름을 **에러코드.zip**으로 변경. 주소·저장소·`qr_site.svg` QR 값·`localStorage` 키(`aircode_fav_v1`·`aircode_recent_v1`)는 그대로.
-  - v11 22:06 (543,116 bytes, sha256 `a2047138…c9c91`) → **v12: `<title>`·apple/application-name·PWA 매니페스트(name/short_name)·상단 헤더·공유 제목·QR aria-label을 `에러코드.zip`으로** (헤더의 `AirCode` 영문 표기 제거)
-  - v12 라이브 검증(390×844): `https://nicehama.github.io/aircode/` HTTP 200 + 내려받은 본문 **바이트 동일**, 타이틀 `에러코드.zip — 에어컨 LED·에러코드`, 헤더 `에러코드.zip`, 매니페스트 name/short_name `에러코드.zip`, QR OpenCV 디코드 `https://nicehama.github.io/aircode/`, LED `test_led_ch21.mp4` → `CH21`, 하단 탭바 4개 완전 노출, **콘솔·페이지 오류 0건**. 캡처 `downloads/gh_pages_errorcodezip.png`·`gh_pages_errorcodezip_header.png`.
-  - v10 22:00 → **v11 22:05: 아카데미 탭에 쾌적하마 홍보(서비스 대상·기종·절차·강점)·홈페이지/네이버 블로그/대표번호 링크·문의 모달 링크 보강**
+- 최신 배포: **v13 (GitHub Pages)** — 2026-11-22 15:13 KST, **560,329 bytes** (sha256 `15905c31…4bc0`). **홈 화면에 앱처럼 추가하기 안내(아이폰 사파리·안드로이드 크롬·삼성 인터넷)** 추가. 주소·저장소·QR 값·`localStorage` 키는 그대로.
+  - v12 11-21 22:19 (543,036 bytes, sha256 `8e7a4988…f6154`) → **v13: 검색 탭 상단 칩·아카데미 배포 카드 버튼·QR 모달 버튼 3곳에서 여는 `#howtoModal` 신설**(접속 기기 자동 선택, 큰 글씨 13.5~14px, 1→2→3 단계, 실제 버튼 모양 아이콘, 카톡 주의 박스, `beforeinstallprompt` 원클릭 설치 버튼 자리)
+  - v13 라이브 검증(390×844): `https://nicehama.github.io/aircode/` HTTP 200 + 내려받은 본문 **바이트 동일**, 타이틀 `에러코드.zip — 에어컨 LED·에러코드`, 진입 3곳 모두 모달 열림, 세 탭 전환·UA 자동 선택(iPhone→사파리, Android→크롬), 세 탭 모두 844 화면 안에 스크롤 없이 들어옴, QR OpenCV 디코드 `https://nicehama.github.io/aircode/`, 검색 `CH21` 1건, LED `test_led_ch21.mp4` → `CH21`, 하단 탭바 4개 완전 노출, **콘솔·페이지 오류 0건**. 캡처 `downloads/gh_pages_howto_*.png`
   - v1 11-17 20:35 (체크리스트 탭) → v2 20:58 (현장 진단 개편) → v3 21:00 (코드바·진행바) → v4 21:10 (반응 띠)
   - **v5~v10 11-21: 에어코드 이름·QR 배포 모달·즐겨찾기·tel 링크·실제 LED 영상 판독 엔진** (v6 tel 정규식, v7 PWA 매니페스트, v8 모드 칩 폭, v9 미매칭 코드 전화 링크, v10 전화 링크 스타일)
 - 이전 deed.page 주소(`https://aircon-code-demo-1120.deed.page/`)는 옛 빌드로 남아 있다(QR이 deed.page를 가리키고 "Published with deed.page" 배지가 붙음). **새로 배포·공유할 주소는 GitHub Pages만 쓴다.**
@@ -36,6 +35,16 @@
   - `캐리어`: 연속 점멸 횟수 → `DATA.led.carrierLamp`(운전램프 5회 등)
   - `삼성 4WAY`·정지 사진: 켜진 램프의 위치·색을 클러스터로 찾아 보여 주고, **[4WAY 조합기에서 확정 →]** 으로 램프 개수(4/5)에 맞는 조합기를 바로 연다.
 - **결과 카드**: 실측 파형(캔버스, 적/녹/밝기 + 점멸 구간 음영), `적색 2회 · 녹색 1회` 같은 실측값, **±1 보정 버튼**(적/녹·자릿수·횟수 — 빛번짐 1회 오차를 재촬영 없이 수정), 매칭 코드·원인·점검·리셋, [상세 점검 보기]·[현장 진단 시작 →], 그리고 "영상은 기기 내에서만 실시간 분석되며 외부로 전송되지 않습니다." 문구.
+
+## v13에서 바뀐 것 — 홈 화면에 앱처럼 추가 안내 (어르신 교육생용)
+- **진입 3곳**: ① 검색 탭 빠른코드 아래 칩 `📲 바탕화면에 앱처럼 추가하는 법`(`#howtoChip`) ② 아카데미 탭 배포 카드의 전체폭 `[홈 화면 추가 방법]` 버튼 ③ QR 모달의 `[바탕화면 바로가기 만드는 법 보기]`. 세 곳 모두 `data-howto-open`으로 `#howtoModal`을 연다(QR 모달에서 열면 QR 모달은 닫힌다).
+- **안내 모달 `#howtoModal`**(`.howto-box`, max-width 420px, max-height 94vh, 본문만 스크롤, 하단 고정 `[확인했어요]`):
+  - 상단 탭 3개 — `아이폰 사파리`(공유 아이콘) · `안드로이드 크롬`(⋮) · `삼성 인터넷`(≡). 탭 자체에 그 브라우저에서 찾아야 할 버튼 모양을 그려 두었다.
+  - **자동 선택**: `iPhone|iPad|iPod` → 사파리, `Android` → 크롬, 그 외 → 사파리.
+  - 각 탭 공통: 맨 위 카톡 주의 박스(`카톡 안에서는 홈 화면 추가가 안 됩니다` → ‘Safari로 열기’ / ‘다른 브라우저로 열기’), `1 → 2 → 3` 번호 단계(제목 14px·본문 13.5px), 단계 안에 실제 버튼 모양(↑ 네모·⋮·≡·홈화면추가 +), 마지막에 `✅ 바탕화면에 에러코드.zip 아이콘이 생깁니다` 완료 박스.
+  - 크롬 탭에는 `beforeinstallprompt`가 오면 `[지금 바로 앱 설치하기]` 원클릭 버튼이 나타나고(미지원 브라우저에서는 숨김), `삼성 인터넷 설명 보기 →` 링크로 바로 전환된다.
+- 390×844에서 세 탭 모두 **안쪽 스크롤 없이** 들어오고, 375×667 이하에서는 본문만 스크롤된다(닫기·탭은 고정). `320px`까지 탭 3개가 한 줄에 유지된다.
+- 기존 검색·LED 판독·현장 진단·아카데미·QR 동작과 데이터·`localStorage` 키는 바꾸지 않았다.
 
 ## v11에서 바뀐 것 — 아카데미 탭 쾌적하마 홍보
 - 히어로 버튼을 2×2로: `아카데미 홈페이지`(cjyacademy.com, 청록) · `쾌적하마 홈페이지`(nicehama.co.kr, 주황) · `교육 문의` · `출장·견적 문의`. 390px에서 159px씩 두 줄, 320px 이하에서는 한 줄씩으로 자연스럽게 접힌다(`flex:1 1 calc(50% - 4px); min-width:132px`).
@@ -90,6 +99,16 @@
 | `app_v5_15_live_mp4.png` | 라이브에서 H.264 mp4 업로드 판독 |
 | `test_led_ch21.mp4` / `test_led_frame_*.png` | E2E용 실제 점멸 영상(H.264 30KB)·프레임 |
 | `gh_pages_main.png` | GitHub Pages 라이브 메인 — 배지 없음·하단 탭바 4개 완전 노출 |
+| `gh_pages_howto_01_main.png` | v13 라이브 메인 — 검색 탭 상단 `바탕화면에 앱처럼 추가하는 법` 칩(362×52px) |
+| `gh_pages_howto_03_ios_safari.png` | 안내 모달 — 아이폰 사파리 탭(카톡 주의 박스 + 1→2→3 단계) |
+| `gh_pages_howto_04_android_chrome.png` | 안내 모달 — 안드로이드 크롬 탭(⋮ → 홈 화면에 추가 → 설치/추가) |
+| `gh_pages_howto_05_samsung_internet.png` | 안내 모달 — 삼성 인터넷 탭(오른쪽 아래 ≡ → 현재 페이지 추가 + → 홈 화면) |
+| `gh_pages_howto_06_academy_card.png` | 아카데미 탭 배포 카드 — `[홈 화면 추가 방법]` 전체폭 버튼 |
+| `gh_pages_howto_07_qr_modal.png` | QR 모달 — `[바탕화면 바로가기 만드는 법 보기]` 버튼 |
+| `gh_pages_howto_08_from_qr.png` | QR 모달에서 안내를 열었을 때(QR 모달 닫힘) |
+| `gh_pages_howto_09_iphone_auto.png` | 아이폰 UA로 접속 → 사파리 탭 자동 선택 |
+| `gh_pages_howto_10_375.png` | 375×667 — 본문만 스크롤, 탭·하단 버튼 고정 |
+| `howto_02_ios_safari.png` · `howto_03_android_chrome.png` · `howto_04_samsung_internet.png` | 로컬 빌드 기준 안내 모달 3탭 |
 | `gh_pages_qr.png` | GitHub Pages QR 모달 — `https://nicehama.github.io/aircode/` 표기 |
 | `gh_pages_led_ch21.png` | GitHub Pages 라이브에서 실제 영상 업로드 → `CH21` 판독 |
 
@@ -101,6 +120,8 @@ make_assets.py         아이콘 SVG/PNG, 배포 QR SVG 생성 (assets/)
 make_test_video.py     E2E용 CH21 점멸 영상 생성
 verify_v5_live.py      배포 URL 전 기능 + 실제 영상 업로드 E2E
 verify_pages.py        GitHub Pages 라이브 검증(배지·탭바·QR·CH21·오류)
+verify_howto_live.py   라이브 검증 — 홈 화면 추가 안내 3탭·3진입·UA 자동선택·회귀·스크린샷
+test_howto_local.py    로컬 dist 검수 — 안내 모달 3탭·진입 3곳·글자 크기·작은 화면
 test_v5_local.py       로컬 파일 기준 기능 전수 점검
 test_v5_small.py       375×667 + 매니페스트 확인
 test_upload.py         파일 하나만 지정해 판독 결과 확인 (python3 test_upload.py 경로)
