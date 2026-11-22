@@ -567,6 +567,74 @@ nav.tabbar button.on .navdot{opacity:1}
 .deploy-btns button{flex:1;height:36px;border-radius:9px;font-size:11.5px;font-weight:700}
 .center-row.tel{cursor:pointer}
 .center-row .call{font-size:10px;color:#0E8A80;font-weight:700;margin-left:4px}
+
+/* ---------- v13: 홈 화면에 앱처럼 추가 안내 ---------- */
+.install-chip{display:flex;align-items:center;gap:9px;width:calc(100% - 28px);margin:2px 14px 10px;
+  background:linear-gradient(100deg,#E4F3F1 0%,#F4FBF9 100%);border:1px solid #CBE7E2;border-radius:12px;
+  padding:9px 11px;text-align:left}
+.install-chip .ic{width:28px;height:28px;border-radius:9px;background:var(--primary);color:#fff;display:grid;place-items:center;flex:none}
+.install-chip .ic svg{width:16px;height:16px}
+.install-chip .tx{flex:1;min-width:0;font-size:12.5px;font-weight:800;color:#0A5B57;line-height:1.3;letter-spacing:-.3px}
+.install-chip .tx span{display:block;font-size:10.5px;font-weight:600;color:#5E8F89;margin-top:2px;letter-spacing:0}
+.install-chip .cv{color:#88AFA9;flex:none}
+.install-chip .cv svg{width:14px;height:14px}
+.install-chip:active{background:#D9EFEA}
+.deploy-btns{flex-wrap:wrap}
+.deploy-btns button.wide{flex:1 1 100%}
+.qr-howto{width:100%;margin-top:10px;height:42px;border-radius:11px;background:var(--primary-soft);
+  border:1px solid #C7E5E1;color:var(--primary);font-size:12.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;gap:6px}
+.qr-howto svg{width:15px;height:15px}
+
+#howtoModal{padding:10px;z-index:82}
+.howto-box{background:#fff;border-radius:20px;width:100%;max-width:420px;max-height:94vh;
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 48px rgba(8,28,34,.3)}
+.howto-head{display:flex;align-items:flex-start;gap:8px;padding:15px 13px 9px;flex:none}
+.howto-head h3{margin:0;font-size:18px;line-height:1.3;letter-spacing:-.5px;color:var(--ink);flex:1;min-width:0}
+.howto-head p{margin:5px 0 0;font-size:12px;line-height:1.5;color:var(--muted)}
+.howto-head .close-x{flex:none}
+.howto-tabs{display:flex;gap:6px;padding:0 11px 10px;flex:none}
+.howto-tab{flex:1;min-width:0;border:1.5px solid var(--line);background:#fff;border-radius:12px;
+  padding:7px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--ink2);line-height:1.2}
+.howto-tab .hi{height:20px;color:#64808A;display:grid;place-items:center}
+.howto-tab .hi svg{width:19px;height:19px}
+.howto-tab b{font-size:12.5px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.howto-tab i{font-style:normal;font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap}
+.howto-tab.on{border-color:var(--primary);background:var(--primary-soft);color:var(--primary)}
+.howto-tab.on .hi{color:var(--primary)}
+.howto-tab.on i{color:#0A7B72}
+.howto-scroll{flex:1;overflow-y:auto;padding:2px 11px 4px;-webkit-overflow-scrolling:touch}
+.howto-pane{display:none}
+.howto-pane.on{display:block}
+.kakao-box{margin:4px 0 12px;background:var(--warn-bg);border:1px solid #F0DDBB;border-radius:12px;padding:10px 11px}
+.kakao-box .kb{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#9A5B12;letter-spacing:.2px}
+.kakao-box .kb svg{width:13px;height:13px;flex:none}
+.kakao-box p{margin:4px 0 0;font-size:13.5px;line-height:1.65;color:#6B4A22}
+.kakao-box b{color:#8A4E0B}
+.hows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.how{display:flex;gap:10px;background:#F7FAFA;border:1px solid #E8F0F0;border-radius:13px;padding:11px 12px}
+.how .num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font-size:14px;font-weight:800;display:grid;place-items:center;flex:none;line-height:1}
+.how .bd{flex:1;min-width:0;padding-top:1px}
+.how .bd > b{display:block;font-size:14px;font-weight:800;line-height:1.45;color:var(--ink);letter-spacing:-.2px}
+.how .bd p{margin:4px 0 0;font-size:13.5px;line-height:1.6;color:#455C63}
+.how .bd p b{display:inline;font-size:inherit;color:#1E3B44;font-weight:800;letter-spacing:0}
+.how .bd p.sm{font-size:12px;line-height:1.55;color:#6B8189;margin-top:5px}
+.pic{display:inline-flex;align-items:center;justify-content:center;gap:3px;vertical-align:-6px;height:25px;min-width:29px;
+  padding:0 6px;border:1.5px solid #A9BCC2;border-radius:7px;background:#fff;color:#2A4650;font-size:11px;font-weight:800;line-height:1}
+.pic svg{width:14px;height:14px;flex:none}
+.pic.tall{border-radius:50%;min-width:25px;padding:0;vertical-align:-7px}
+.word{display:inline-block;background:#E4F3F1;color:#0B6E6E;border-radius:7px;padding:2px 7px;font-size:12.5px;font-weight:800;vertical-align:1px}
+.howto-done{margin:10px 0 2px;background:#E9F6F2;border:1px solid #C4EADB;border-radius:12px;padding:11px 12px;
+  font-size:13.5px;line-height:1.6;color:#0A5B57;font-weight:700}
+.howto-done b{font-weight:800}
+.howto-tip{margin:6px 2px 2px;font-size:12.5px;line-height:1.7;color:#5F767E}
+.howto-tip button{font-size:12.5px;font-weight:800;color:var(--primary);text-decoration:underline;text-underline-offset:2px}
+.howto-install{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin:10px 0 2px;height:48px;
+  border-radius:13px;background:var(--primary);color:#fff;font-size:14.5px;font-weight:800}
+.howto-install svg{width:17px;height:17px}
+.howto-install[hidden]{display:none}
+.howto-foot{flex:none;padding:9px 11px calc(11px + env(safe-area-inset-bottom));border-top:1px solid #F0F4F5;display:flex;gap:8px}
+.howto-foot button{flex:1;height:48px;border-radius:13px;font-size:14px;font-weight:800}
 </style>
 </head>
 <body>
@@ -594,6 +662,12 @@ nav.tabbar button.on .navdot{opacity:1}
     <symbol id="i-qr" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="currentColor"/></symbol>
     <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9L3.5 9.7l5.9-.8z" fill="currentColor"/></symbol>
     <symbol id="i-tel" viewBox="0 0 24 24"><path d="M6.2 3.5h3l1.6 4-2 1.5a11.5 11.5 0 0 0 5.2 5.2l1.5-2 4 1.6v3c0 1.1-.9 2-2 2A15.5 15.5 0 0 1 4.2 5.5c0-1.1.9-2 2-2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.2v10.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m8.4 6.8 3.6-3.6 3.6 3.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 10.6H6A1.8 1.8 0 0 0 4.2 12.4v6.4A1.8 1.8 0 0 0 6 20.6h12a1.8 1.8 0 0 0 1.8-1.8v-6.4A1.8 1.8 0 0 0 18 10.6h-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-dots3" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.85" fill="currentColor"/><circle cx="12" cy="12" r="1.85" fill="currentColor"/><circle cx="12" cy="19" r="1.85" fill="currentColor"/></symbol>
+    <symbol id="i-menu3" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-addhome" viewBox="0 0 24 24"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 8.4v7.2M8.4 12h7.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-getapp" viewBox="0 0 24 24"><path d="M12 3.4v10.2m0 0 3.7-3.7M12 13.6 8.3 9.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.4 16.4v2.2a2 2 0 0 0 2 2h11.2a2 2 0 0 0 2-2v-2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7A2.5 2.5 0 0 1 17.5 16H10l-4.4 3.2A.8.8 0 0 1 4.3 18.6V6.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
 
@@ -626,6 +700,11 @@ nav.tabbar button.on .navdot{opacity:1}
         <div class="chip-row" id="viewChips"></div>
       </div>
       <div class="quick" id="quickCodes"></div>
+      <button class="install-chip" id="howtoChip" data-howto-open="1" aria-haspopup="dialog">
+        <span class="ic"><svg><use href="#i-addhome"/></svg></span>
+        <span class="tx">바탕화면에 앱처럼 추가하는 법<span>아이폰·안드로이드 그림 순서대로</span></span>
+        <span class="cv"><svg><use href="#i-chev"/></svg></span>
+      </button>
       <div class="list-head"><b id="listTitle">전체 코드</b><span id="listCount"></span></div>
       <div class="cards" id="cards"></div>
       <button class="more-btn" id="moreBtn" style="display:none">더 보기</button>
@@ -828,6 +907,7 @@ nav.tabbar button.on .navdot{opacity:1}
           <div class="deploy-btns">
             <button class="btn-primary" data-qr="1"><svg style="width:12px;height:12px;vertical-align:-2px;margin-right:4px"><use href="#i-qr"/></svg>QR 코드 보기</button>
             <button class="btn-ghost" data-copy-link="1">링크 복사</button>
+            <button class="btn-ghost wide" data-howto-open="1"><svg style="width:12px;height:12px;vertical-align:-2px;margin-right:4px"><use href="#i-addhome"/></svg>홈 화면 추가 방법</button>
           </div>
         </div>
       </div>
@@ -945,8 +1025,135 @@ nav.tabbar button.on .navdot{opacity:1}
       <button class="btn-primary" id="qrCopy">링크 복사</button>
       <button class="btn-ghost" id="qrShare">공유하기</button>
     </div>
-    <p class="qr-note">QR은 앱 안에 들어 있어 인터넷이 없어도 뜹니다. 아이폰은 사파리 공유 → ‘홈 화면에 추가’로 앱처럼 쓸 수 있고, 안드로이드는 링크를 열면 설치 안내가 뜹니다.</p>
+    <p class="qr-note">QR은 앱 안에 들어 있어 인터넷이 없어도 뜹니다. 아래 버튼을 누르면 아이폰(사파리)·안드로이드(크롬·삼성 인터넷)별로 홈 화면에 추가하는 순서를 그림으로 보여 줍니다.</p>
+    <button class="qr-howto" data-howto-open="1"><svg><use href="#i-addhome"/></svg>바탕화면 바로가기 만드는 법 보기</button>
     <div class="row"><button class="btn-ghost" id="qrClose">닫기</button></div>
+  </div>
+</div>
+<div class="modal" id="howtoModal" role="dialog" aria-modal="true" aria-labelledby="howtoTitle">
+  <div class="howto-box">
+    <div class="howto-head">
+      <div style="flex:1;min-width:0">
+        <h3 id="howtoTitle">홈 화면에 앱처럼 추가하기</h3>
+        <p>휴대폰 바탕화면에 아이콘을 만들어 두면, 다음부터는 한 번에 열립니다.</p>
+      </div>
+      <button class="close-x" id="howtoClose" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="howto-tabs" role="tablist">
+      <button class="howto-tab on" data-howto="ios" role="tab" aria-selected="true">
+        <span class="hi"><svg><use href="#i-share"/></svg></span><b>아이폰</b><i>사파리</i>
+      </button>
+      <button class="howto-tab" data-howto="android" role="tab" aria-selected="false">
+        <span class="hi"><svg><use href="#i-dots3"/></svg></span><b>안드로이드</b><i>크롬</i>
+      </button>
+      <button class="howto-tab" data-howto="samsung" role="tab" aria-selected="false">
+        <span class="hi"><svg><use href="#i-menu3"/></svg></span><b>삼성 인터넷</b><i>갤럭시 기본</i>
+      </button>
+    </div>
+    <div class="howto-scroll" id="howtoScroll">
+      <!-- 아이폰 사파리 -->
+      <div class="howto-pane on" data-pane="ios">
+        <div class="kakao-box">
+          <div class="kb"><svg><use href="#i-chat"/></svg>카카오톡으로 열었다면 먼저!</div>
+          <p>카톡 안에서는 홈 화면 추가가 안 됩니다. 오른쪽 위 <span class="pic tall">⋯</span>를 누르거나 화면 아래 <b>공유</b>를 눌러 <b>‘Safari로 열기’</b>를 먼저 골라 주세요.</p>
+        </div>
+        <ol class="hows">
+          <li class="how">
+            <span class="num">1</span>
+            <div class="bd">
+              <b>화면 맨 아래 가운데 <span class="pic"><svg><use href="#i-share"/></svg></span> 버튼을 누릅니다</b>
+              <p>네모 위로 화살표가 나온 모양입니다. 사파리 화면 아래쪽 가운데에 있습니다.</p>
+            </div>
+          </li>
+          <li class="how">
+            <span class="num">2</span>
+            <div class="bd">
+              <b>메뉴를 위로 살짝 올려 <span class="word">홈 화면에 추가</span>를 누릅니다</b>
+              <p>‘+’가 붙은 <span class="pic"><svg><use href="#i-addhome"/></svg></span> 모양입니다. 목록이 길면 손가락으로 위로 조금 밀어 올리세요.</p>
+            </div>
+          </li>
+          <li class="how">
+            <span class="num">3</span>
+            <div class="bd">
+              <b>오른쪽 위 <span class="word">추가</span>를 누릅니다</b>
+              <p>이름은 그대로 두고 <b>추가</b>만 누르면 됩니다.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="howto-done">✅ 바탕화면에 <b>에러코드.zip</b> 아이콘이 생깁니다. 다음부터는 그 아이콘을 누르면 앱처럼 바로 열립니다.</div>
+        <p class="howto-tip">아이콘이 안 보이면 홈 화면을 왼쪽으로 넘겨 마지막 페이지나 ‘앱 보관함’을 확인해 보세요.</p>
+      </div>
+
+      <!-- 안드로이드 크롬 -->
+      <div class="howto-pane" data-pane="android">
+        <div class="kakao-box">
+          <div class="kb"><svg><use href="#i-chat"/></svg>카카오톡으로 열었다면 먼저!</div>
+          <p>카톡 안에서는 홈 화면 추가가 안 됩니다. 오른쪽 위 <span class="pic tall">⋮</span> → <b>‘다른 브라우저로 열기’</b> → <b>Chrome(크롬)</b>을 먼저 골라 주세요.</p>
+        </div>
+        <ol class="hows">
+          <li class="how">
+            <span class="num">1</span>
+            <div class="bd">
+              <b>크롬 화면 오른쪽 위 <span class="pic tall"><svg><use href="#i-dots3"/></svg></span> 점 세 개를 누릅니다</b>
+              <p>세로로 점 세 개가 콕콕콕 찍힌 모양입니다. 주소 입력창 오른쪽에 있습니다.</p>
+            </div>
+          </li>
+          <li class="how">
+            <span class="num">2</span>
+            <div class="bd">
+              <b><span class="word">홈 화면에 추가</span> 또는 <span class="word">앱 설치</span>를 누릅니다</b>
+              <p>목록이 길면 손가락으로 위로 조금 밀어 올리면 바로 보입니다.</p>
+            </div>
+          </li>
+          <li class="how">
+            <span class="num">3</span>
+            <div class="bd">
+              <b><span class="word">설치</span> 또는 <span class="word">추가</span>를 누릅니다</b>
+              <p>확인 창이 한 번 더 뜨면 같은 버튼을 눌러 주세요.</p>
+            </div>
+          </li>
+        </ol>
+        <button class="howto-install" id="howtoInstallBtn" type="button" hidden><svg><use href="#i-getapp"/></svg>지금 바로 앱 설치하기</button>
+        <div class="howto-done">✅ 바탕화면에 <b>에러코드.zip</b> 아이콘이 생깁니다. 다음부터는 그 아이콘을 누르면 앱처럼 크게 열립니다.</div>
+        <p class="howto-tip">갤럭시 기본 브라우저(삼성 인터넷)로 열렸다면 <button id="howtoSwitchSam" type="button">삼성 인터넷 설명 보기 →</button></p>
+      </div>
+
+      <!-- 삼성 인터넷 -->
+      <div class="howto-pane" data-pane="samsung">
+        <div class="kakao-box">
+          <div class="kb"><svg><use href="#i-chat"/></svg>카카오톡으로 열었다면 먼저!</div>
+          <p>오른쪽 위 <span class="pic tall">⋮</span> → <b>‘다른 브라우저로 열기’</b> → <b>인터넷(삼성 인터넷)</b>을 먼저 골라 주세요.</p>
+        </div>
+        <ol class="hows">
+          <li class="how">
+            <span class="num">1</span>
+            <div class="bd">
+              <b>화면 오른쪽 아래 <span class="pic tall"><svg><use href="#i-menu3"/></svg></span> 줄 세 개를 누릅니다</b>
+              <p>삼성 인터넷은 메뉴가 크롬과 달리 오른쪽 <b>아래</b>에 있습니다.</p>
+            </div>
+          </li>
+          <li class="how">
+            <span class="num">2</span>
+            <div class="bd">
+              <b><span class="word">현재 페이지 추가 +</span>를 누릅니다</b>
+              <p>‘+’가 붙은 <span class="pic"><svg><use href="#i-addhome"/></svg></span> 모양입니다. 목록이 길면 위로 살짝 밀어 올리세요.</p>
+            </div>
+          </li>
+          <li class="how">
+            <span class="num">3</span>
+            <div class="bd">
+              <b><span class="word">홈 화면</span>을 고르고 <span class="word">추가</span>를 누릅니다</b>
+              <p>이름은 그대로 두고 <b>추가</b>만 누르면 됩니다.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="howto-done">✅ 바탕화면에 <b>에러코드.zip</b> 아이콘이 생깁니다. 다음부터는 그 아이콘을 누르면 앱처럼 바로 열립니다.</div>
+        <p class="howto-tip">삼성 인터넷이 보이지 않으면 앱 서랍에서 <b>인터넷</b>을 찾아 열어 주세요. 갤럭시에는 ‘Samsung Internet’이라는 이름으로 들어 있습니다.</p>
+      </div>
+    </div>
+    <div class="howto-foot">
+      <button class="btn-ghost" id="howtoOk">확인했어요</button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -15431,6 +15638,57 @@ function initQr(){
   });
 }
 
+/* ------------------------------------------------ 홈 화면 추가 안내 */
+function initHowto(){
+  const modal = $('#howtoModal'), scroll = $('#howtoScroll');
+  const tabs = $$('#howtoModal .howto-tab'), panes = $$('#howtoModal .howto-pane');
+  const pick = k => {
+    tabs.forEach(t => {
+      const on = t.dataset.howto === k;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panes.forEach(pn => pn.classList.toggle('on', pn.dataset.pane === k));
+    scroll.scrollTop = 0;
+  };
+  const autoTab = () => {
+    const ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod/i.test(ua)) return 'ios';
+    if (/Android/i.test(ua)) return 'android';
+    return 'ios';
+  };
+  const open = () => {
+    pick(autoTab());
+    $('#modal').classList.remove('on');
+    $('#qrModal').classList.remove('on');
+    modal.classList.add('on');
+    scroll.scrollTop = 0;
+  };
+  const close = () => modal.classList.remove('on');
+  $$('[data-howto-open]').forEach(b => b.addEventListener('click', open));
+  tabs.forEach(t => t.addEventListener('click', () => pick(t.dataset.howto)));
+  $('#howtoClose').addEventListener('click', close);
+  $('#howtoOk').addEventListener('click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  $('#howtoSwitchSam').addEventListener('click', () => pick('samsung'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('on')) close(); });
+
+  let deferred = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferred = e;
+    const b = $('#howtoInstallBtn');
+    if (b) b.hidden = false;
+  });
+  $('#howtoInstallBtn').addEventListener('click', async () => {
+    if (!deferred){ toast('브라우저 메뉴에서 직접 추가해 주세요'); return; }
+    deferred.prompt();
+    try { await deferred.userChoice; } catch(e){}
+    deferred = null;
+    $('#howtoInstallBtn').hidden = true;
+  });
+  window.addEventListener('appinstalled', () => toast('홈 화면에 추가했습니다'));
+}
+
 /* ------------------------------------------------ 시작 */
 buildChips();
 renderList();
@@ -15441,6 +15699,7 @@ initEtc();
 initDx();
 initPromo();
 initQr();
+initHowto();
 </script>
 </body>
 </html>
