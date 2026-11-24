@@ -14226,7 +14226,7 @@ function openSheet(e){
     <div class="blk"><h4>원인</h4><p>${esc(e.cause)}</p></div>
     ${steps.length ? `<div class="blk"><h4>현장 점검 순서</h4><ol>${steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol></div>` : ''}
     <div class="blk warn-box"><h4>리셋 전 주의</h4><p>${esc(e.reset)}</p></div>
-    ${notes.length ? `<div class="blk"><h4>${esc(brandMap[e.brand].name)} 현장 노트</h4><ul>${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul><div style="font-size:10.5px;color:var(--muted);margin-top:6px">‘고객센터’ 탭에서 제조사 연락처를 볼 수 있습니다.</div></div>` : ''}
+    ${notes.length ? `<div class="blk"><h4>${esc(brandMap[e.brand].name)} 현장 노트</h4><ul>${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul><div style="font-size:10.5px;color:var(--muted);margin-top:6px">‘더보기’ 탭에서 제조사 연락처를 볼 수 있습니다.</div></div>` : ''}
     ${rel.length ? `<div class="blk"><h4>같은 계열 코드</h4><div class="relchips">${rel.map(r => `<button data-rel="${r.id}">${esc(r.codes[0] || r.display)}</button>`).join('')}</div></div>` : ''}
     <div style="height:6px"></div>`;
   $$('#shBody [data-rel]').forEach(btn => btn.addEventListener('click', () => {
@@ -15670,7 +15670,7 @@ function dxContactHTML(){
       ? (telHref(center.phone)
         ? `<a class="center-row tel" href="${telHref(center.phone)}"><span class="cm">${esc(center.maker)}${info ? `<span class="ci">${esc(info)}</span>` : ''}</span><span class="cp">${esc(center.phone || '문의')}<span class="call">전화</span></span></a>`
         : `<div class="center-row"><span class="cm">${esc(center.maker)}${info ? `<span class="ci">${esc(info)}</span>` : ''}</span><span class="cp">${esc(center.phone || '문의')}</span></div>`)
-      : `<p class="hint" style="margin:2px 0 8px">브랜드를 알면 검색 탭에서 모델명과 코드를 확인한 뒤 제조사에 문의하세요. 아카데미 탭에 제조사별 연락처가 있습니다.</p>`}
+      : `<p class="hint" style="margin:2px 0 8px">브랜드를 알면 검색 탭에서 모델명과 코드를 확인한 뒤 제조사에 문의하세요. 더보기 탭에 제조사별 연락처가 있습니다.</p>`}
     <div class="ch" style="border-top:1px solid #F0F4F5">현장 지원</div>
     <a class="center-row" href="https://cjyacademy.com" target="_blank" rel="noopener" style="text-decoration:none">
       <span class="cm">최정예홈케어아카데미<span class="ci">판정 검토·교육 문의 · 쾌적하마 현장 지원</span></span>
