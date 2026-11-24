@@ -1438,7 +1438,7 @@ $$('#tabbar button').forEach(btn => btn.addEventListener('click', () => {
   const isSearch = currentTab === 'search';
   $('#topSearch').style.display = isSearch ? 'block' : 'none';
   $('header.top').classList.toggle('has-search', isSearch);
-  const titles = {search:'삼성 · LG · 캐리어 · 위니아 · 파세코 · FCU', led:'LED 점멸로 코드 찾기', check:'단계별 현장 진단 · 고장 추적', promo:'최정예홈케어아카데미 · 쾌적하마'};
+  const titles = {search:'삼성 · LG · 캐리어 · 위니아 · 파세코 · FCU', led:'LED 점멸로 코드 찾기', check:'단계별 현장 진단 · 고장 추적', promo:'내 계정 · 교육 · 서비스 안내'};
   $('#topSub').textContent = titles[currentTab];
 }));
 
