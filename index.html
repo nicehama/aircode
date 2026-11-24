@@ -16027,6 +16027,8 @@ function friendly(err){
   if (low.indexOf('email not confirmed') >= 0) return '<b>메일 인증이 아직 안 됐습니다.</b><br>받은 메일의 확인 링크를 누른 뒤 다시 로그인해 주세요.<div class="mini"><button type="button" data-resend="1">확인 메일 다시 받기</button></div>';
   if (low.indexOf('already registered') >= 0 || low.indexOf('user already') >= 0) return '<b>이미 가입된 이메일입니다.</b><br>[로그인] 탭에서 들어오시면 됩니다.';
   if (low.indexOf('rate limit') >= 0 || low.indexOf('too many') >= 0 || low.indexOf('security purposes') >= 0) return '<b>잠시 후 다시 시도해 주세요.</b><br>같은 요청이 너무 자주 있었습니다. 1분 뒤 다시 눌러 주세요.';
+  if (low.indexOf('is invalid') >= 0 || low.indexOf('invalid email') >= 0 || low.indexOf('unable to validate') >= 0) return '<b>이메일 주소를 다시 확인해 주세요.</b><br>실제로 메일을 받을 수 있는 주소가 아니면 가입되지 않습니다. 다른 이메일을 넣어 주세요.';
+  if (low.indexOf('password') >= 0 && (low.indexOf('at least') >= 0 || low.indexOf('characters') >= 0 || low.indexOf('weak') >= 0)) return '<b>비밀번호가 너무 짧습니다.</b><br>6자 이상으로 넣어 주세요.';
   if (low.indexOf('failed to fetch') >= 0 || low.indexOf('network') >= 0) return '<b>서버에 연결하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 시도해 주세요.';
   if (low.indexOf('signups not allowed') >= 0) return '<b>지금은 새 가입을 받지 않습니다.</b><br>잠시 뒤 다시 시도해 주세요.';
   return '<b>가입·로그인을 마치지 못했습니다.</b><br>' + esc(m || '잠시 뒤 다시 시도해 주세요.');
