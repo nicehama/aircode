@@ -9,7 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'assets')
 os.makedirs(OUT, exist_ok=True)
 
-SITE_URL = 'https://nicehama.github.io/aircode/'
+SITE_URL = 'https://aircode-zip.vercel.app'
 
 # ---------------- QR ----------------
 qr = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_M,

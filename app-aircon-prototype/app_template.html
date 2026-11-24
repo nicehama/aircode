@@ -635,6 +635,102 @@ nav.tabbar button.on .navdot{opacity:1}
 .howto-install[hidden]{display:none}
 .howto-foot{flex:none;padding:9px 11px calc(11px + env(safe-area-inset-bottom));border-top:1px solid #F0F4F5;display:flex;gap:8px}
 .howto-foot button{flex:1;height:48px;border-radius:13px;font-size:14px;font-weight:800}
+
+/* ---------- v14: 회원 전용 잠금 (LED 찾기·현장 진단) ---------- */
+body:not(.authed) .members-only{display:none !important}
+body.authed .gate{display:none !important}
+.gate{padding:26px 16px 14px;text-align:center}
+.gate-ico{width:66px;height:66px;border-radius:21px;margin:0 auto 14px;background:linear-gradient(150deg,#0E8A80,#0B4A5A);color:#fff;
+  display:grid;place-items:center;box-shadow:0 8px 20px rgba(11,110,110,.22)}
+.gate-ico svg{width:31px;height:31px}
+.gate-kicker{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.3px;color:#0B6E6E;background:var(--primary-soft);
+  border:1px solid #C7E5E1;border-radius:999px;padding:4px 11px}
+.gate h3{margin:12px 0 9px;font-size:22px;line-height:1.34;letter-spacing:-.8px;color:#0A2E38}
+.gate p{margin:0 auto;max-width:310px;font-size:14px;line-height:1.65;color:var(--ink2)}
+.gate-main,.gate-sub{display:block;width:100%;max-width:330px;margin:0 auto;height:54px;border-radius:15px;font-size:17px;font-weight:800}
+.gate-main{margin-top:20px;background:var(--primary);color:#fff;box-shadow:0 6px 16px rgba(11,110,110,.2)}
+.gate-sub{margin-top:9px;background:#fff;border:1.5px solid #BFDCD8;color:var(--primary)}
+.gate-main:active{background:#0A5E5E}
+.gate-sub:active{background:#EAF6F4}
+.gate-perks{max-width:340px;margin:17px auto 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;text-align:left}
+.gate-perks li{list-style:none;position:relative;padding:6px 0 6px 23px;font-size:13px;color:var(--ink2);line-height:1.45}
+.gate-perks li::before{content:"";position:absolute;left:3px;top:12px;width:10px;height:6px;
+  border-left:2px solid #0E8A80;border-bottom:2px solid #0E8A80;transform:rotate(-45deg)}
+.gate-note{margin-top:16px !important;font-size:12.5px !important;color:var(--muted)}
+.gate-note b{color:#0B6E6E}
+
+/* ---------- v14: 더보기 탭 계정 카드 ---------- */
+.acct-card{margin:12px 14px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.acct-top{display:flex;align-items:center;gap:11px}
+.acct-ava{width:44px;height:44px;border-radius:14px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+.acct-ava svg{width:22px;height:22px}
+.acct-txt{flex:1;min-width:0}
+.acct-txt b{display:block;font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-.3px;line-height:1.3}
+.acct-txt span{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;word-break:break-all;line-height:1.45}
+.acct-state{font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 8px;white-space:nowrap;flex:none}
+.acct-state.out{background:#F1F5F6;color:#6C8189}
+.acct-state.in{background:#E4F3F1;color:#0B6E6E}
+.acct-btns{display:flex;gap:8px;margin-top:12px}
+.acct-btns[hidden]{display:none}
+.acct-btns button{flex:1;height:44px;border-radius:12px;font-size:14.5px;font-weight:800}
+.acct-btns .a-solid{background:var(--primary);color:#fff}
+.acct-btns .a-line{background:#fff;border:1.5px solid #BFDCD8;color:var(--primary)}
+.acct-btns .a-out{background:#fff;border:1.5px solid var(--line);color:#5E747D}
+.acct-note{margin-top:10px;font-size:11px;color:var(--muted);line-height:1.55}
+
+/* ---------- v14: 로그인·회원가입 화면 ---------- */
+#authScreen{position:fixed;inset:0;z-index:92;display:none;background:var(--bg)}
+#authScreen.on{display:block}
+.auth-box{max-width:520px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:var(--bg)}
+.auth-head{flex:none;background:linear-gradient(140deg,#0B6E6E 0%,#0E8378 55%,#12A08C 100%);color:#fff;
+  padding:11px 14px;display:flex;align-items:center;gap:10px}
+.auth-back{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;flex:none;color:#fff}
+.auth-back svg{width:15px;height:15px}
+.auth-logo{font-size:15px;font-weight:800;letter-spacing:-.3px}
+.auth-logo span{font-weight:700;opacity:.82}
+.auth-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 16px calc(26px + env(safe-area-inset-bottom))}
+.auth-scroll h2{margin:0;font-size:24px;letter-spacing:-.9px;color:#0A2E38}
+.auth-lead{margin:7px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink2)}
+.auth-modes{display:flex;gap:8px;margin:16px 0 2px}
+.auth-mode{flex:1;height:47px;border-radius:13px;font-size:15.5px;font-weight:800;background:#fff;border:1.5px solid var(--line);color:#6C8189}
+.auth-mode.on{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(11,110,110,.18)}
+.fld{display:block;margin-top:14px}
+.fld-k{display:block;font-size:14.5px;font-weight:800;color:#12323B;margin-bottom:6px;letter-spacing:-.3px}
+.fld input{width:100%;height:52px;border-radius:13px;border:1.5px solid #DCE6E9;background:#fff;padding:0 14px;font-size:16px;
+  color:var(--ink);font-family:inherit;-webkit-appearance:none}
+.fld input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(11,110,110,.1)}
+.fld-err{display:none;font-size:12.5px;color:#C2410C;margin-top:5px;font-weight:700;line-height:1.4}
+.fld.bad input{border-color:#E0A087;background:#FFFBF9}
+.fld.bad .fld-err{display:block}
+.fld .hintk{display:block;font-size:11.5px;color:var(--muted);margin-top:5px}
+.pw-wrap{display:block;position:relative}
+.pw-wrap input{padding-right:62px}
+.pw-eye{position:absolute;right:6px;top:6px;height:40px;padding:0 12px;border-radius:9px;background:#F1F5F6;color:#4C6666;font-size:12px;font-weight:800}
+.agree{display:flex;gap:9px;align-items:flex-start;margin-top:16px;background:#fff;border:1.5px solid #DCE6E9;border-radius:13px;padding:12px}
+.agree input{width:22px;height:22px;margin:1px 0 0;accent-color:#0B6E6E;flex:none}
+.agree span{font-size:12.5px;line-height:1.55;color:var(--ink2)}
+.agree b{color:#0A2E38}
+.agree.bad{border-color:#E0A087;background:#FFFBF9}
+.auth-submit{width:100%;height:56px;border-radius:15px;background:var(--primary);color:#fff;font-size:17.5px;font-weight:800;
+  margin-top:18px;box-shadow:0 6px 16px rgba(11,110,110,.2)}
+.auth-submit:active{background:#0A5E5E}
+.auth-submit:disabled{opacity:.55;box-shadow:none}
+.auth-msg{margin-top:14px;border-radius:13px;padding:12px 13px;font-size:13.5px;line-height:1.6;font-weight:700;display:none}
+.auth-msg.on{display:block}
+.auth-msg.info{background:#E4F3F1;border:1px solid #BFDCD8;color:#0A5B57}
+.auth-msg.ok{background:#E9F6F2;border:1px solid #C4EADB;color:#0A5B57}
+.auth-msg.err{background:#FFF4EE;border:1px solid #F1CDB9;color:#9A3A12}
+.auth-msg .mini{margin-top:9px;font-weight:800}
+.auth-msg .mini button{font-size:12.5px;font-weight:800;color:#0B6E6E;text-decoration:underline;text-underline-offset:2px}
+.auth-social{margin-top:22px}
+.auth-or{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted);margin-bottom:12px}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.soc{width:100%;height:52px;border-radius:13px;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  gap:8px;margin-top:9px;border:1.5px solid var(--line);background:#fff;color:#9AABB2}
+.soc span{font-size:11px;font-weight:700;background:#F1F5F6;border-radius:999px;padding:2px 7px}
+.auth-foot{margin:20px 2px 0;font-size:11.5px;line-height:1.65;color:var(--muted)}
+#authScreen[data-mode="login"] [data-only="signup"]{display:none}
 </style>
 </head>
 <body>
@@ -668,6 +764,9 @@ nav.tabbar button.on .navdot{opacity:1}
     <symbol id="i-addhome" viewBox="0 0 24 24"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 8.4v7.2M8.4 12h7.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-getapp" viewBox="0 0 24 24"><path d="M12 3.4v10.2m0 0 3.7-3.7M12 13.6 8.3 9.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.4 16.4v2.2a2 2 0 0 0 2 2h11.2a2 2 0 0 0 2-2v-2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7A2.5 2.5 0 0 1 17.5 16H10l-4.4 3.2A.8.8 0 0 1 4.3 18.6V6.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.6" y="10.4" width="14.8" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.4V8a4 4 0 0 1 8 0v2.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15.4" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.6" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.9 20c.6-3.6 3.6-5.7 7.1-5.7s6.5 2.1 7.1 5.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4.6h4.4A1.6 1.6 0 0 1 20 6.2v11.6a1.6 1.6 0 0 1-1.6 1.6H14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.4 12H3.6m0 0 3.2-3.2M3.6 12l3.2 3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
 
@@ -716,6 +815,20 @@ nav.tabbar button.on .navdot{opacity:1}
 
     <!-- ============ 2. LED ============ -->
     <section class="tab" id="tab-led">
+      <div class="gate" id="gateLed">
+        <div class="gate-ico"><svg><use href="#i-lock"/></svg></div>
+        <div class="gate-kicker">회원 전용 기능</div>
+        <h3>LED 영상 판독은<br>회원만 쓸 수 있습니다</h3>
+        <p>깜빡이는 불을 5~10초 찍으면 점멸 횟수를 세어 코드로 바꿔 주는 기능입니다. 무료로 가입하면 바로 쓰실 수 있습니다.</p>
+        <button class="gate-main" data-auth-open="login">로그인</button>
+        <button class="gate-sub" data-auth-open="signup">회원가입 (무료)</button>
+        <ul class="gate-perks">
+          <li>이름·전화번호·이메일만 있으면 1분 안에 가입</li>
+          <li>가입한 계정은 폰을 바꿔도 그대로 이어집니다</li>
+        </ul>
+        <p class="gate-note">에러코드 <b>검색</b>은 로그인 없이 그대로 쓰실 수 있습니다.</p>
+      </div>
+      <div class="members-only" id="ledBody">
       <!-- AI 판독 -->
       <div class="ai-card">
         <div class="ai-head">
@@ -835,10 +948,25 @@ nav.tabbar button.on .navdot{opacity:1}
         <div class="tool-body" id="shootBody"></div>
       </div>
       <div style="height:6px"></div>
+      </div>
     </section>
 
     <!-- ============ 3. 현장 진단 (단계별 고장 추적) ============ -->
     <section class="tab" id="tab-check">
+      <div class="gate" id="gateCheck">
+        <div class="gate-ico"><svg><use href="#i-lock"/></svg></div>
+        <div class="gate-kicker">회원 전용 기능</div>
+        <h3>현장 진단은<br>회원만 쓸 수 있습니다</h3>
+        <p>고장 계열을 고르면 예상 원인을 1→2→3→4단계로 안내하고, 조치 내역을 보고서로 정리해 주는 기능입니다.</p>
+        <button class="gate-main" data-auth-open="login">로그인</button>
+        <button class="gate-sub" data-auth-open="signup">회원가입 (무료)</button>
+        <ul class="gate-perks">
+          <li>단계별 조치·판정 기록이 계정에 남습니다</li>
+          <li>검색 탭의 코드 상세에서도 바로 이어집니다</li>
+        </ul>
+        <p class="gate-note">에러코드 <b>검색</b>은 로그인 없이 그대로 쓰실 수 있습니다.</p>
+      </div>
+      <div class="members-only" id="checkBody">
       <div id="dxStart">
         <div class="dx-lead">
           <div class="kick">FIELD DIAGNOSIS · 4 STEPS</div>
@@ -882,9 +1010,29 @@ nav.tabbar button.on .navdot{opacity:1}
       </div>
       <div class="sec"><div class="note-card"><b>접수·인계 시 꼭 남기기</b><br>표시 코드나 점멸 횟수를 사진으로, 실내기·실외기 라벨의 모델명과 제조연월을 함께 적습니다. 같은 코드라도 계열을 구분하는 유일한 근거입니다.</div></div>
       <div style="height:8px"></div>
+      </div>
     </section>
-    <!-- ============ 4. 아카데미 ============ -->
+    <!-- ============ 4. 더보기 (아카데미·홍보·계정) ============ -->
     <section class="tab" id="tab-promo">
+      <div class="acct-card" id="acctCard">
+        <div class="acct-top">
+          <span class="acct-ava"><svg><use href="#i-user"/></svg></span>
+          <div class="acct-txt">
+            <b id="acctName">로그인하지 않으셨습니다</b>
+            <span id="acctSub">가입하면 LED 찾기·현장 진단을 쓰실 수 있습니다</span>
+          </div>
+          <span class="acct-state out" id="acctState">비로그인</span>
+        </div>
+        <div class="acct-btns" id="acctOut">
+          <button class="a-solid" data-auth-open="login">로그인</button>
+          <button class="a-line" data-auth-open="signup">회원가입</button>
+        </div>
+        <div class="acct-btns" id="acctIn" hidden>
+          <button class="a-out" id="acctLogout"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"><use href="#i-out"/></svg>로그아웃</button>
+        </div>
+        <p class="acct-note" id="acctNote">에러코드 검색·더보기는 로그인 없이 쓰실 수 있습니다. LED 찾기와 현장 진단만 회원 전용입니다.</p>
+      </div>
+
       <div class="promo-hero">
         <div class="glow"></div>
         <div class="kicker">ACADEMY · SERVICE</div>
@@ -987,7 +1135,7 @@ nav.tabbar button.on .navdot{opacity:1}
     <button class="on" data-tab="search"><svg><use href="#i-search"/></svg>검색<span class="navdot"></span></button>
     <button data-tab="led"><svg><use href="#i-bulb"/></svg>LED 찾기<span class="navdot"></span></button>
     <button data-tab="check"><svg><use href="#i-check"/></svg>현장 진단<span class="navdot"></span></button>
-    <button data-tab="promo"><svg><use href="#i-store"/></svg>아카데미<span class="navdot"></span></button>
+    <button data-tab="promo"><svg><use href="#i-grid"/></svg>더보기<span class="navdot"></span></button>
   </nav>
 </div>
 
@@ -1158,6 +1306,77 @@ nav.tabbar button.on .navdot{opacity:1}
 </div>
 <div class="toast" id="toast"></div>
 
+<!-- ============ v14: 로그인 · 회원가입 화면 ============ -->
+<div id="authScreen" data-mode="login" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-box">
+    <div class="auth-head">
+      <button class="auth-back" id="authClose" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+      <div class="auth-logo">에러코드<span>.zip</span></div>
+    </div>
+    <div class="auth-scroll" id="authScroll">
+      <h2 id="authTitle">로그인</h2>
+      <p class="auth-lead" id="authLead">가입하실 때 쓴 이메일과 비밀번호를 넣어 주세요.</p>
+
+      <div class="auth-modes" role="tablist">
+        <button class="auth-mode on" type="button" data-auth-mode="login" role="tab">로그인</button>
+        <button class="auth-mode" type="button" data-auth-mode="signup" role="tab">회원가입</button>
+      </div>
+
+      <div class="auth-msg" id="authMsg" role="status"></div>
+
+      <form id="authForm" novalidate>
+        <label class="fld" data-only="signup" for="auName">
+          <span class="fld-k">이름</span>
+          <input id="auName" name="name" type="text" placeholder="예) 홍길동" autocomplete="name" enterkeyhint="next">
+          <span class="fld-err" id="errName"></span>
+        </label>
+
+        <label class="fld" data-only="signup" for="auPhone">
+          <span class="fld-k">전화번호</span>
+          <input id="auPhone" name="phone" type="tel" inputmode="tel" placeholder="예) 010-1234-5678" autocomplete="tel" enterkeyhint="next">
+          <span class="fld-err" id="errPhone"></span>
+        </label>
+
+        <label class="fld" for="auEmail">
+          <span class="fld-k">이메일</span>
+          <input id="auEmail" name="email" type="email" inputmode="email" placeholder="예) hong@naver.com" autocomplete="email" autocapitalize="off" enterkeyhint="next">
+          <span class="fld-err" id="errEmail"></span>
+        </label>
+
+        <label class="fld" for="auPw">
+          <span class="fld-k">비밀번호</span>
+          <span class="pw-wrap">
+            <input id="auPw" name="password" type="password" placeholder="6자 이상" autocomplete="current-password" enterkeyhint="next">
+            <button class="pw-eye" type="button" id="pwEye" aria-label="비밀번호 보기">보기</button>
+          </span>
+          <span class="fld-err" id="errPw"></span>
+        </label>
+
+        <label class="fld" data-only="signup" for="auPw2">
+          <span class="fld-k">비밀번호 확인</span>
+          <input id="auPw2" name="password2" type="password" placeholder="한 번 더 똑같이" autocomplete="new-password" enterkeyhint="done">
+          <span class="fld-err" id="errPw2"></span>
+        </label>
+
+        <label class="agree" id="agreeBox" data-only="signup" for="auAgree">
+          <input id="auAgree" type="checkbox">
+          <span><b>개인정보 수집·이용에 둥의합니다.</b><br>이름·전화번호·이메일을 회원 확인과 문의 응대 목적으로만 쓰고, 다른 곳에 넘기지 않습니다.</span>
+        </label>
+
+        <button class="auth-submit" id="authSubmit" type="submit">로그인</button>
+      </form>
+
+      <div class="auth-social" id="authSocial" hidden>
+        <div class="auth-or">또는</div>
+        <button class="soc" id="btnKakao" type="button" disabled>카카오로 시작 <span>준비 중</span></button>
+        <button class="soc" id="btnGoogle" type="button" disabled>구글로 시작 <span>준비 중</span></button>
+      </div>
+
+      <p class="auth-foot">가입한 정보는 회원 관리에만 쓰입니다. 비밀번호는 암호화되어 저장되며 앱은 비밀번호를 보관하지 않습니다.</p>
+    </div>
+  </div>
+</div>
+
 <script id="data" type="application/json">__DATA_JSON__</script>
 <script>
 "use strict";
@@ -1206,6 +1425,11 @@ function catClass(c){
 
 /* ------------------------------------------------ 탭 */
 let currentTab = 'search';
+function goTab(name){
+  const btn = $$('#tabbar button').find(b => b.dataset.tab === name);
+  if (btn) btn.click();
+}
+function authOn(){ return !!(window.AIR_AUTH && window.AIR_AUTH.isAuthed()); }
 $$('#tabbar button').forEach(btn => btn.addEventListener('click', () => {
   currentTab = btn.dataset.tab;
   $$('#tabbar button').forEach(b => b.classList.toggle('on', b === btn));
@@ -1463,6 +1687,11 @@ $('#shDiag').addEventListener('click', () => {
   if (!sheetEntry) return;
   const e = sheetEntry;
   closeSheet();
+  if (!authOn()){
+    goTab('check');
+    if (window.AIR_AUTH) window.AIR_AUTH.open('login', '현장 진단은 회원 전용입니다. 로그인하시면 이어서 진단하실 수 있습니다.');
+    return;
+  }
   startDxForEntry(e);
 });
 $('#backdrop').addEventListener('click', closeSheet);
@@ -3133,6 +3362,7 @@ function initHowto(){
 }
 
 /* ------------------------------------------------ 시작 */
+window.AIR_TOAST = toast;
 buildChips();
 renderList();
 initAi();
@@ -3143,6 +3373,290 @@ initDx();
 initPromo();
 initQr();
 initHowto();
+</script>
+
+<script type="module">
+/* ================================================================
+   v14 — 회원가입 · 로그인 (Supabase Auth)
+   브라우저에는 Project URL 과 Publishable key 만 들어갑니다.
+   Secret key 는 이 파일에도 깃허브에도 절대 넣지 않습니다.
+   ================================================================ */
+const SUPABASE_URL = 'https://wplvxblleiulpbqqwavo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ViwcLZattdra0GY-E6zEXA_Z74QPvHr';
+const HOME_URL = 'https://aircode-zip.vercel.app';
+const CDN_LIST = [
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm',
+  'https://esm.sh/@supabase/supabase-js@2'
+];
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+let client = null;
+let session = null;
+let mode = 'login';
+let busy = false;
+
+const ui = {
+  screen: $('#authScreen'), scroll: $('#authScroll'),
+  title: $('#authTitle'), lead: $('#authLead'), msg: $('#authMsg'),
+  form: $('#authForm'), submit: $('#authSubmit'),
+  name: $('#auName'), phone: $('#auPhone'), email: $('#auEmail'), pw: $('#auPw'), pw2: $('#auPw2'),
+  agree: $('#auAgree'), agreeBox: $('#agreeBox'), pwEye: $('#pwEye'),
+  acctName: $('#acctName'), acctSub: $('#acctSub'), acctState: $('#acctState'),
+  acctOut: $('#acctOut'), acctIn: $('#acctIn'), acctNote: $('#acctNote')
+};
+
+const digits = (s) => String(s || '').replace(/[^0-9]/g, '');
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---------- 로그인 상태를 화면 전체에 반영 ---------- */
+function applySession(s){
+  session = s || null;
+  const user = (session && session.user) ? session.user : null;
+  document.body.classList.toggle('authed', !!user);
+  if (user){
+    const md = user.user_metadata || {};
+    const nm = String(md.name || '').trim();
+    ui.acctName.textContent = nm ? (nm + ' 님') : '회원 님';
+    ui.acctSub.textContent = (user.email || '') + ' · 무료 회원';
+    ui.acctState.textContent = '회원';
+    ui.acctState.className = 'acct-state in';
+    ui.acctOut.hidden = true;
+    ui.acctIn.hidden = false;
+    ui.acctNote.textContent = 'LED 찾기와 현장 진단을 모두 쓰실 수 있습니다. 로그아웃해도 검색·더보기는 그대로 쓰실 수 있습니다.';
+  } else {
+    ui.acctName.textContent = '로그인하지 않으셨습니다';
+    ui.acctSub.textContent = '가입하면 LED 찾기·현장 진단을 쓰실 수 있습니다';
+    ui.acctState.textContent = '비로그인';
+    ui.acctState.className = 'acct-state out';
+    ui.acctOut.hidden = false;
+    ui.acctIn.hidden = true;
+    ui.acctNote.textContent = '에러코드 검색·더보기는 로그인 없이 쓰실 수 있습니다. LED 찾기와 현장 진단만 회원 전용입니다.';
+  }
+}
+
+/* ---------- 안내문·오류 표시 ---------- */
+function clearMsg(){ ui.msg.className = 'auth-msg'; ui.msg.innerHTML = ''; }
+function showMsg(kind, html){ ui.msg.className = 'auth-msg on ' + kind; ui.msg.innerHTML = html; }
+
+const FIELDS = {
+  name: () => [ui.name, 'errName'],
+  phone: () => [ui.phone, 'errPhone'],
+  email: () => [ui.email, 'errEmail'],
+  pw: () => [ui.pw, 'errPw'],
+  pw2: () => [ui.pw2, 'errPw2']
+};
+function setErr(key, text){
+  const pair = FIELDS[key]();
+  const input = pair[0], errEl = document.getElementById(pair[1]);
+  const fld = input.closest('.fld');
+  if (fld) fld.classList.toggle('bad', !!text);
+  if (errEl) errEl.textContent = text || '';
+}
+function clearErrs(){
+  Object.keys(FIELDS).forEach(k => setErr(k, ''));
+  ui.agreeBox.classList.remove('bad');
+}
+
+function startBusy(label){ busy = true; ui.submit.disabled = true; ui.submit.textContent = label; }
+function endBusy(){ busy = false; ui.submit.disabled = false; ui.submit.textContent = mode === 'signup' ? '가입하기' : '로그인'; }
+
+function friendly(err){
+  const m = String((err && (err.message || err.error_description || err.error)) || err || '');
+  const low = m.toLowerCase();
+  if (low.indexOf('invalid login') >= 0) return '<b>이메일이나 비밀번호가 맞지 않습니다.</b><br>한 번 더 확인해 주세요.';
+  if (low.indexOf('email not confirmed') >= 0) return '<b>메일 인증이 아직 안 됐습니다.</b><br>받은 메일의 확인 링크를 누른 뒤 다시 로그인해 주세요.<div class="mini"><button type="button" data-resend="1">확인 메일 다시 받기</button></div>';
+  if (low.indexOf('already registered') >= 0 || low.indexOf('user already') >= 0) return '<b>이미 가입된 이메일입니다.</b><br>[로그인] 탭에서 들어오시면 됩니다.';
+  if (low.indexOf('rate limit') >= 0 || low.indexOf('too many') >= 0 || low.indexOf('security purposes') >= 0) return '<b>잠시 후 다시 시도해 주세요.</b><br>같은 요청이 너무 자주 있었습니다. 1분 뒤 다시 눌러 주세요.';
+  if (low.indexOf('failed to fetch') >= 0 || low.indexOf('network') >= 0) return '<b>서버에 연결하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 시도해 주세요.';
+  if (low.indexOf('signups not allowed') >= 0) return '<b>지금은 새 가입을 받지 않습니다.</b><br>잠시 뒤 다시 시도해 주세요.';
+  return '<b>가입·로그인을 마치지 못했습니다.</b><br>' + esc(m || '잠시 뒤 다시 시도해 주세요.');
+}
+
+/* ---------- 화면 열기/닫기 ---------- */
+function setMode(m, note){
+  mode = (m === 'signup') ? 'signup' : 'login';
+  ui.screen.dataset.mode = mode;
+  $$('#authScreen .auth-mode').forEach(b => b.classList.toggle('on', b.dataset.authMode === mode));
+  ui.title.textContent = mode === 'signup' ? '회원가입' : '로그인';
+  ui.lead.textContent = note || (mode === 'signup'
+    ? '이름·전화번호·이메일·비밀번호만 넣으면 무료로 가입됩니다.'
+    : '가입하실 때 쓴 이메일과 비밀번호를 넣어 주세요.');
+  ui.pw.autocomplete = mode === 'signup' ? 'new-password' : 'current-password';
+  ui.submit.textContent = mode === 'signup' ? '가입하기' : '로그인';
+  clearMsg(); clearErrs();
+}
+function open(m, note){
+  setMode(m, note);
+  ui.screen.classList.add('on');
+  ui.scroll.scrollTop = 0;
+}
+function close(){
+  ui.screen.classList.remove('on');
+  ui.pw.type = 'password';
+  ui.pwEye.textContent = '보기';
+}
+
+/* ---------- 가입 · 로그인 ---------- */
+async function signUp(v){
+  if (!client){ showMsg('err', '<b>서버에 연결하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 시도해 주세요.'); return; }
+  startBusy('가입하는 중…');
+  try {
+    const { data, error } = await client.auth.signUp({
+      email: v.email,
+      password: v.pw,
+      options: { data: { name: v.name, phone: v.phone }, emailRedirectTo: HOME_URL }
+    });
+    if (error) throw error;
+    const user = data && data.user;
+    const dup = !!(user && Array.isArray(user.identities) && user.identities.length === 0);
+    if (data && data.session){
+      showMsg('ok', '<b>가입이 끝났습니다.</b><br>이제 LED 찾기와 현장 진단을 쓰실 수 있습니다.');
+      setTimeout(close, 1300);
+    } else if (dup){
+      showMsg('info', '<b>이미 가입된 이메일입니다.</b><br>위의 [로그인] 탭에서 들어오세요. 메일 인증을 아직 안 하셨다면 받은 메일의 확인 링크를 먼저 눌러 주세요.');
+    } else {
+      showMsg('info', '<b>가입 신청이 끝났습니다.</b><br><br>1. <b>' + esc(v.email) + '</b> 로 확인 메일을 보냈습니다.<br>2. 메일 안의 <b>확인</b> 링크를 누릅니다. (안 보이면 스팸함도 확인)<br>3. 확인이 끝나면 위의 <b>로그인</b> 탭에서 들어오시면 됩니다.'
+        + '<div class="mini"><button type="button" data-resend="1">확인 메일 다시 받기</button></div>');
+    }
+  } catch (err){
+    showMsg('err', friendly(err));
+  } finally {
+    endBusy();
+  }
+}
+
+async function signIn(v){
+  if (!client){ showMsg('err', '<b>서버에 연결하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 시도해 주세요.'); return; }
+  startBusy('로그인하는 중…');
+  try {
+    const { error } = await client.auth.signInWithPassword({ email: v.email, password: v.pw });
+    if (error) throw error;
+    showMsg('ok', '<b>로그인했습니다.</b><br>잠시 뒤 화면이 바뀝니다.');
+  } catch (err){
+    showMsg('err', friendly(err));
+  } finally {
+    endBusy();
+  }
+}
+
+async function signOut(){
+  if (!client) return;
+  if (!window.confirm('로그아웃하시겠습니까?')) return;
+  await client.auth.signOut();
+  applySession(null);
+  if (window.AIR_TOAST) window.AIR_TOAST('로그아웃했습니다');
+}
+
+/* ---------- 입력 ---------- */
+ui.form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (busy) return;
+  clearMsg(); clearErrs();
+  const email = ui.email.value.trim().toLowerCase();
+  const pw = ui.pw.value;
+  if (mode === 'signup'){
+    const name = ui.name.value.trim();
+    const phone = digits(ui.phone.value);
+    const pw2 = ui.pw2.value;
+    let bad = false;
+    if (name.length < 2){ setErr('name', '이름을 두 글자 이상 넣어 주세요.'); bad = true; }
+    if (!(phone.length >= 10 && phone.length <= 11 && phone.charAt(0) === '0')){ setErr('phone', '전화번호를 정확히 넣어 주세요. 예) 010-1234-5678'); bad = true; }
+    if (!EMAIL_RE.test(email)){ setErr('email', '이메일 주소를 정확히 넣어 주세요. 예) hong@naver.com'); bad = true; }
+    if (pw.length < 6){ setErr('pw', '비밀번호는 6자 이상이어야 합니다.'); bad = true; }
+    if (!pw2 || pw2 !== pw){ setErr('pw2', '비밀번호가 서로 다릅니다. 똑같이 다시 넣어 주세요.'); bad = true; }
+    if (!ui.agree.checked){ ui.agreeBox.classList.add('bad'); showMsg('err', '<b>개인정보 수집·이용에 동의해 주세요.</b><br>동의란에 체크하셔야 가입이 됩니다.'); bad = true; }
+    if (bad) return;
+    await signUp({ name, phone, email, pw });
+  } else {
+    if (!EMAIL_RE.test(email)){ setErr('email', '이메일 주소를 정확히 넣어 주세요.'); return; }
+    if (!pw){ setErr('pw', '비밀번호를 넣어 주세요.'); return; }
+    await signIn({ email, pw });
+  }
+});
+
+ui.msg.addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-resend]');
+  if (!b) return;
+  const email = ui.email.value.trim().toLowerCase();
+  if (!EMAIL_RE.test(email)){ showMsg('err', '이메일을 먼저 넣어 주세요.'); return; }
+  if (!client){ showMsg('err', '서버에 연결하지 못했습니다. 인터넷 연결을 확인해 주세요.'); return; }
+  b.disabled = true;
+  try {
+    const { error } = await client.auth.resend({ type: 'signup', email, options: { emailRedirectTo: HOME_URL } });
+    if (error) throw error;
+    showMsg('ok', '<b>확인 메일을 다시 보냈습니다.</b><br>' + esc(email) + ' 메일함(스팸함 포함)을 확인해 주세요.');
+  } catch (err){
+    showMsg('err', friendly(err));
+  }
+});
+
+ui.pwEye.addEventListener('click', () => {
+  const show = ui.pw.type === 'password';
+  ui.pw.type = show ? 'text' : 'password';
+  ui.pwEye.textContent = show ? '가리기' : '보기';
+});
+
+$$('[data-auth-open]').forEach(b => b.addEventListener('click', () => open(b.dataset.authOpen)));
+$$('#authScreen .auth-mode').forEach(b => b.addEventListener('click', () => setMode(b.dataset.authMode)));
+$('#authClose').addEventListener('click', close);
+$('#acctLogout').addEventListener('click', signOut);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && ui.screen.classList.contains('on')) close();
+});
+
+/* ---------- Supabase 연결 ---------- */
+window.AIR_AUTH = {
+  ready: false,
+  offline: false,
+  isAuthed(){ return !!(session && session.user); },
+  user(){ return (session && session.user) || null; },
+  open, close, signOut,
+  reload(){ boot(); }
+};
+
+async function boot(){
+  let mod = null;
+  for (const url of CDN_LIST){
+    try {
+      const m = await import(url);
+      if (m && m.createClient){ mod = m; break; }
+    } catch (e){ /* 다음 CDN 시도 */ }
+  }
+  if (!mod){
+    window.AIR_AUTH.offline = true;
+    return;
+  }
+  client = mod.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storageKey: 'aircode.auth.v1'
+    }
+  });
+  try {
+    const { data } = await client.auth.getSession();
+    applySession(data ? data.session : null);
+  } catch (e){
+    applySession(null);
+  }
+  client.auth.onAuthStateChange((evt, s) => {
+    const wasOpen = ui.screen.classList.contains('on');
+    applySession(s);
+    if (evt === 'SIGNED_IN' && wasOpen){
+      close();
+      if (window.AIR_TOAST) window.AIR_TOAST('로그인했습니다. 이용해 주셔서 감사합니다');
+    }
+    if (s && s.user && location.hash && /access_token|refresh_token/.test(location.hash)){
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e){}
+    }
+  });
+  window.AIR_AUTH.ready = true;
+}
+boot();
 </script>
 </body>
 </html>

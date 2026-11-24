@@ -1,1 +1,1 @@
-{"url": "https://nicehama.github.io/aircode/", "modules": 29, "version": 3}
+{"url": "https://aircode-zip.vercel.app", "modules": 29, "version": 3}

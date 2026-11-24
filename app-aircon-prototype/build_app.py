@@ -3,7 +3,7 @@
 외부 CDN·네트워크 없이 동작하도록 모든 자원을 파일 안에 넣는다."""
 import json, os, base64
 
-SITE_URL = 'https://nicehama.github.io/aircode/'
+SITE_URL = 'https://aircode-zip.vercel.app'
 
 here = os.path.dirname(os.path.abspath(__file__))
 root = os.path.dirname(here)
