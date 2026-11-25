@@ -731,6 +731,25 @@ body.authed .gate{display:none !important}
 .soc span{font-size:11px;font-weight:700;background:#F1F5F6;border-radius:999px;padding:2px 7px}
 .auth-foot{margin:20px 2px 0;font-size:11.5px;line-height:1.65;color:var(--muted)}
 #authScreen[data-mode="login"] [data-only="signup"]{display:none}
+
+/* ---------- v15: 소셜 로그인 · 첫 로그인 추가 정보 ---------- */
+.soc{cursor:pointer}
+.soc svg{width:19px;height:19px;flex:none}
+.soc.kakao{background:#FEE500;border-color:#FEE500;color:#191600;box-shadow:0 3px 10px rgba(254,229,0,.28)}
+.soc.kakao:active{background:#F4DA00}
+.soc.google{background:#fff;border-color:#DADCE0;color:#1F1F1F}
+.soc.google:active{background:#F5F7FA}
+.soc .soc-tag{font-size:10.5px;font-weight:700;background:rgba(0,0,0,.06);border-radius:999px;padding:2px 7px;color:inherit;opacity:.7}
+#profScreen{position:fixed;inset:0;z-index:95;display:none;background:var(--bg)}
+#profScreen.on{display:block}
+.prof-hero{display:flex;align-items:center;gap:11px;margin:0 0 4px}
+.prof-hero .em{width:46px;height:46px;border-radius:14px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+.prof-hero .em svg{width:23px;height:23px}
+.prof-hero b{display:block;font-size:14.5px;font-weight:800;color:#0A2E38}
+.prof-hero span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;word-break:break-all}
+.prof-step{display:flex;gap:7px;margin:14px 0 0}
+.prof-step i{flex:1;height:4px;border-radius:99px;background:#DCE6E9}
+.prof-step i.on{background:var(--primary)}
 </style>
 </head>
 <body>
@@ -1360,19 +1379,57 @@ body.authed .gate{display:none !important}
 
         <label class="agree" id="agreeBox" data-only="signup" for="auAgree">
           <input id="auAgree" type="checkbox">
-          <span><b>개인정보 수집·이용에 둥의합니다.</b><br>이름·전화번호·이메일을 회원 확인과 문의 응대 목적으로만 쓰고, 다른 곳에 넘기지 않습니다.</span>
+          <span><b>개인정보 수집·이용에 동의합니다.</b><br>이름·전화번호·이메일을 회원 확인과 문의 응대 목적으로만 쓰고, 다른 곳에 넘기지 않습니다.</span>
         </label>
 
         <button class="auth-submit" id="authSubmit" type="submit">로그인</button>
       </form>
 
-      <div class="auth-social" id="authSocial" hidden>
+      <div class="auth-social" id="authSocial">
         <div class="auth-or">또는</div>
-        <button class="soc" id="btnKakao" type="button" disabled>카카오로 시작 <span>준비 중</span></button>
-        <button class="soc" id="btnGoogle" type="button" disabled>구글로 시작 <span>준비 중</span></button>
+        <button class="soc kakao" id="btnKakao" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#191600" d="M12 3C6.9 3 2.8 6.2 2.8 10.1c0 2.5 1.7 4.7 4.3 6l-1.1 4c-.1.4.3.7.7.5l4.7-3.1c.5.1 1 .1 1.6.1 5.1 0 9.2-3.2 9.2-7.1S17.1 3 12 3z"/></svg>카카오로 시작</button>
+        <button class="soc google" id="btnGoogle" type="button"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>구글로 시작</button>
       </div>
 
-      <p class="auth-foot">가입한 정보는 회원 관리에만 쓰입니다. 비밀번호는 암호화되어 저장되며 앱은 비밀번호를 보관하지 않습니다.</p>
+      <p class="auth-foot">가입한 정보는 회원 관리에만 쓰입니다. 비밀번호는 암호화되어 저장되며 앱은 비밀번호를 보관하지 않습니다. 받는 정보와 쓰임은 <a href="./privacy.html" target="_blank" rel="noopener" style="color:#0B6E6E;font-weight:800;text-decoration:underline;text-underline-offset:2px">개인정보 처리방침</a>에서 보실 수 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ v15: 첫 로그인 추가 정보(이름·전화번호) ============ -->
+<div id="profScreen" role="dialog" aria-modal="true" aria-labelledby="profTitle">
+  <div class="auth-box">
+    <div class="auth-head">
+      <button class="auth-back" id="profClose" type="button" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+      <div class="auth-logo">에러코드<span>.zip</span></div>
+    </div>
+    <div class="auth-scroll">
+      <div class="prof-step"><i class="on"></i><i class="on"></i></div>
+      <h2 id="profTitle">마지막 한 가지만</h2>
+      <p class="auth-lead">처음 오셨습니다. <b>이름</b>과 <b>전화번호</b>를 한 번만 받습니다. 회원 확인과 문의 응대에만 쓰고, 다른 곳에 넘기지 않습니다.</p>
+      <div class="prof-hero">
+        <span class="em"><svg><use href="#i-user"/></svg></span>
+        <div><b id="profWho">회원 님</b><span id="profMail"></span></div>
+      </div>
+      <div class="auth-msg" id="profMsg" role="status"></div>
+      <form id="profForm" novalidate>
+        <label class="fld" for="pfName">
+          <span class="fld-k">이름</span>
+          <input id="pfName" name="name" type="text" placeholder="예) 홍길동" autocomplete="name" enterkeyhint="next">
+          <span class="fld-err" id="pfErrName"></span>
+        </label>
+        <label class="fld" for="pfPhone">
+          <span class="fld-k">전화번호</span>
+          <input id="pfPhone" name="phone" type="tel" inputmode="tel" placeholder="예) 010-1234-5678" autocomplete="tel" enterkeyhint="done">
+          <span class="fld-err" id="pfErrPhone"></span>
+        </label>
+        <label class="agree" id="pfAgreeBox" for="pfAgree">
+          <input id="pfAgree" type="checkbox">
+          <span><b>개인정보 수집·이용에 동의합니다.</b><br>이름·전화번호는 회원 확인과 문의 응대 목적으로만 쓰고, 다른 곳에 넘기지 않습니다.</span>
+        </label>
+        <button class="auth-submit" id="profSubmit" type="submit">저장하고 시작하기</button>
+      </form>
+      <p class="auth-foot">저장하시면 LED 찾기와 현장 진단이 바로 열립니다. 넣으신 이름·전화번호는 더보기 탭의 내 계정에서 보실 수 있습니다. 자세한 내용은 <a href="./privacy.html" target="_blank" rel="noopener" style="color:#0B6E6E;font-weight:800;text-decoration:underline;text-underline-offset:2px">개인정보 처리방침</a>을 봐 주세요.</p>
     </div>
   </div>
 </div>
@@ -15953,6 +16010,8 @@ let client = null;
 let session = null;
 let mode = 'login';
 let busy = false;
+let profile = null;          // public.profiles 의 내 행 (name·phone·email)
+let profBusy = false;
 
 const ui = {
   screen: $('#authScreen'), scroll: $('#authScroll'),
@@ -15964,25 +16023,54 @@ const ui = {
   acctOut: $('#acctOut'), acctIn: $('#acctIn'), acctNote: $('#acctNote')
 };
 
+const profUi = {
+  screen: $('#profScreen'), scroll: $('#profScreen .auth-scroll'),
+  who: $('#profWho'), mail: $('#profMail'), msg: $('#profMsg'),
+  form: $('#profForm'), submit: $('#profSubmit'),
+  name: $('#pfName'), phone: $('#pfPhone'), agree: $('#pfAgree'), agreeBox: $('#pfAgreeBox')
+};
+
 const digits = (s) => String(s || '').replace(/[^0-9]/g, '');
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-/* ---------- 로그인 상태를 화면 전체에 반영 ---------- */
-function applySession(s){
-  session = s || null;
-  const user = (session && session.user) ? session.user : null;
-  document.body.classList.toggle('authed', !!user);
+/* ---------- 로그인 상태 · 회원 정보를 화면 전체에 반영 ---------- */
+function nameFromMeta(user){
+  const md = (user && user.user_metadata) || {};
+  return String(md.name || md.full_name || md.nickname || md.preferred_username || '').trim();
+}
+function phoneFromMeta(user){
+  const md = (user && user.user_metadata) || {};
+  return String(md.phone || md.phone_number || '').replace(/[^0-9]/g, '');
+}
+function profileComplete(){
+  return !!(profile && String(profile.name || '').trim() && String(profile.phone || '').trim());
+}
+
+async function loadProfile(user){
+  profile = null;
+  if (!client || !user) return;
+  try {
+    const { data, error } = await client.from('profiles').select('name,phone,email').eq('id', user.id).maybeSingle();
+    if (!error && data) profile = data;
+  } catch (e){ /* 조회가 안 되면 미입력으로 보고 아래에서 한 번 더 받는다 */ }
+  if (!profile) profile = { name: '', phone: '', email: user.email || '' };
+}
+
+function paintAccount(user){
   if (user){
-    const md = user.user_metadata || {};
-    const nm = String(md.name || '').trim();
+    const nm = String((profile && profile.name) || '').trim() || nameFromMeta(user);
+    const mail = (profile && profile.email) || user.email || '';
+    const done = profileComplete();
     ui.acctName.textContent = nm ? (nm + ' 님') : '회원 님';
-    ui.acctSub.textContent = (user.email || '') + ' · 무료 회원';
-    ui.acctState.textContent = '회원';
-    ui.acctState.className = 'acct-state in';
+    ui.acctSub.textContent = mail ? (mail + ' · 무료 회원') : '카카오 계정 · 무료 회원';
+    ui.acctState.textContent = done ? '회원' : '정보 필요';
+    ui.acctState.className = 'acct-state ' + (done ? 'in' : 'out');
     ui.acctOut.hidden = true;
     ui.acctIn.hidden = false;
-    ui.acctNote.textContent = 'LED 찾기와 현장 진단을 모두 쓰실 수 있습니다. 로그아웃해도 검색·더보기는 그대로 쓰실 수 있습니다.';
+    ui.acctNote.textContent = done
+      ? 'LED 찾기와 현장 진단을 모두 쓰실 수 있습니다. 로그아웃해도 검색·더보기는 그대로 쓰실 수 있습니다.'
+      : '이름·전화번호를 넣으시면 LED 찾기와 현장 진단이 열립니다.';
   } else {
     ui.acctName.textContent = '로그인하지 않으셨습니다';
     ui.acctSub.textContent = '가입하면 LED 찾기·현장 진단을 쓰실 수 있습니다';
@@ -15992,6 +16080,20 @@ function applySession(s){
     ui.acctIn.hidden = true;
     ui.acctNote.textContent = '에러코드 검색·더보기는 로그인 없이 쓰실 수 있습니다. LED 찾기와 현장 진단만 회원 전용입니다.';
   }
+}
+
+/* 로그인했어도 이름·전화번호가 비어 있으면 잠금 탭을 열지 않는다 */
+async function syncAuth(s){
+  session = s || null;
+  const user = (session && session.user) ? session.user : null;
+  profile = null;
+  if (user) await loadProfile(user);
+  const open = !!user && profileComplete();
+  document.body.classList.toggle('authed', open);
+  paintAccount(user);
+  if (user && !open) openProfile(user);
+  else closeProfile();
+  return open;
 }
 
 /* ---------- 안내문·오류 표시 ---------- */
@@ -16058,6 +16160,70 @@ function close(){
   ui.pwEye.textContent = '보기';
 }
 
+/* ---------- 첫 로그인: 이름·전화번호 한 번만 ---------- */
+function profMsg(kind, html){
+  profUi.msg.className = 'auth-msg' + (kind ? ' on ' + kind : '');
+  profUi.msg.innerHTML = html || '';
+}
+function profErr(which, text){
+  const input = which === 'name' ? profUi.name : profUi.phone;
+  const el = document.getElementById(which === 'name' ? 'pfErrName' : 'pfErrPhone');
+  const fld = input.closest('.fld');
+  if (fld) fld.classList.toggle('bad', !!text);
+  if (el) el.textContent = text || '';
+}
+function openProfile(user){
+  const nm = nameFromMeta(user);
+  profUi.who.textContent = (nm ? nm : '회원') + ' 님';
+  profUi.mail.textContent = (user && user.email) || '카카오 계정으로 로그인했습니다';
+  if (!profUi.name.value) profUi.name.value = nm;
+  if (!profUi.phone.value) profUi.phone.value = phoneFromMeta(user);
+  profMsg('', '');
+  profErr('name', ''); profErr('phone', '');
+  profUi.agreeBox.classList.remove('bad');
+  profUi.screen.classList.add('on');
+  profUi.scroll.scrollTop = 0;
+}
+function closeProfile(){ profUi.screen.classList.remove('on'); }
+
+async function saveProfile(e){
+  if (e) e.preventDefault();
+  if (profBusy) return;
+  const user = session && session.user;
+  if (!client || !user){
+    profMsg('err', '<b>로그인 정보를 찾지 못했습니다.</b><br>창을 닫고 다시 로그인해 주세요.');
+    return;
+  }
+  const name = profUi.name.value.trim();
+  const phone = digits(profUi.phone.value);
+  let bad = false;
+  if (name.length < 2){ profErr('name', '이름을 두 글자 이상 넣어 주세요.'); bad = true; }
+  if (!(phone.length >= 10 && phone.length <= 11 && phone.charAt(0) === '0')){ profErr('phone', '전화번호를 정확히 넣어 주세요. 예) 010-1234-5678'); bad = true; }
+  if (!profUi.agree.checked){ profUi.agreeBox.classList.add('bad'); profMsg('err', '<b>개인정보 수집·이용에 동의해 주세요.</b><br>동의란에 체크하셔야 저장됩니다.'); bad = true; }
+  if (bad) return;
+  profBusy = true; profUi.submit.disabled = true; profUi.submit.textContent = '저장하는 중…';
+  profMsg('', '');
+  const mail = user.email || (profile && profile.email) || null;
+  try {
+    const { error } = await client.from('profiles').upsert(
+      { id: user.id, name, phone, email: mail },
+      { onConflict: 'id' }
+    );
+    if (error) throw error;
+  } catch (err){
+    profMsg('err', '<b>저장하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 눌러 주세요. 계속 안 되면 ' + esc(String((err && err.message) || '')) + '');
+    profBusy = false; profUi.submit.disabled = false; profUi.submit.textContent = '저장하고 시작하기';
+    return;
+  }
+  profile = { name, phone, email: mail || '' };
+  try { await client.auth.updateUser({ data: { name, phone } }); } catch (e){}
+  profBusy = false; profUi.submit.disabled = false; profUi.submit.textContent = '저장하고 시작하기';
+  closeProfile();
+  document.body.classList.toggle('authed', true);
+  paintAccount(user);
+  if (window.AIR_TOAST) window.AIR_TOAST('가입이 끝났습니다. 이용해 주셔서 감사합니다');
+}
+
 /* ---------- 가입 · 로그인 ---------- */
 async function signUp(v){
   if (!client){ showMsg('err', '<b>서버에 연결하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 시도해 주세요.'); return; }
@@ -16105,8 +16271,29 @@ async function signOut(){
   if (!client) return;
   if (!window.confirm('로그아웃하시겠습니까?')) return;
   await client.auth.signOut();
-  applySession(null);
+  closeProfile();
+  await syncAuth(null);
   if (window.AIR_TOAST) window.AIR_TOAST('로그아웃했습니다');
+}
+
+/* ---------- 카카오·구글 소셜 로그인 ---------- */
+async function signInSocial(provider){
+  if (!client){
+    showMsg('err', '<b>서버에 연결하지 못했습니다.</b><br>인터넷 연결을 확인한 뒤 다시 시도해 주세요.');
+    return;
+  }
+  clearMsg(); clearErrs();
+  const label = provider === 'kakao' ? '카카오' : '구글';
+  showMsg('info', '<b>' + label + ' 로그인 화면으로 이동합니다.</b><br>잠시만 기다려 주세요.');
+  try {
+    const { error } = await client.auth.signInWithOAuth({
+      provider: provider,
+      options: { redirectTo: HOME_URL }
+    });
+    if (error) throw error;
+  } catch (err){
+    showMsg('err', friendly(err));
+  }
 }
 
 /* ---------- 입력 ---------- */
@@ -16162,6 +16349,16 @@ $$('[data-auth-open]').forEach(b => b.addEventListener('click', () => open(b.dat
 $$('#authScreen .auth-mode').forEach(b => b.addEventListener('click', () => setMode(b.dataset.authMode)));
 $('#authClose').addEventListener('click', close);
 $('#acctLogout').addEventListener('click', signOut);
+$('#btnKakao').addEventListener('click', () => signInSocial('kakao'));
+$('#btnGoogle').addEventListener('click', () => signInSocial('google'));
+profUi.form.addEventListener('submit', saveProfile);
+$('#profClose').addEventListener('click', async () => {
+  if (profileComplete()){ closeProfile(); return; }
+  if (!window.confirm('이름과 전화번호를 넣지 않으면 LED 찾기와 현장 진단을 쓸 수 없습니다. 로그아웃하시겠습니까?')) return;
+  if (client) { try { await client.auth.signOut(); } catch (e){} }
+  closeProfile();
+  await syncAuth(null);
+});
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && ui.screen.classList.contains('on')) close();
 });
@@ -16170,8 +16367,9 @@ document.addEventListener('keydown', (e) => {
 window.AIR_AUTH = {
   ready: false,
   offline: false,
-  isAuthed(){ return !!(session && session.user); },
+  isAuthed(){ return !!(session && session.user && profileComplete()); },
   user(){ return (session && session.user) || null; },
+  profile(){ return profile; },
   open, close, signOut,
   reload(){ boot(); }
 };
@@ -16198,16 +16396,16 @@ async function boot(){
   });
   try {
     const { data } = await client.auth.getSession();
-    applySession(data ? data.session : null);
+    await syncAuth(data ? data.session : null);
   } catch (e){
-    applySession(null);
+    await syncAuth(null);
   }
-  client.auth.onAuthStateChange((evt, s) => {
+  client.auth.onAuthStateChange(async (evt, s) => {
     const wasOpen = ui.screen.classList.contains('on');
-    applySession(s);
-    if (evt === 'SIGNED_IN' && wasOpen){
-      close();
-      if (window.AIR_TOAST) window.AIR_TOAST('로그인했습니다. 이용해 주셔서 감사합니다');
+    const open = await syncAuth(s);
+    if (evt === 'SIGNED_IN' && wasOpen) close();
+    if (evt === 'SIGNED_IN' && open && wasOpen && window.AIR_TOAST){
+      window.AIR_TOAST('로그인했습니다. 이용해 주셔서 감사합니다');
     }
     if (s && s.user && location.hash && /access_token|refresh_token/.test(location.hash)){
       try { history.replaceState(null, '', location.pathname + location.search); } catch (e){}
